@@ -12,24 +12,23 @@ export default defineConfig({
   define: {
     __SERVER_PORT__: process.env.SERVER_PORT,
   },
-  plugins: [
-    react({
-      babel: {
-        plugins: [
-          [
-            'babel-plugin-styled-components',
-            {
-              displayName: true,
-              fileName: true,
-            },
-          ],
-        ],
-      },
-    }),
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
     },
+  },
+  css: {
+    modules: {
+      localsConvention: 'camelCase',
+      generateScopedName: '[name]__[local]__[hash:base64:8]',
+    },
+    // @TODO удалить или использовать в дальнейшем
+    // Если нао будет добавить глобальные переменные SASS
+    // preprocessorOptions: {
+    //   scss: {
+    //     additionalData: '@import "./src/app/styles/index.scss";',
+    //   },
+    // },
   },
 });
