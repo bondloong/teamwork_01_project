@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
+import { Heading } from './AuthPage.styles';
 
 export const AuthPage = (): ReactElement => {
-  return <h1>AuthPage</h1>;
+  return <Heading>AuthPage</Heading>;
 };
