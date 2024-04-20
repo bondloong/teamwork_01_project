@@ -1,5 +1,5 @@
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default {
   preset: 'ts-jest',
@@ -8,4 +8,8 @@ export default {
   globals: {
     __SERVER_PORT__: process.env.SERVER_PORT,
   },
-}
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|less|sass|scss)$': '<rootDir>/src/shared/tests/stubs/styleMock.ts',
+  },
+};
