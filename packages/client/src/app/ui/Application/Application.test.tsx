@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 test('Application should render page correctly', () => {
   const { queryByText } = render(<Application />);
 
-  const title = queryByText('AuthPage');
+  const title = queryByText('Log In');
 
   expect(title).toBeVisible();
 });

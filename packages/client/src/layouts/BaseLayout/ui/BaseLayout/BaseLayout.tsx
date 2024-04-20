@@ -6,7 +6,7 @@ import { LogOut } from '@/features/LogOut';
 
 export const BaseLayout = ({ children }: IBaseLayoutProps): ReactElement => {
   return (
-    <div className={classes.layout}>
+    <div>
       <header className={classes.header}>
         <MainNavigation />
 
