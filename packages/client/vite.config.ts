@@ -23,12 +23,10 @@ export default defineConfig({
       localsConvention: 'camelCase',
       generateScopedName: '[name]__[local]__[hash:base64:8]',
     },
-    // @TODO удалить или использовать в дальнейшем
-    // Если нао будет добавить глобальные переменные SASS
-    // preprocessorOptions: {
-    //   scss: {
-    //     additionalData: '@import "./src/app/styles/index.scss";',
-    //   },
-    // },
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "./src/app/styles/index.scss";',
+      },
+    },
   },
 });

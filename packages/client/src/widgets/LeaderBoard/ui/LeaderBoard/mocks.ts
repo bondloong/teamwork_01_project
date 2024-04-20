@@ -1,0 +1,38 @@
+// @TODO удалить после настройки получения наддных с бэка
+
+import { IPlayer } from '@/entities/Player';
+
+export const dataSourceMock: IPlayer[] = [
+  { id: 1, login: 'john_doe', userId: 1, scores: 100000 },
+  { id: 1, login: 'john_doe', userId: 1, scores: 95000 },
+  { id: 2, login: 'jane_doe', userId: 2, scores: 90000 },
+  { id: 3, login: 'alex_smith', userId: 3, scores: 85000 },
+  { id: 4, login: 'emma_jones', userId: 4, scores: 80000 },
+  { id: 5, login: 'mike_brown', userId: 5, scores: 75000 },
+  { id: 6, login: 'sarah_davis', userId: 6, scores: 70000 },
+  { id: 7, login: 'david_wilson', userId: 7, scores: 65000 },
+  { id: 8, login: 'olivia_thomas', userId: 8, scores: 60000 },
+  { id: 9, login: 'william_moore', userId: 9, scores: 55000 },
+  { id: 9, login: 'william_moore', userId: 9, scores: 50000 },
+  { id: 10, login: 'sophia_martin', userId: 10, scores: 45000 },
+  { id: 11, login: 'james_taylor', userId: 11, scores: 40000 },
+  { id: 12, login: 'isabella_garcia', userId: 12, scores: 39000 },
+  { id: 13, login: 'daniel_clark', userId: 13, scores: 38000 },
+  { id: 14, login: 'mia_white', userId: 14, scores: 37000 },
+  { id: 15, login: 'robert_lewis', userId: 15, scores: 36000 },
+  { id: 16, login: 'abigail_king', userId: 16, scores: 35000 },
+  { id: 17, login: 'charles_young', userId: 17, scores: 34000 },
+  { id: 18, login: 'emily_scott', userId: 18, scores: 33000 },
+  { id: 19, login: 'joseph_bailey', userId: 19, scores: 32000 },
+  { id: 20, login: 'madison_turner', userId: 20, scores: 31000 },
+  { id: 21, login: 'samuel_walker', userId: 21, scores: 30000 },
+  { id: 22, login: 'grace_hall', userId: 22, scores: 29000 },
+  { id: 23, login: 'andrew_allen', userId: 23, scores: 28000 },
+  { id: 24, login: 'chloe_phillips', userId: 24, scores: 27000 },
+  { id: 25, login: 'matthew_mitchell', userId: 25, scores: 26000 },
+  { id: 26, login: 'lily_wood', userId: 26, scores: 25000 },
+  { id: 27, login: 'benjamin_foster', userId: 27, scores: 22000 },
+  { id: 28, login: 'hannah_parker', userId: 28, scores: 21000 },
+  { id: 29, login: 'ryan_adams', userId: 29, scores: 20000 },
+  { id: 30, login: 'evelyn_miller', userId: 30, scores: 19000 },
+];

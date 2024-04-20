@@ -6,6 +6,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 import { TopicPage } from '@/pages/TopicPage';
 import { ReactElement } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import '../../styles/_app.scss';
 
 export const Application = (): ReactElement => (
   <BrowserRouter>
