@@ -1,0 +1,24 @@
+$header-height: 50px;
+
+.layout {
+  min-height: 100dvh;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $header-height;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 33px;
+  background-color: $primary-bg-color;
+  border-bottom: 1px solid $secondary-color;
+  z-index: 10;
+}
+
+.main {
+  margin-top: $header-height;
+}
