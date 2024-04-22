@@ -30,7 +30,7 @@ export const LoginForm = ({ toggleFormButton }: IFormProps): ReactElement => {
             placeholder={placeholder}
             type={type}
             size="large"
-            status={errors[name] ? 'error' : undefined}
+            status={errors[name] && 'error'}
             value={values[name]}
             onChange={handleInputChange}
             key={name}
