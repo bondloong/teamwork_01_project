@@ -6,7 +6,7 @@ import { useForm } from '@/shared/hooks';
 import { IFormProps } from '../../model';
 
 export const LoginForm = ({ toggleFormButton }: IFormProps): ReactElement => {
-  const { values, setValue, inputNames } = useForm(INPUTS);
+  const { values, setValue, inputNames, errors } = useForm(INPUTS);
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
     setValue(event.target.name, event.target.value);
@@ -30,7 +30,7 @@ export const LoginForm = ({ toggleFormButton }: IFormProps): ReactElement => {
             placeholder={placeholder}
             type={type}
             size="large"
-            status="warning"
+            status={errors[name] ? 'error' : undefined}
             value={values[name]}
             onChange={handleInputChange}
             key={name}
