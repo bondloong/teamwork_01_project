@@ -1,12 +1,12 @@
 import { ChangeEventHandler, FormEventHandler, ReactElement } from 'react';
 import { Button, Input } from 'antd';
-import { INPUTS, TEXTS } from './SignupForm.constants';
+import { TEXTS } from './SignupForm.constants';
 import { useForm } from '@/shared/hooks';
-import { IFormProps } from '../../model';
+import { IFormProps, SIGNUP_INPUTS } from '../../model';
 import classes from './SignupForm.module.scss';
 
 export const SignupForm = ({ toggleFormButton }: IFormProps): ReactElement => {
-  const { values, setValue, inputNames, errors } = useForm(INPUTS);
+  const { values, setValue, inputNames, errors } = useForm(SIGNUP_INPUTS);
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
     setValue(event.target.name, event.target.value);
@@ -23,7 +23,7 @@ export const SignupForm = ({ toggleFormButton }: IFormProps): ReactElement => {
 
   return (
     <form className={classes.form} onSubmit={handleSubmit}>
-      {INPUTS.map((input) => {
+      {SIGNUP_INPUTS.map((input) => {
         const { name, placeholder, type } = input;
 
         return (
