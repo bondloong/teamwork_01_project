@@ -1,6 +1,6 @@
 import { BaseLayout } from '@/layouts/BaseLayout';
 import { ReactElement } from 'react';
-import MainImage from '../../../../../assets/images/main.jpg';
+import MainImage from '@/assets/images/main.jpg';
 import classes from './MainPage.module.scss';
 export const MainPage = (): ReactElement => {
   return (
