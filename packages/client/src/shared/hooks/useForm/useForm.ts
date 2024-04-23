@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { TInputValues, TUseForm } from './useForm.interfaces';
-import { validateFormData } from './validateFormData';
+import { validateFormData, validateString } from './utils';
 
 export const useForm: TUseForm = (inputs) => {
   const [values, setValues] = useState<TInputValues<typeof inputs>>(() =>
@@ -46,5 +46,6 @@ export const useForm: TUseForm = (inputs) => {
     setErrors,
     inputNames,
     validateFormData,
+    validateString,
   };
 };

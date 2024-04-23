@@ -1,5 +1,5 @@
 import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from 'react';
-import { TValidateFormData } from './validateFormData';
+import { TValidateFormData, TValidateString } from './utils';
 
 export interface IInputData {
   name: string;
@@ -17,4 +17,5 @@ export type TUseForm = (inputs: Readonly<IInputData[]>) => {
   inputNames: (typeof inputs)[number]['name'][];
   setErrors: Dispatch<SetStateAction<TInputValues<readonly IInputData[]>>>;
   validateFormData: TValidateFormData;
+  validateString: TValidateString;
 };

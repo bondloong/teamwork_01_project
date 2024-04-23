@@ -11,3 +11,21 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.field {
+  height: 64px;
+  border: none;
+}
+
+.error {
+  display: block;
+  height: 0;
+  color: $text-error-color;
+  font-size: 10px;
+  transition: all 0.3s;
+  overflow: hidden;
+
+  &__expanded {
+    height: 24px;
+  }
+}
