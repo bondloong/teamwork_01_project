@@ -1,14 +1,14 @@
 import { BaseLayout } from '@/layouts/BaseLayout';
 import { ReactElement } from 'react';
-import MainImage from '@/assets/images/main.jpg';
+// import MainImage from '@/assets/images/main.jpg';
 import classes from './MainPage.module.scss';
 
 export const MainPage = (): ReactElement => {
-  console.log('ok', MainImage as string);
+  // console.log('ok', MainImage as string);
   return (
     <BaseLayout>
       <div className={classes.container}>
-        <img src={MainImage} alt="Starship Screenshot" className={classes.image} />
+        <img src={'/assets/images/main.jpg'} alt="Starship Screenshot" className={classes.image} />
         <div className={classes.overlay}>
           <div className={classes.content}>
             <h1>Explore the Universe</h1>
