@@ -1,17 +1,16 @@
-import { EAppRoutes } from '@/shared/types';
 import { MenuProps } from 'antd';
 
 export const navItems: MenuProps['items'] = [
   {
     label: 'Play game',
-    key: EAppRoutes.Game,
+    key: '/game',
   },
   {
     label: 'LeaderBoard',
-    key: EAppRoutes.LeaderBoard,
+    key: '/leaderboard',
   },
   {
     label: 'Forum',
-    key: EAppRoutes.Forum,
+    key: '/forum',
   },
 ];

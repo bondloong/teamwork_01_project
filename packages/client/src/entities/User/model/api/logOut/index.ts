@@ -1,1 +1,0 @@
-export { logOut } from './logOut';
