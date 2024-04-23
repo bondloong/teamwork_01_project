@@ -6,7 +6,7 @@ import classes from './Form.module.scss';
 import { classNames } from '@/shared/utils';
 
 export const Form = (props: IFormProps): ReactElement => {
-  const { inputs, validationSchema, children, onSubmit } = props;
+  const { inputs, validationSchema, children, onSubmit, mainError } = props;
 
   const { values, setValue, errors, setErrors, validateFormData, setError, validateString } =
     useForm(inputs);
@@ -78,6 +78,8 @@ export const Form = (props: IFormProps): ReactElement => {
       </div>
 
       {children}
+
+      {mainError && <div className={classes['main-error']}>{mainError}</div>}
     </form>
   );
 };
