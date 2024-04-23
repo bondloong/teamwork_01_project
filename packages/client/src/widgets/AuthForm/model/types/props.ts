@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
 
-export interface IFormProps {
+export interface ICommonFormProps {
   toggleFormButton: ReactElement;
 }

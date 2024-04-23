@@ -1,6 +1,7 @@
+import { IInputData } from '@/shared/hooks';
 import { EInputNames } from '@/shared/types';
 
-export const SIGNUP_INPUTS = [
+export const SIGNUP_INPUTS: IInputData[] = [
   {
     name: EInputNames.FirstName,
     placeholder: 'Введите имя',

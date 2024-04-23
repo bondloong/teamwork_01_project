@@ -1,23 +1,11 @@
-import { HTMLInputTypeAttribute } from 'react';
+import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from 'react';
+import { TValidateFormData } from './validateFormData';
 
 export interface IInputData {
   name: string;
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
 }
-
-export const INPUTS = [
-  {
-    name: 'login',
-    placeholder: 'Введите логин',
-    type: 'text',
-  },
-  {
-    name: 'password',
-    placeholder: 'Введите пароль',
-    type: 'password',
-  },
-] as const;
 
 export type TInputValues<T extends Readonly<IInputData[]>> = Record<T[number]['name'], string>;
 
@@ -27,4 +15,6 @@ export type TUseForm = (inputs: Readonly<IInputData[]>) => {
   errors: TInputValues<typeof inputs>;
   setError: (name: string, error: string) => void;
   inputNames: (typeof inputs)[number]['name'][];
+  setErrors: Dispatch<SetStateAction<TInputValues<readonly IInputData[]>>>;
+  validateFormData: TValidateFormData;
 };

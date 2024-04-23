@@ -6,7 +6,8 @@
   max-width: 300px;
 }
 
-.buttonsContainer {
+.inputs-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 10px;
 }
