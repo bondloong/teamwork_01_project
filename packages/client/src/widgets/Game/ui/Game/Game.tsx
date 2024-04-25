@@ -1,55 +1,71 @@
-import React, { useEffect, useRef, useState } from 'react';
-import SpaceHD from './templates/space_hd.webp'
+import { FC, useEffect, useRef, useState } from 'react';
+import { SpaceHD } from './assets/indes';
+import { checkCollision } from './Models/collisionUtils';
+import { IBullet, IEnemy, IGameProps } from './GameInterfaces';
+import classes from './Game.module.scss';
 
-
-interface Props {
-  width: number;
-  height: number;
-}
-
-interface Bullet {
-  x: number;
-  y: number;
-  dx: number;
-  dy: number;
-}
-interface Enemy {
-  x: number;
-  y: number;
-  size: number;
-  dx: number;
-  dy: number;
-}
-
-const Game: React.FC<Props> = ({ width, height }) => {
+export const Game: FC<IGameProps>  = ({ width, height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const player = useRef({ x: width / 2, y: height / 2, size: 20 });
-  const bullets = useRef<Array<Bullet>>([]);
-  const enemies = useRef<Array<Enemy>>([]);
-  const shootingInterval = useRef<NodeJS.Timeout | null>(null);
-  const [gameStarted, setGameStarted] = useState(false);
+  const bullets = useRef<Array<IBullet>>([]);
+  const enemies = useRef<Array<IEnemy>>([]);
   const gameOver = useRef(false);
+  const shootingInterval = useRef<NodeJS.Timeout | null>(null);
+  const backgroundImage = useRef(new Image());
+  const backgroundX = useRef(0);
+
+  const [gameStarted, setGameStarted] = useState(false);
   const [cursor, setCursor] = useState<'inherit' | 'none'>('inherit');
   const [score, setScore] = useState(0);
-  const backgroundImage = useRef(new Image()); 
-  const backgroundX = useRef(0);
+  const [enemySpeed] = useState(5)
+
+  // Пуля
+  const shootBullet = (): void => {
+    const speed = 15;
+    bullets.current.push({
+      x: player.current.x + player.current.size / 2,
+      y: player.current.y + player.current.size / 2,
+      moveX: speed,
+      moveY: 0,
+    });
+  };
+
+  // Выстрел
+  const handleMouseDownStartShooting = (): void => {
+    shootBullet();
+    shootingInterval.current = setInterval(shootBullet, 200); // Повторение выстрела каждые 0.2 секунды
+  };
+
+  // Прекращение стрельбы
+  const handleMouseUpStopShooting = (): void => {
+    if (shootingInterval.current) {
+      clearInterval(shootingInterval.current);
+      shootingInterval.current = null;
+    }
+  };
+
+  // Спавн врага
+  const spawnEnemy = (): void => {/* Ускорять по мере набора очков */
+    enemies.current.push({
+      x: width,
+      y: Math.random() * (height - 30),
+      size: 30,
+      moveX: -enemySpeed,
+      moveY: 0,
+    });
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
     const ctx = canvas?.getContext('2d');
-    if (!ctx) return;
-
-    backgroundImage.current.src = SpaceHD;  // Загрузка фона
-    backgroundImage.current.onload = (): void => {
-      requestAnimationFrame(gameLoop);
-    };
+    if (!canvas || !ctx) return;
 
     // Отрисовка кнопки начала игры
     const handleStartGameClick = (event: MouseEvent): void => {
       const rect = canvas.getBoundingClientRect();
       const clickX = event.clientX - rect.left;
       const clickY = event.clientY - rect.top;
+
       // Проверяем, был ли клик внутри "кнопки"
       if (
         clickX >= width / 2 - 50 &&
@@ -74,48 +90,16 @@ const Game: React.FC<Props> = ({ width, height }) => {
       return;
     }
 
+    backgroundImage.current.src = SpaceHD;  // Загрузка фона
+    backgroundImage.current.onload = (): void => {
+      requestAnimationFrame(gameLoop);
+    };
+
     // Отрисовка корабля на мышке
-    const handleMouseMove = (event: MouseEvent): void => {
+    const handleMouseMovePlayer = (event: MouseEvent): void => {
       const rect = canvas.getBoundingClientRect();
       player.current.x = event.clientX - rect.left - player.current.size / 2;
       player.current.y = event.clientY - rect.top - player.current.size / 2;
-    };
-
-    // Пуля
-    const shootBullet = (): void => {
-      const speed = 15;
-      bullets.current.push({
-        x: player.current.x + player.current.size / 2,
-        y: player.current.y + player.current.size / 2,
-        dx: speed,
-        dy: 0,
-      });
-    };
-
-    // Выстрел
-    const handleMouseDown = (): void => {
-      shootBullet();
-      shootingInterval.current = setInterval(shootBullet, 200); // Повторение выстрела каждые 0.2 секунды
-    };
-
-    // Прекращение стрельбы
-    const handleMouseUp = (): void => {
-      if (shootingInterval.current) {
-        clearInterval(shootingInterval.current);
-        shootingInterval.current = null;
-      }
-    };
-
-    // Спавн врага
-    const spawnEnemy = (): void => {
-      const speed = 5; /* Ускорять по мере набора очков */
-      enemies.current.push({
-        x: width,
-        y: Math.random() * (height - 30),
-        size: 30,
-        dx: -speed,
-        dy: 0,
-      });
     };
 
     const gameLoop = (): void => {
@@ -126,9 +110,6 @@ const Game: React.FC<Props> = ({ width, height }) => {
       if (backgroundX.current <= -backgroundImage.current.width) {
         backgroundX.current += backgroundImage.current.width;
       }
-
-      // Очистка канваса
-      ctx.clearRect(0, 0, width, height);
 
       // Отрисовка фона с учётом сдвига
       for (let x = backgroundX.current; x < width; x += backgroundImage.current.width) {
@@ -143,8 +124,8 @@ const Game: React.FC<Props> = ({ width, height }) => {
 
       // Отрисовка выстрелов
       bullets.current.forEach((bullet, index) => {
-        bullet.x += bullet.dx;
-        bullet.y += bullet.dy;
+        bullet.x += bullet.moveX;
+        bullet.y += bullet.moveY;
         ctx.fillStyle = 'red';
         ctx.fillRect(bullet.x, bullet.y, 5, 5);
 
@@ -155,7 +136,7 @@ const Game: React.FC<Props> = ({ width, height }) => {
 
       // Отрисовка врагов
       enemies.current.forEach((enemy) => {
-        enemy.x += enemy.dx;
+        enemy.x += enemy.moveX;
         ctx.fillStyle = 'green';
         ctx.fillRect(enemy.x, enemy.y, enemy.size, enemy.size);
 
@@ -180,7 +161,7 @@ const Game: React.FC<Props> = ({ width, height }) => {
       // Проверка столкновений пуль с врагами
       enemies.current = enemies.current.filter((enemy) => {
         return !bullets.current.some((bullet, bulletIndex) => {
-          const hit = Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y) < enemy.size;
+          const hit = checkCollision(bullet, enemy);
           if (hit) {
             bullets.current.splice(bulletIndex, 1);
             setScore((prev) => prev + 100);
@@ -192,17 +173,16 @@ const Game: React.FC<Props> = ({ width, height }) => {
       requestAnimationFrame(gameLoop);
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mousemove', handleMouseMovePlayer);
+    document.addEventListener('mousedown', handleMouseDownStartShooting);
+    document.addEventListener('mouseup', handleMouseUpStopShooting);
     setInterval(spawnEnemy, 500);
-
-    requestAnimationFrame(gameLoop);
+    
 
     return () => {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mouseup', handleMouseUp);
+      document.addEventListener('mousemove', handleMouseMovePlayer);
+      document.removeEventListener('mousedown', handleMouseDownStartShooting);
+      document.removeEventListener('mouseup', handleMouseUpStopShooting);
       if (shootingInterval.current) {
         clearInterval(shootingInterval.current);
       }
@@ -210,17 +190,15 @@ const Game: React.FC<Props> = ({ width, height }) => {
   }, [width, height, gameStarted]);
 
   return (
-    <>
+    <section className={classes.game}>
       <h2>{score}</h2>
       <canvas
-        style={{ border: '1px solid black', cursor: cursor }}
+        className={classes.canvas}
+        style={{cursor: cursor }}
         ref={canvasRef}
         width={width}
         height={height}
       />
-      ;
-    </>
+    </section>
   );
 };
-
-export default Game;
