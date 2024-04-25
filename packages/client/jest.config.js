@@ -10,6 +10,6 @@ export default {
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '\\.(css|less|sass|scss|png|jpg)$': '<rootDir>/src/shared/tests/stubs/styleMock.ts',
+    '\\.(css|less|sass|scss|gif)$': '<rootDir>/src/shared/tests/stubs/styleMock.ts',
   },
 };
