@@ -1,11 +1,7 @@
+import { IInputData } from '@/shared/hooks';
 import { EInputNames } from '@/shared/types';
 
-export const TEXTS = {
-  submitButton: 'Submit',
-  signupButton: 'Log in',
-} as const;
-
-export const INPUTS = [
+export const SIGNUP_INPUTS: IInputData[] = [
   {
     name: EInputNames.FirstName,
     placeholder: 'Введите имя',
@@ -18,7 +14,7 @@ export const INPUTS = [
   },
   {
     name: EInputNames.Phone,
-    placeholder: 'Введите нормер телефона',
+    placeholder: 'Введите номер телефона',
     type: 'text',
   },
   {

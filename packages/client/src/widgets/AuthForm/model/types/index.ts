@@ -1,1 +1,1 @@
-export type { IFormProps } from './props';
+export type { ICommonFormProps } from './props';

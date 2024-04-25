@@ -1,0 +1,1 @@
+export { praktikumClient } from './client';
