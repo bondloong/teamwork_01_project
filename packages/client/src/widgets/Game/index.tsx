@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import SpaceHD from '@/widgets/Game/templates/space_hd.webp'
+import SpaceHD from './templates/space_hd.webp'
 
 
 interface Props {
