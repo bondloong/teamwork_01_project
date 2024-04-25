@@ -8,4 +8,5 @@ export interface IFormProps {
   validationSchema: Record<string, StringSchema>;
   children: ReactElement;
   onSubmit: (values: TInputValues<IInputData[]>) => void;
+  mainError?: string | null;
 }

@@ -1,4 +1,5 @@
 export const TEXTS = {
   submitButton: 'Submit',
-  signupButton: 'Log in',
+  passwordRepeatError: 'Введенные пароли не совпадают',
+  unknownError: 'Что-то пошло не так',
 } as const;
