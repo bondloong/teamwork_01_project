@@ -2,13 +2,13 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { SpaceHD } from './assets/indes';
 import { IBullet, IEnemy, IGameProps, TCursor } from './GameInterfaces';
 import classes from './Game.module.scss';
-import { drawStartGame, handleMouseDownStartShooting, handleMouseMovePlayer, handleMouseUpStopShooting, shootBullet, spawnEnemy } from './models/helpers';
+import { drawStartGame, handleMouseDownStartShooting, handleMouseMoveShip, handleMouseUpStopShooting, shootBullet, spawnEnemy } from './models/gameHelpers';
 import { gameLoop } from './models/gameLoop';
 
 
 export const Game: FC<IGameProps>  = ({ width, height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const player = useRef({ x: width / 2, y: height / 2, size: 20 });
+  const ship = useRef({ x: width / 2, y: height / 2, size: 20 });
   const bullets = useRef<Array<IBullet>>([]);
   const enemies = useRef<Array<IEnemy>>([]);
   const gameOver = useRef(false);
@@ -33,18 +33,18 @@ export const Game: FC<IGameProps>  = ({ width, height }) => {
 
     backgroundImage.current.src = SpaceHD;  // Загрузка фона
     backgroundImage.current.onload = (): void => {
-      requestAnimationFrame(() => gameLoop({ ctx, gameOver, backgroundX, backgroundImage, width, height, player, bullets, enemies, setScore }));
+      requestAnimationFrame(() => gameLoop({ ctx, gameOver, backgroundX, backgroundImage, width, height, ship, bullets, enemies, setScore }));
     };
 
-    document.addEventListener('mousemove', (event) => handleMouseMovePlayer(event, canvas, player));
-    document.addEventListener('mousedown', () => handleMouseDownStartShooting(() =>shootBullet(bullets, player), shootingInterval));
+    document.addEventListener('mousemove', (event) => handleMouseMoveShip(event, canvas, ship));
+    document.addEventListener('mousedown', () => handleMouseDownStartShooting(() =>shootBullet(bullets, ship), shootingInterval));
     document.addEventListener('mouseup', () => handleMouseUpStopShooting(shootingInterval));
     setInterval(() => spawnEnemy(enemies, width, height, enemySpeed), 500);
     
 
     return () => {
-      document.addEventListener('mousemove', (event) => handleMouseMovePlayer(event, canvas, player));
-      document.removeEventListener('mousedown', () => handleMouseDownStartShooting(() =>shootBullet(bullets, player), shootingInterval));
+      document.addEventListener('mousemove', (event) => handleMouseMoveShip(event, canvas, ship));
+      document.removeEventListener('mousedown', () => handleMouseDownStartShooting(() =>shootBullet(bullets, ship), shootingInterval));
       document.removeEventListener('mouseup', () => handleMouseUpStopShooting(shootingInterval));
       if (shootingInterval.current) {
         clearInterval(shootingInterval.current);

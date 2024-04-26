@@ -5,10 +5,10 @@ interface shootingInterval extends React.MutableRefObject<NodeJS.Timeout | null>
 
 
 // Отрисовка корабля на мышке
-export const handleMouseMovePlayer = (event: MouseEvent, canvas: HTMLCanvasElement, player: MutableRefObject<IShip>): void => {
+export const handleMouseMoveShip = (event: MouseEvent, canvas: HTMLCanvasElement, ship: MutableRefObject<IShip>): void => {
 	const rect = canvas.getBoundingClientRect();
-	player.current.x = event.clientX - rect.left - player.current.size / 2;
-	player.current.y = event.clientY - rect.top - player.current.size / 2;
+	ship.current.x = event.clientX - rect.left - ship.current.size / 2;
+	ship.current.y = event.clientY - rect.top - ship.current.size / 2;
 };
 
 // Выстрел
@@ -38,11 +38,11 @@ export const spawnEnemy = (enemies: React.MutableRefObject<IEnemy[]>, width: num
 };
 
 // Пуля
-export const shootBullet = (bullets: React.MutableRefObject<IBullet[]>, player: MutableRefObject<IShip>): void => {
+export const shootBullet = (bullets: React.MutableRefObject<IBullet[]>, ship: MutableRefObject<IShip>): void => {
 	const speed = 15;
 	bullets.current.push({
-		x: player.current.x + player.current.size / 2,
-		y: player.current.y + player.current.size / 2,
+		x: ship.current.x + ship.current.size / 2,
+		y: ship.current.y + ship.current.size / 2,
 		moveX: speed,
 		moveY: 0,
 	});
