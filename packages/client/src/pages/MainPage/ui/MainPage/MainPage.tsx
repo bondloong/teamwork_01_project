@@ -1,39 +1,18 @@
-import { BaseLayout } from '@/layouts/BaseLayout';
 import { ReactElement } from 'react';
-import MainImage from '@/assets/images/main.jpg';
+import { LandingNavigation } from '@/widgets/LandingNavigation';
 import classes from './MainPage.module.scss';
 
 export const MainPage = (): ReactElement => {
   return (
-    <BaseLayout>
-      <div className={classes.container}>
-        <img src={MainImage} alt="Starship Screenshot" className={classes.image} />
-        <div className={classes.overlay}>
-          <div className={classes.content}>
-            <h1>Explore the Universe</h1>
-            <p>
-              Embark on an epic journey through space in Starship, a thrilling adventure game where
-              you control your own spacecraft and battle against alien invaders.
-            </p>
-            <nav>
-              <ul>
-                <li>
-                  <a href="/forum">Join the Community</a>
-                </li>
-                <li>
-                  <a href="/leaderboard">Compete for Glory</a>
-                </li>
-                <li>
-                  <a href="/profile">Customize Your Ship</a>
-                </li>
-                <li>
-                  <a href="/game">Start Your Adventure</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
+    <div className={`${classes.section} `}>
+      <div className={classes.content}>
+        <h1 className={classes.heading}>Explore the Universe</h1>
+        <p className={classes.paragraph}>
+          Embark on an epic journey through space in Starship, a thrilling adventure game where you
+          control your own spacecraft and battle against alien invaders.
+        </p>
       </div>
-    </BaseLayout>
+      <LandingNavigation className={classes.navigation} />
+    </div>
   );
 };
