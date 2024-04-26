@@ -4,6 +4,12 @@ export interface IGameProps {
 	height: number;
 }
 
+export interface IShip{
+	x: number;
+	y: number;
+	size: number;
+}
+
 export interface IBullet {
 	x: number;
 	y: number;
@@ -17,3 +23,5 @@ export interface IEnemy {
 	moveX: number;
 	moveY: number;
 }
+
+export type TCursor = 'inherit' | 'none'
