@@ -3,9 +3,9 @@ import { Application } from './Application';
 import '@testing-library/jest-dom';
 
 test('Application should render page correctly', () => {
-  const { queryByText } = render(<Application />);
+  const { queryByAltText } = render(<Application />);
 
-  const title = queryByText('Log In');
+  const loader = queryByAltText('Loading...');
 
-  expect(title).toBeVisible();
+  expect(loader).toBeVisible();
 });

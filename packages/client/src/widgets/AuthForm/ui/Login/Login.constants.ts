@@ -1,4 +1,4 @@
 export const TEXTS = {
   submitButton: 'Submit',
-  signupButton: 'Sign up',
+  unknownError: 'Что-то пошло не так',
 } as const;
