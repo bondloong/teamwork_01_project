@@ -2,9 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { SpaceHD } from './assets/indes';
 import { IBullet, IEnemy, IGameProps, TCursor } from './GameInterfaces';
 import classes from './Game.module.scss';
-import { drawStartGame, handleMouseDownStartShooting, handleMouseMoveShip, handleMouseUpStopShooting, shootBullet, spawnEnemy } from './models';
-import { gameLoop } from './models';
-
+import { drawStartGame, handleMouseDownStartShooting, handleMouseMoveShip, handleMouseUpStopShooting, shootBullet, spawnEnemy, gameLoop } from './models';
 
 export const Game: FC<IGameProps>  = ({ width, height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -33,6 +31,7 @@ export const Game: FC<IGameProps>  = ({ width, height }) => {
 
     backgroundImage.current.src = SpaceHD;  // Загрузка фона
     backgroundImage.current.onload = (): void => {
+      // Запуск игры после отрисовки фона
       requestAnimationFrame(() => gameLoop({ ctx, gameOver, backgroundX, backgroundImage, width, height, ship, bullets, enemies, setScore }));
     };
 
@@ -41,7 +40,6 @@ export const Game: FC<IGameProps>  = ({ width, height }) => {
     document.addEventListener('mouseup', () => handleMouseUpStopShooting(shootingInterval));
     setInterval(() => spawnEnemy(enemies, width, height, enemySpeed), 500);
     
-
     return () => {
       document.addEventListener('mousemove', (event) => handleMouseMoveShip(event, canvas, ship));
       document.removeEventListener('mousedown', () => handleMouseDownStartShooting(() =>shootBullet(bullets, ship), shootingInterval));
