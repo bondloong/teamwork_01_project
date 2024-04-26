@@ -1,5 +1,4 @@
 import { IBullet, IEnemy, IShip } from '../GameInterfaces';
-import { checkCollision } from './collisionUtils';
 
 // Отрисовка фона с учётом сдвига
 export const moveBG = (backgroundX: React.MutableRefObject<number>, backgroundImage: React.MutableRefObject<HTMLImageElement>, width: number, height: number, ctx: CanvasRenderingContext2D): void => {
@@ -35,6 +34,10 @@ export const drawBullets = (bullets: React.MutableRefObject<IBullet[]>, ctx: Can
 }
 
 export const enemiesCheckCollision = (enemies: React.MutableRefObject<IEnemy[]>, bullets: React.MutableRefObject<IBullet[]>, setScore: React.Dispatch<React.SetStateAction<number>>):void => {
+	const checkCollision = (bullet: IBullet, enemy: IEnemy): boolean => {
+		return Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y) < enemy.size;
+	}
+
 	enemies.current = enemies.current.filter((enemy) => {
 		const someBulletsCheck = (bullet: IBullet, bulletIndex: number): boolean => {
 			const hit = checkCollision(bullet, enemy);

@@ -1,5 +1,5 @@
 import { IBullet, IEnemy, IShip } from '../GameInterfaces';
-import { drawBullets, drawEnemies, drawShip, enemiesCheckCollision, moveBG } from './gameLoopHelpers';
+import { drawBullets, drawEnemies, drawShip, enemiesCheckCollision, moveBG } from '.';
 
 
 interface IGameLoopProps {

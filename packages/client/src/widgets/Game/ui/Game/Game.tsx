@@ -2,8 +2,8 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { SpaceHD } from './assets/indes';
 import { IBullet, IEnemy, IGameProps, TCursor } from './GameInterfaces';
 import classes from './Game.module.scss';
-import { drawStartGame, handleMouseDownStartShooting, handleMouseMoveShip, handleMouseUpStopShooting, shootBullet, spawnEnemy } from './models/gameHelpers';
-import { gameLoop } from './models/gameLoop';
+import { drawStartGame, handleMouseDownStartShooting, handleMouseMoveShip, handleMouseUpStopShooting, shootBullet, spawnEnemy } from './models';
+import { gameLoop } from './models';
 
 
 export const Game: FC<IGameProps>  = ({ width, height }) => {
