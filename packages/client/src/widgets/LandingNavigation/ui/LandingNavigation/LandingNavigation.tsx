@@ -1,32 +1,33 @@
 import { ReactElement } from 'react';
 import classes from './LandingNavigation.module.scss';
-import { LandingNavigationProps } from './LandingNavigation.interfaces';
+import { Link } from 'react-router-dom';
+import { EAppRoutes } from '@/shared/types';
 
-export const LandingNavigation = ({ className }: LandingNavigationProps): ReactElement => {
+export const LandingNavigation = (): ReactElement => {
   return (
-    <nav className={`${classes.navigation} ${className}`}>
-      <ul className={classes.list}>
+    <>
+      <ul className={`${classes.list}`}>
         <li className={classes.item}>
-          <a href="/forum" className={classes.link}>
+          <Link to={EAppRoutes.Forum} className={classes.link}>
             Join the Community
-          </a>
+          </Link>
         </li>
         <li className={classes.item}>
-          <a href="/leaderboard" className={classes.link}>
+          <Link to={EAppRoutes.LeaderBoard} className={classes.link}>
             Compete for Glory
-          </a>
+          </Link>
         </li>
         <li className={classes.item}>
-          <a href="/profile" className={classes.link}>
+          <Link to="#" className={classes.link}>
             Customize Your Ship
-          </a>
+          </Link>
         </li>
         <li className={classes.item}>
-          <a href="/game" className={classes.link}>
+          <Link to={EAppRoutes.Game} className={classes.link}>
             Start Your Adventure
-          </a>
+          </Link>
         </li>
       </ul>
-    </nav>
+    </>
   );
 };

@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { TFormType } from './AuthForm.interfaces';
-import { LoginForm } from '../LoginForm';
-import { SignupForm } from '../SignupForm';
-import { IFormProps } from '../../model';
+import { Login } from '../Login';
+import { Signup } from '../Signup';
+import { ICommonFormProps } from '../../model';
 
-export const formsMap: Record<TFormType, FC<IFormProps>> = {
-  login: LoginForm,
-  signup: SignupForm,
+export const formsMap: Record<TFormType, FC<ICommonFormProps>> = {
+  login: Login,
+  signup: Signup,
 } as const;
 
 export const TEXTS = {
