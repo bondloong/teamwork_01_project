@@ -12,7 +12,7 @@ export const MainPage = (): ReactElement => {
           control your own spacecraft and battle against alien invaders.
         </p>
       </div>
-      <LandingNavigation className={classes.navigation} />
+      <LandingNavigation />
     </div>
   );
 };
