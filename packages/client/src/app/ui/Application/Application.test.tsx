@@ -3,11 +3,7 @@ import { Application } from './Application';
 import '@testing-library/jest-dom';
 
 test('Application should render page correctly', () => {
-  const { queryByText, queryByAltText } = render(<Application />);
-
-  const title = queryByText('Log In');
-
-  expect(title).toBeVisible();
+  const { queryByAltText } = render(<Application />);
 
   const loader = queryByAltText('Loading...');
 

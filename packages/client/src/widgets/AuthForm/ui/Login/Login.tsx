@@ -37,7 +37,7 @@ export const Login = ({ toggleFormButton, setIsLoading }: ICommonFormProps): Rea
           ...res,
         });
 
-        navigate(EAppRoutes.Game);
+        navigate(EAppRoutes.Home);
       })
       .catch((error) => {
         console.log('LogIn failed', error);
