@@ -4,7 +4,7 @@ import classes from './MainPage.module.scss';
 
 export const MainPage = (): ReactElement => {
   return (
-    <div className={`${classes.section} `}>
+    <div className={classes.section}>
       <div className={classes.content}>
         <h1 className={classes.heading}>Explore the Universe</h1>
         <p className={classes.paragraph}>
