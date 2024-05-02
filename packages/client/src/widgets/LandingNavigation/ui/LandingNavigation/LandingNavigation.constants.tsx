@@ -3,18 +3,18 @@ import { NavItem } from './LandingNavigation.interfaces';
 export const navItems: NavItem[] = [
   {
     label: 'Join the Community',
-    key: EAppRoutes.Home,
+    path: EAppRoutes.Home,
   },
   {
     label: 'Compete for Glory',
-    key: EAppRoutes.LeaderBoard,
+    path: EAppRoutes.LeaderBoard,
   },
   {
     label: 'Customize Your Ship',
-    key: EAppRoutes.Game,
+    path: EAppRoutes.Game,
   },
   {
     label: 'Start Your Adventure',
-    key: EAppRoutes.Forum,
+    path: EAppRoutes.Forum,
   },
 ];

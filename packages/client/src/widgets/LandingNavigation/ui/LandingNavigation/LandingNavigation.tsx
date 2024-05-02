@@ -8,7 +8,7 @@ export const LandingNavigation = (): ReactElement => {
     <ul className={classes.list}>
       {navItems.map((item, index) => (
         <li className={classes.item} key={index}>
-          <Link to={item.key} className={classes.link}>
+          <Link to={item.path} className={classes.link}>
             {item.label}
           </Link>
         </li>
