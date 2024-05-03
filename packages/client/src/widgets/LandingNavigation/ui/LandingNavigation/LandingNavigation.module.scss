@@ -1,0 +1,15 @@
+.list {
+  margin-bottom: 16px;
+}
+
+.item {
+  margin: 8px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-h3;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

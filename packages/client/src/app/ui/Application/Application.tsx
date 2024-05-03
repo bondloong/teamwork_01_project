@@ -4,6 +4,7 @@ import { GamePage } from '@/pages/GamePage';
 import { LeaderboardPage } from '@/pages/LeaderboardPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { TopicPage } from '@/pages/TopicPage';
+import { MainPage } from '@/pages/MainPage';
 import { ReactElement } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '../../styles/_app.scss';
@@ -16,6 +17,14 @@ export const Application = (): ReactElement => (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AuthPage />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <MainPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/game"
           element={

@@ -1,0 +1,23 @@
+.section {
+  color: $text-secondary-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background-position: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.751), rgba(0, 0, 0, 0.751)),
+    url('../assets/star-ship.webp');
+}
+.content {
+  text-align: center;
+  color: $text-secondary-color;
+}
+
+.heading {
+  font-size: $font-size-big;
+}
+
+.paragraph {
+  font-size: $font-size-h4;
+}

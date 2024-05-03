@@ -9,7 +9,7 @@ export const AuthPage = (): ReactElement => {
   const { user } = useAuthContext();
 
   if (user) {
-    return <Navigate to={EAppRoutes.Game} />;
+    return <Navigate to={EAppRoutes.Home} />;
   }
 
   return (

@@ -51,7 +51,7 @@ export const Signup = ({ toggleFormButton, setIsLoading }: ICommonFormProps): Re
           id: res.id,
         });
 
-        navigate(EAppRoutes.Game);
+        navigate(EAppRoutes.Home);
       })
       .catch((error) => {
         console.log('SignUp failed', error);
