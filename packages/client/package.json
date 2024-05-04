@@ -12,6 +12,7 @@
     "stylelint": "stylelint **/*.scss"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.2.3",
     "antd": "^5.16.2",
     "axios": "^1.6.8",
     "dotenv": "^16.0.2",
