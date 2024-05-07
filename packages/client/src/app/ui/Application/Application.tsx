@@ -11,49 +11,47 @@ import '../../styles/_app.scss';
 import { AuthProvider } from '@/shared/contexts';
 import { fetchUserInfo } from '@/entities/User';
 import { ProtectedRoute } from '@/widgets/ProtectedRoute';
+import { useServiceWorker } from '../../model';
 
-export const Application = (): ReactElement => (
-  <AuthProvider getUserInfo={fetchUserInfo}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AuthPage />} />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <MainPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/game"
-          element={
-            <ProtectedRoute>
-              <GamePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/leaderboard"
-          element={
-            <ProtectedRoute>
-              <LeaderboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/forum">
+export const Application = (): ReactElement => {
+  useServiceWorker();
+
+  return (
+    <AuthProvider getUserInfo={fetchUserInfo}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AuthPage />} />
           <Route
-            index
+            path="/home"
             element={
               <ProtectedRoute>
-                <ForumPage />
+                <MainPage />
               </ProtectedRoute>
             }
           />
-          <Route path=":topicId" element={<TopicPage />} />
-        </Route>
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </BrowserRouter>
-  </AuthProvider>
-);
+          <Route path="/game" element={<GamePage />} />
+          <Route
+            path="/leaderboard"
+            element={
+              <ProtectedRoute>
+                <LeaderboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/forum">
+            <Route
+              index
+              element={
+                <ProtectedRoute>
+                  <ForumPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path=":topicId" element={<TopicPage />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
+};
