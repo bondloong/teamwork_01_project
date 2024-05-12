@@ -3,7 +3,7 @@ import { NavItem } from './LandingNavigation.interfaces';
 export const navItems: NavItem[] = [
   {
     label: 'Join the Community',
-    path: EAppRoutes.Home,
+    path: EAppRoutes.Forum,
   },
   {
     label: 'Compete for Glory',
@@ -11,10 +11,11 @@ export const navItems: NavItem[] = [
   },
   {
     label: 'Customize Your Ship',
-    path: EAppRoutes.Game,
+    path: EAppRoutes.Home,
   },
   {
     label: 'Start Your Adventure',
-    path: EAppRoutes.Forum,
+    path: EAppRoutes.Game,
+    // path: EAppRoutes.Home,
   },
 ];
