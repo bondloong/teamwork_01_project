@@ -1,7 +1,8 @@
 export enum EAppRoutes {
   Main = '/',
   Game = '/game',
+  Auth = '/auth',
   LeaderBoard = '/leaderboard',
   Forum = '/forum',
-  Home = '/home',
+  Profile = '/profile',
 }
