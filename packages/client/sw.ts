@@ -8,10 +8,10 @@ const CHACHE_VERSION = 'v1';
 
 const CACHE_NAME = `${CHACHE_TITLE}-${CHACHE_VERSION}`;
 
-const URLS = ['/', '/index.ts'];
+const URLS = ['/', '/game', '/auth', '/leaderboard', '/forum', '/profile', '/index.html'];
 
 const ERROR_BLOCK = `
-<div >
+<div>
   Something went wrong. Please try again later.
 </div>
 `;
@@ -23,8 +23,6 @@ const fallbackResponse = new Response(ERROR_BLOCK, {
 });
 
 self.addEventListener('install', (event) => {
-  console.log('Service Worker install', event);
-
   event.waitUntil(
     caches
       .open(CACHE_NAME)
@@ -36,43 +34,64 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activate', event);
-
   // Браузер может останавливать сервис-воркеры, чтобы освободить ресурсы системы и улучшить производительность (например, когда они больше не нужны, например, когда пользователь закрывает вкладку или выходит из приложения).
   // Браузер не должен останавливать сервис-воркер, пока он не установит контроль над всеми клиентами страницы
   // Браузер должен убедиться, что сервис-воркер установил контроль над всеми клиентами страницы, прежде чем сервис-воркер будет останавлен
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    // При установке нового сервис-воркера (новая версия) Вначале чистим кэш,
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames
+            .filter((cacheName) => {
+              // Удаляем все кеши, кроме текущего
+              return cacheName !== CACHE_NAME;
+            })
+            .map((cacheName) => {
+              return caches.delete(cacheName);
+            })
+        );
+      })
+      // Потом говорим браузеру не останавливать сервис-воркер
+      .then(() => self.clients.claim())
+  );
 });
 
 // Событие fetch в сервис-воркере вызывается каждый раз, когда браузер пытается получить ресурс из сети, такой как HTML-страница, изображение, стиль, скрипт и т.д.
 self.addEventListener('fetch', (event) => {
-  console.log('Service Worker fetch', event);
-
   // Если сеть доступна
   if (navigator.onLine) {
     // Запрос - это поток, который может существовать только в одном экземпляре, который будет передан или браузеру, или сервис-воркеру Поэтому создаем копию, с которой будет работать SW
     const requestCopy = event.request.clone();
 
-    return fetch(requestCopy).then((response) => {
-      // response.type === 'basic' - проверяем, что ответ является простым ответом CORS
-      if (response && response.status === 200 && response.type === 'basic') {
-        //Кэш работает со своей копией ответа
-        const responseCopy = response.clone();
+    return fetch(requestCopy)
+      .then((response) => {
+        // response.type === 'basic' - проверяем, что ответ является простым ответом CORS
+        if (response && response.status === 200 && response.type === 'basic') {
+          //Кэш работает со своей копией ответа
+          const responseCopy = response.clone();
 
-        // Сохраняем ответ в кэш
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseCopy));
-      }
+          // Сохраняем ответ в кэш
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseCopy);
+          });
+        }
 
-      // Возвращаем оригинальный ответ
-      return response;
-    });
+        // Возвращаем оригинальный ответ
+        return response;
+      })
+      .catch(() => fallbackResponse);
     // Если браузер не в сети
   } else {
     // Если находим в кэше нужные файлы, то используем их, в противном случае возвращаем загулушку
+
     event.respondWith(
       caches
         .match(event.request)
-        .then((response) => response || fallbackResponse)
+        .then((response) => {
+          return response || fallbackResponse;
+        })
         .catch(() => fallbackResponse)
     );
   }
