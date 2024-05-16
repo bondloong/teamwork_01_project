@@ -119,6 +119,9 @@ export const Game: FC<IGameProps> = ({ width, height, onFullscreenToggle }) => {
   }, [width, height]);
 
   const toggleFullScreen = (): void => {
+    if (!onFullscreenToggle) {
+      return;
+    }
     if (!document.fullscreenElement) {
       document.documentElement
         .requestFullscreen()
