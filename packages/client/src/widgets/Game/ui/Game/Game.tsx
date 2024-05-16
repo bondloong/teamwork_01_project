@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useRef, useState, useEffect } from 'react';
 import { SpaceHD } from './assets/index';
 import { IBullet, IEnemy, IGameProps, TCursor } from './GameInterfaces';
 import classes from './Game.module.scss';
@@ -12,11 +12,10 @@ import {
   gameLoop,
 } from './models';
 
-export const Game: FC<IGameProps> = ({ width, height, onFullscreenToggle }) => {
+export const Game: FC<IGameProps> = ({ width, height, onFullscreenToggle, isFullscreen }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasWidth, setCanvasWidth] = useState(width);
   const [canvasHeight, setCanvasHeight] = useState(height);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const ship = useRef({ x: width / 2, y: height / 2, size: 20 });
   const bullets = useRef<Array<IBullet>>([]);
@@ -102,56 +101,21 @@ export const Game: FC<IGameProps> = ({ width, height, onFullscreenToggle }) => {
   }, [canvasWidth, canvasHeight, gameStarted]);
 
   useEffect(() => {
-    const handleResize = (): void => {
-      if (document.fullscreenElement != null) {
-        setCanvasWidth(window.innerWidth);
-        setCanvasHeight(window.innerHeight);
-      } else {
-        setCanvasWidth(width);
-        setCanvasHeight(height);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [width, height]);
-
-  const toggleFullScreen = (): void => {
-    if (!onFullscreenToggle) {
-      return;
-    }
-    if (!document.fullscreenElement) {
-      document.documentElement
-        .requestFullscreen()
-        .then(() => {
-          setCanvasWidth(window.innerWidth);
-          setCanvasHeight(window.innerHeight);
-          onFullscreenToggle(true);
-          setIsFullscreen(true);
-        })
-        .catch((e) => {
-          console.error(`Error attempting to enable full-screen mode: ${e.message} (${e.name})`);
-        });
+    if (isFullscreen) {
+      setCanvasWidth(window.innerWidth);
+      setCanvasHeight(window.innerHeight);
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().then(() => {
-          setCanvasWidth(width);
-          setCanvasHeight(height);
-          onFullscreenToggle(false);
-          setIsFullscreen(false);
-        });
-      }
+      setCanvasWidth(width);
+      setCanvasHeight(height);
     }
-  };
+  }, [isFullscreen, width, height]);
 
   return (
     <section className={classes.game}>
       <h2 className={`${classes.score} ${isFullscreen ? classes.scoreIsFullscreen : ''}`}>
         {score}
       </h2>
-      <button onClick={toggleFullScreen} className={classes.fullscreenButton}>
+      <button onClick={onFullscreenToggle} className={classes.fullscreenButton}>
         Toggle Fullscreen
       </button>
       <canvas
