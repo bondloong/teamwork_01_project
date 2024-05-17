@@ -1,41 +1,41 @@
 .game {
-	position: relative;
-	text-align: center;
+  position: relative;
+  text-align: center;
 }
 .canvas {
-	border: 1px solid black;
+  border: 1px solid black;
 }
 
 .fullscreen-button {
-	position: absolute;
-	opacity: 0.4;
-	right: 20px;
-	bottom: 10px;
-	background: #111;
-	border: 1px solid #fff;
-	color: #fff;
-	padding: 10px 20px;
-	font-size: 16px;
-	cursor: pointer;
-	transition: all 0.3s ease;
-	text-transform: uppercase;
-	font-weight: bold;
+  position: absolute;
+  opacity: 0.4;
+  right: 20px;
+  bottom: 10px;
+  background: #111;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: bold;
 
-	&:hover {
-		color: rgb(244, 175, 106);
-	}
+  &:hover {
+    color: rgb(244, 175, 106);
+  }
 }
 
 .score {
-	display: block;
+  display: block;
 }
 
 .score-is-fullscreen {
-	position: absolute;
-	top: 10px;
-	left: 0;
-	width: 100%;
-	margin: 0 auto;
-	color: white;
-	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  margin: 0 auto;
+  color: white;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
