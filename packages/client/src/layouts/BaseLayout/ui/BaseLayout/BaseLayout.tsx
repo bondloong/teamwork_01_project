@@ -3,27 +3,16 @@ import { IBaseLayoutProps } from './BaseLayout.interfaces';
 import classes from './BaseLayout.module.scss';
 import { MainNavigation } from '@/widgets/MainNavigation';
 import { LogOut } from '@/features/LogOut';
-import classNames from 'classnames';
 
-export const BaseLayout = ({ children, isFullscreen }: IBaseLayoutProps): ReactElement => {
-  const headerClasses = classNames({
-    [classes.header]: true,
-    [classes.fullscreenHeader]: isFullscreen,
-  });
-
-  const mainClasses = classNames({
-    [classes.main]: true,
-    [classes.fullscreenMain]: isFullscreen,
-  });
-
+export const BaseLayout = ({ children }: IBaseLayoutProps): ReactElement => {
   return (
-    <div className={classes.layout}>
-      <header className={headerClasses}>
+    <div>
+      <header className={classes.header}>
         <MainNavigation />
         <LogOut />
       </header>
 
-      <main className={mainClasses}>{children}</main>
+      <main className={classes.main}>{children}</main>
     </div>
   );
 };

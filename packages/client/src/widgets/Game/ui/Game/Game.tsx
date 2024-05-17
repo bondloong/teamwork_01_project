@@ -11,9 +11,13 @@ import {
   spawnEnemy,
   gameLoop,
 } from './models';
+import { useFullscreen } from '@/shared/hooks/useFullscreen';
 
-export const Game: FC<IGameProps> = ({ width, height, onFullscreenToggle, isFullscreen }) => {
+export const Game: FC<IGameProps> = ({ width, height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const gameRef = useRef<HTMLCanvasElement>(null);
+  const { isFullscreen, toggleFullscreen } = useFullscreen(gameRef);
+
   const [canvasWidth, setCanvasWidth] = useState(width);
   const [canvasHeight, setCanvasHeight] = useState(height);
 
@@ -111,11 +115,11 @@ export const Game: FC<IGameProps> = ({ width, height, onFullscreenToggle, isFull
   }, [isFullscreen, width, height]);
 
   return (
-    <section className={classes.game}>
+    <section ref={gameRef} className={classes.game}>
       <h2 className={`${classes.score} ${isFullscreen ? classes.scoreIsFullscreen : ''}`}>
         {score}
       </h2>
-      <button onClick={onFullscreenToggle} className={classes.fullscreenButton}>
+      <button onClick={toggleFullscreen} className={classes.fullscreenButton}>
         Toggle Fullscreen
       </button>
       <canvas

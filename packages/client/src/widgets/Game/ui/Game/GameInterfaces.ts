@@ -1,8 +1,6 @@
 export interface IGameProps {
   width: number;
   height: number;
-  onFullscreenToggle: () => void;
-  isFullscreen: boolean;
 }
 
 export interface IShip {
