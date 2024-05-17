@@ -1,4 +1,4 @@
-export interface UseFullscreenResult {
+export interface IUseFullscreenResult {
   isFullscreen: boolean;
   toggleFullscreen: () => void;
 }
