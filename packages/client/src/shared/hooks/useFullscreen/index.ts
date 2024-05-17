@@ -1,2 +1,2 @@
 export { useFullscreen } from './useFullscreen';
-export type { UseFullscreenResult } from './useFullscreen.interfaces';
+export type { IUseFullscreenResult } from './useFullscreen.interfaces';

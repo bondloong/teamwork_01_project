@@ -1,24 +1,35 @@
 import { useState, useEffect, RefObject } from 'react';
-import { UseFullscreenResult } from './useFullscreen.interfaces';
+import { IUseFullscreenResult } from './useFullscreen.interfaces';
 
 export const useFullscreen = (
   elementRef: RefObject<HTMLElement>,
-  initialState: boolean = false
-): UseFullscreenResult => {
+  initialState: boolean = false,
+  onToggle?: () => void
+): IUseFullscreenResult => {
   const [isFullscreen, setIsFullscreen] = useState<boolean>(initialState);
 
   const toggleFullscreen = (): void => {
     if (!document.fullscreenElement && elementRef.current) {
       elementRef.current
         .requestFullscreen()
-        .then(() => setIsFullscreen(true))
+        .then(() => {
+          setIsFullscreen(true);
+          if (onToggle) {
+            onToggle();
+          }
+        })
         .catch((e) =>
           console.error(`Error attempting to enable full-screen mode: ${e.message} (${e.name})`)
         );
     } else if (document.fullscreenElement) {
       document
         .exitFullscreen()
-        .then(() => setIsFullscreen(false))
+        .then(() => {
+          setIsFullscreen(false);
+          if (onToggle) {
+            onToggle();
+          }
+        })
         .catch((e) =>
           console.error(`Error attempting to exit full-screen mode: ${e.message} (${e.name})`)
         );

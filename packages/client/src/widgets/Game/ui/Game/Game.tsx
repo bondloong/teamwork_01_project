@@ -18,8 +18,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   const gameRef = useRef<HTMLCanvasElement>(null);
   const { isFullscreen, toggleFullscreen } = useFullscreen(gameRef);
 
-  const [canvasWidth, setCanvasWidth] = useState(width);
-  const [canvasHeight, setCanvasHeight] = useState(height);
+  const [canvasSize, setCanvasSize] = useState({ width, height });
 
   const ship = useRef({ x: width / 2, y: height / 2, size: 20 });
   const bullets = useRef<Array<IBullet>>([]);
@@ -39,53 +38,39 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
     const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
 
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
+    canvas.width = canvasSize.width;
+    canvas.height = canvasSize.height;
 
     if (!gameStarted) {
-      drawStartGame(canvas, ctx, canvasWidth, canvasHeight, setGameStarted, setCursor);
+      drawStartGame(canvas, ctx, canvasSize.width, canvasSize.height, setGameStarted, setCursor);
       return;
     }
 
-    if (backgroundImage.current.complete && backgroundImage.current.naturalHeight !== 0) {
-      gameLoop({
-        ctx,
-        gameOver,
-        backgroundX,
-        backgroundImage,
-        width: canvasWidth,
-        height: canvasHeight,
-        ship,
-        bullets,
-        enemies,
-        setScore,
-      });
-    } else {
-      backgroundImage.current.onload = (): void => {
-        requestAnimationFrame(() =>
-          gameLoop({
-            ctx,
-            gameOver,
-            backgroundX,
-            backgroundImage,
-            width: canvasWidth,
-            height: canvasHeight,
-            ship,
-            bullets,
-            enemies,
-            setScore,
-          })
-        );
-      };
-      backgroundImage.current.src = SpaceHD;
-    }
+    const gameConfig = {
+      ctx,
+      gameOver,
+      backgroundX,
+      backgroundImage,
+      width: canvasSize.width,
+      height: canvasSize.height,
+      ship,
+      bullets,
+      enemies,
+      setScore,
+    };
+
+    backgroundImage.current.src = SpaceHD; // Загрузка фона
+    backgroundImage.current.onload = (): void => {
+      // Запуск игры после отрисовки фона
+      requestAnimationFrame(() => gameLoop(gameConfig));
+    };
 
     const handleMouseMove = (event: MouseEvent): void => handleMouseMoveShip(event, canvas, ship);
     const handleMouseDown = (): void =>
       handleMouseDownStartShooting(() => shootBullet(bullets, ship), shootingInterval);
     const handleMouseUp = (): void => handleMouseUpStopShooting(shootingInterval);
     const spawnEnemyInterval = setInterval(
-      () => spawnEnemy(enemies, canvasWidth, canvasHeight, enemySpeed),
+      () => spawnEnemy(enemies, canvasSize.width, canvasSize.height, enemySpeed),
       500
     );
 
@@ -102,15 +87,13 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
         clearInterval(shootingInterval.current);
       }
     };
-  }, [canvasWidth, canvasHeight, gameStarted]);
+  }, [canvasSize.width, canvasSize.height, gameStarted]);
 
   useEffect(() => {
     if (isFullscreen) {
-      setCanvasWidth(window.innerWidth);
-      setCanvasHeight(window.innerHeight);
+      setCanvasSize({ width: window.innerWidth, height: window.innerHeight });
     } else {
-      setCanvasWidth(width);
-      setCanvasHeight(height);
+      setCanvasSize({ width, height });
     }
   }, [isFullscreen, width, height]);
 
@@ -126,8 +109,8 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
         className={classes.canvas}
         style={{ cursor: cursor }}
         ref={canvasRef}
-        width={canvasWidth}
-        height={canvasHeight}
+        width={canvasSize.width}
+        height={canvasSize.height}
       />
     </section>
   );

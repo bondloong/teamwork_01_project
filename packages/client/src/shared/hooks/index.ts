@@ -1,2 +1,2 @@
 export { useForm, type IInputData } from './useForm';
-export { useFullscreen, type UseFullscreenResult } from './useFullscreen';
+export { useFullscreen, type IUseFullscreenResult } from './useFullscreen';
