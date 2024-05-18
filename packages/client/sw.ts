@@ -3,10 +3,10 @@
 export type {};
 declare const self: ServiceWorkerGlobalScope;
 
-const CHACHE_TITLE = 'cache';
-const CHACHE_VERSION = 'v1';
+const CACHE_TITLE = 'cache';
+const CACHE_VERSION = 'v1';
 
-const CACHE_NAME = `${CHACHE_TITLE}-${CHACHE_VERSION}`;
+const CACHE_NAME = `${CACHE_TITLE}-${CACHE_VERSION}`;
 
 const URLS = ['/', '/game', '/auth', '/leaderboard', '/forum', '/profile', '/index.html'];
 

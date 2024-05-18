@@ -8,5 +8,9 @@ export const startServiceWorker = (): void => {
       .catch((error: string) => {
         console.log('ServiceWorker registration failed: ', error);
       });
+  } else {
+    console.log(
+      'Service worker is not supported. Please update the version or use another browser.'
+    );
   }
 };
