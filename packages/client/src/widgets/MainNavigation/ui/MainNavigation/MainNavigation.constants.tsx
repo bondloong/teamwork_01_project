@@ -3,8 +3,8 @@ import { MenuProps } from 'antd';
 
 export const navItems: MenuProps['items'] = [
   {
-    label: 'Home',
-    key: EAppRoutes.Home,
+    label: 'Main',
+    key: EAppRoutes.Main,
   },
   {
     label: 'Play game',
@@ -17,5 +17,9 @@ export const navItems: MenuProps['items'] = [
   {
     label: 'Forum',
     key: EAppRoutes.Forum,
+  },
+  {
+    label: 'Profile',
+    key: EAppRoutes.Profile,
   },
 ];
