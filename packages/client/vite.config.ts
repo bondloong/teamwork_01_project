@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import { resolve } from 'path';
 dotenv.config();
 
+const SERVICE_WORKER = 'service-worker';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
@@ -26,6 +28,20 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: '@import "./src/app/styles/index.scss";',
+      },
+    },
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        app: './index.html',
+        // Т.к. sw.ts нигде не импртируется, он не попадает в итоговый бандл. Добавляем точку входа
+        [SERVICE_WORKER]: './sw.ts',
+      },
+      output: {
+        entryFileNames: (chunk) =>
+          // Для чанка с именем 'service-worker' сохраняем исходной имя файла. Остальные чанки складываем в assests, добавляя хэш к имени
+          chunk.name === SERVICE_WORKER ? '[name].js' : 'assets/[name]-[hash].js',
       },
     },
   },

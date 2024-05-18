@@ -19,3 +19,11 @@ $header-height: 50px;
   margin-top: $header-height;
   min-height: calc(100dvh - $header-height);
 }
+
+.fullscreenHedaer {
+  display: none;
+}
+
+.fullscreenMain {
+  margin: 0;
+}

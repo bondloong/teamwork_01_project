@@ -14,4 +14,8 @@ export const navItems: MenuProps['items'] = [
     label: 'Forum',
     key: EAppRoutes.Forum,
   },
+  {
+    label: 'Profile',
+    key: EAppRoutes.Profile,
+  },
 ];
