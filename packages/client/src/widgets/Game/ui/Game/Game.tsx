@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { SpaceHD } from './assets/indes';
+import { SpaceHD } from './assets';
 import { IBullet, IEnemy, IGameProps, TCursor } from './GameInterfaces';
 import classes from './Game.module.scss';
 import {
