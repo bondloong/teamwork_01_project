@@ -8,7 +8,7 @@ export const ProtectedRoute = ({ children }: IProtectedRouteProps): ReactElement
   const { user } = useAuthContext();
 
   if (!user) {
-    return <Navigate to={EAppRoutes.Main} />;
+    return <Navigate to={EAppRoutes.Auth} />;
   }
 
   return <>{children}</>;

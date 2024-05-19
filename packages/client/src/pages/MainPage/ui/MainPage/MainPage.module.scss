@@ -5,19 +5,22 @@
   justify-content: center;
   flex-direction: column;
   min-height: 100vh;
-  background-position: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.751), rgba(0, 0, 0, 0.751)),
+  background: linear-gradient(rgb(0 0 0 / 75.1%), rgb(0 0 0 / 75.1%)),
     url('../assets/star-ship.webp');
+  background-position: center;
 }
+
 .content {
   text-align: center;
   color: $text-secondary-color;
 }
 
 .heading {
+  margin-bottom: 30px;
   font-size: $font-size-big;
 }
 
 .paragraph {
+  margin-bottom: 30px;
   font-size: $font-size-h4;
 }
