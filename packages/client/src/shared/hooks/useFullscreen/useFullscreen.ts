@@ -14,9 +14,7 @@ export const useFullscreen = (
         .requestFullscreen()
         .then(() => {
           setIsFullscreen(true);
-          if (onToggle) {
-            onToggle();
-          }
+          onToggle?.();
         })
         .catch((e) =>
           console.error(`Error attempting to enable full-screen mode: ${e.message} (${e.name})`)
@@ -26,9 +24,7 @@ export const useFullscreen = (
         .exitFullscreen()
         .then(() => {
           setIsFullscreen(false);
-          if (onToggle) {
-            onToggle();
-          }
+          onToggle?.();
         })
         .catch((e) =>
           console.error(`Error attempting to exit full-screen mode: ${e.message} (${e.name})`)
