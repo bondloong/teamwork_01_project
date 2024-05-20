@@ -7,3 +7,7 @@ export interface IUser {
   avatar?: string;
   email: string;
 }
+
+export interface IUserSchema {
+  userData: IUser | null;
+}

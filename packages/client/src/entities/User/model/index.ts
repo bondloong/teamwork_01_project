@@ -1,9 +1,3 @@
-export type { IUser } from './types';
-export {
-  fetchUserInfo,
-  logOut,
-  signUp,
-  type TSignUpPayload,
-  logIn,
-  type TLogInPayload,
-} from './api';
+export type { IUser, IUserSchema } from './types';
+export { getUserData, getIsAuth } from './selectors';
+export { userActions, userReducer } from './slice';

@@ -15,7 +15,7 @@ export const LogOut = (): ReactElement => {
       .then(() => {
         setUser(null);
 
-        navigate(EAppRoutes.Main);
+        navigate(EAppRoutes.Auth);
       })
       .catch((error) => {
         console.log('LogOut failed', error);
