@@ -6,4 +6,8 @@ export {
   type TSignUpPayload,
   logIn,
   type TLogInPayload,
+  changeUserPassword,
+  changeProfileAvatar,
+  changeUserProfile,
+  type TChangePasswordPayload,
 } from './model';

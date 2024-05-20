@@ -5,4 +5,7 @@ export const API = {
   signUp: '/auth/signup',
   logIn: '/auth/signin',
   logOut: '/auth/logout',
+  profileAvatar: '/user/profile/avatar',
+  password: '/user/password',
+  profile: '/user/profile',
 } as const;

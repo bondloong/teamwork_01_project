@@ -1,0 +1,36 @@
+.wrapper {
+  max-width: 600px;
+  margin-top: 24px;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-image {
+  margin-bottom: 6px;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.change-password-button {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
