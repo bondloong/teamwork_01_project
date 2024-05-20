@@ -2,19 +2,19 @@ import { EAppRoutes } from '@/shared/types';
 import { NavItem } from './LandingNavigation.interfaces';
 export const navItems: NavItem[] = [
   {
-    label: 'Join the Community',
-    path: EAppRoutes.Home,
-  },
-  {
-    label: 'Compete for Glory',
-    path: EAppRoutes.LeaderBoard,
-  },
-  {
-    label: 'Customize Your Ship',
+    label: 'Start game',
     path: EAppRoutes.Game,
   },
   {
-    label: 'Start Your Adventure',
+    label: 'LeaderBoard',
+    path: EAppRoutes.LeaderBoard,
+  },
+  {
+    label: 'Join the Community',
     path: EAppRoutes.Forum,
+  },
+  {
+    label: 'Profile',
+    path: EAppRoutes.Profile,
   },
 ];
