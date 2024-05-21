@@ -4,10 +4,13 @@ import { TEXTS, formsMap } from './AuthForm.constants';
 import { Button } from 'antd';
 import classes from './AuthForm.module.scss';
 import { Loader } from '@/shared/ui';
+import { useSelector } from 'react-redux';
+import { getIsUserLoading } from '@/entities/User';
 
 export const AuthForm = (): ReactElement => {
   const [formType, setFormType] = useState<TFormType>('login');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const isLoading = useSelector(getIsUserLoading);
 
   const Form = formsMap[formType];
 
@@ -31,7 +34,7 @@ export const AuthForm = (): ReactElement => {
     <>
       <h2 className={classes.heading}>{title}</h2>
 
-      <Form toggleFormButton={toggleFormButton} setIsLoading={setIsLoading} />
+      <Form toggleFormButton={toggleFormButton} />
 
       {isLoading && <Loader mode="dark" />}
     </>

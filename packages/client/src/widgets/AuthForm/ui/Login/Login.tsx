@@ -6,20 +6,17 @@ import { Form } from '../Form';
 import { TInputValues } from '@/shared/hooks/useForm';
 import classes from './Login.module.scss';
 import { TLogInPayload, fetchUserInfo, logIn } from '@/entities/User';
-import { useAuthContext } from '@/shared/contexts';
 import { useNavigate } from 'react-router-dom';
 import { EAppRoutes, EInputNames } from '@/shared/types';
+import { useAppDispatch } from '@/shared/hooks';
 
-export const Login = ({ toggleFormButton, setIsLoading }: ICommonFormProps): ReactElement => {
+export const Login = ({ toggleFormButton }: ICommonFormProps): ReactElement => {
+  const dispatch = useAppDispatch();
   const [mainError, setMainError] = useState<string | null>();
-  const { setUser } = useAuthContext();
+
   const navigate = useNavigate();
 
   const handleSubmit = (values: TInputValues<typeof LOGIN_INPUTS>): void => {
-    if (mainError !== null) {
-      setMainError(null);
-    }
-
     const login = values[EInputNames.Login];
     const password = values[EInputNames.Password];
 
@@ -28,23 +25,14 @@ export const Login = ({ toggleFormButton, setIsLoading }: ICommonFormProps): Rea
       password,
     };
 
-    setIsLoading(true);
-
-    logIn(payload)
-      .then(() => fetchUserInfo())
-      .then((res) => {
-        setUser({
-          ...res,
-        });
-
-        navigate(EAppRoutes.Main);
-      })
-      .catch((error) => {
-        console.log('LogIn failed', error);
-        setMainError(TEXTS.unknownError);
-      })
-      .finally(() => {
-        setIsLoading(false);
+    dispatch(logIn(payload))
+      .then(() => dispatch(fetchUserInfo()))
+      .then((result) => {
+        if (result.meta.requestStatus === 'fulfilled') {
+          navigate(EAppRoutes.Main);
+        } else {
+          setMainError(TEXTS.unknownError);
+        }
       });
   };
 

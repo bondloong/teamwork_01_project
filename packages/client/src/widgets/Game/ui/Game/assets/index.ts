@@ -1,1 +1,1 @@
-export { default as SpaceHD } from './space_hd.webp'
+export { default as SpaceHD } from './space_hd.webp';
