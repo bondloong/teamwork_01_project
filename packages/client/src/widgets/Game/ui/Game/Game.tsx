@@ -13,11 +13,11 @@ export const Game: FC<IGameProps>  = ({ width, height }) => {
   const shootingInterval = useRef<NodeJS.Timeout | null>(null);
   const backgroundImage = useRef(new Image());
   const backgroundX = useRef(0);
+  const enemySpeed = useRef(5);
 
   const [gameStarted, setGameStarted] = useState(false);
   const [cursor, setCursor] = useState<TCursor>('inherit');
   const [score, setScore] = useState(0);
-  const [enemySpeed] = useState(5)
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -38,8 +38,8 @@ export const Game: FC<IGameProps>  = ({ width, height }) => {
     document.addEventListener('mousemove', (event) => handleMouseMoveShip(event, canvas, ship));
     document.addEventListener('mousedown', () => handleMouseDownStartShooting(() =>shootBullet(bullets, ship), shootingInterval));
     document.addEventListener('mouseup', () => handleMouseUpStopShooting(shootingInterval));
-    setInterval(() => spawnEnemy(enemies, width, height, enemySpeed), 500);
-    
+    setInterval(() => spawnEnemy(enemies, width, height, enemySpeed.current), 500);
+
     return () => {
       document.addEventListener('mousemove', (event) => handleMouseMoveShip(event, canvas, ship));
       document.removeEventListener('mousedown', () => handleMouseDownStartShooting(() =>shootBullet(bullets, ship), shootingInterval));
@@ -48,7 +48,11 @@ export const Game: FC<IGameProps>  = ({ width, height }) => {
         clearInterval(shootingInterval.current);
       }
     };
-  }, [width, height, gameStarted]);
+  }, [width, height, gameStarted, enemySpeed]);
+
+  useEffect(() => {
+    enemySpeed.current = 5 + Math.floor(score / 1000);
+  }, [score]);
 
   return (
     <section className={classes.game}>
