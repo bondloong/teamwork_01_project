@@ -6,7 +6,7 @@ import classes from './Signup.module.scss';
 import { TInputValues } from '@/shared/hooks/useForm';
 import { signupSchema } from '../../model/validation/schemas';
 import { Form } from '../Form';
-import { TSignUpPayload, signUpThunk } from '@/entities/User';
+import { TSignUpPayload, signUp } from '@/entities/User';
 import { useNavigate } from 'react-router-dom';
 import { EAppRoutes, EInputNames } from '@/shared/types';
 import { useAppDispatch } from '@/shared/hooks';
@@ -41,7 +41,7 @@ export const Signup = ({ toggleFormButton }: ICommonFormProps): ReactElement => 
       password,
     };
 
-    dispatch(signUpThunk(payload)).then((result) => {
+    dispatch(signUp(payload)).then((result) => {
       if (result.meta.requestStatus === 'fulfilled') {
         navigate(EAppRoutes.Main);
       }

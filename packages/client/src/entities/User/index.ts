@@ -6,10 +6,7 @@ export {
   getIsUserLoading,
   userActions,
   userReducer,
-  fetchUserInfoThunk,
-  logOutThunk,
-  logInThunk,
-  signUpThunk,
 } from './model';
 
 export { type TSignUpPayload, type TLogInPayload } from './api';
+export { fetchUserInfo, logOut, logIn, signUp } from './api';

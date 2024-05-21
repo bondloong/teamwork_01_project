@@ -5,7 +5,7 @@ import { ICommonFormProps, LOGIN_INPUTS, loginSchema } from '../../model';
 import { Form } from '../Form';
 import { TInputValues } from '@/shared/hooks/useForm';
 import classes from './Login.module.scss';
-import { TLogInPayload, fetchUserInfoThunk, logInThunk } from '@/entities/User';
+import { TLogInPayload, fetchUserInfo, logIn } from '@/entities/User';
 import { useNavigate } from 'react-router-dom';
 import { EAppRoutes, EInputNames } from '@/shared/types';
 import { useAppDispatch } from '@/shared/hooks';
@@ -25,8 +25,8 @@ export const Login = ({ toggleFormButton }: ICommonFormProps): ReactElement => {
       password,
     };
 
-    dispatch(logInThunk(payload))
-      .then(() => dispatch(fetchUserInfoThunk()))
+    dispatch(logIn(payload))
+      .then(() => dispatch(fetchUserInfo()))
       .then((result) => {
         if (result.meta.requestStatus === 'fulfilled') {
           navigate(EAppRoutes.Main);

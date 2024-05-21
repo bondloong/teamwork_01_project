@@ -4,7 +4,7 @@ import { TEXTS } from './LogOut.constants';
 import { useNavigate } from 'react-router-dom';
 import { EAppRoutes } from '@/shared/types';
 import { useAppDispatch } from '@/shared/hooks';
-import { getIsUserLoading, logOutThunk } from '@/entities/User';
+import { getIsUserLoading, logOut } from '@/entities/User';
 import { Loader } from '@/shared/ui';
 import { useSelector } from 'react-redux';
 
@@ -14,7 +14,7 @@ export const LogOut = (): ReactElement => {
   const isLoading = useSelector(getIsUserLoading);
 
   const handleClick = (): void => {
-    dispatch(logOutThunk()).then((result) => {
+    dispatch(logOut()).then((result) => {
       if (result.meta.requestStatus === 'fulfilled') {
         navigate(EAppRoutes.Auth);
       }

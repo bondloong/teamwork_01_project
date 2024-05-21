@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { IAuthProps } from './Auth.interfaces';
 import { useAppDispatch } from '@/shared/hooks';
-import { fetchUserInfoThunk } from '@/entities/User';
+import { fetchUserInfo } from '@/entities/User';
 import { Loader } from '@/shared/ui';
 
 export const Auth = ({ children }: IAuthProps): ReactElement => {
@@ -9,7 +9,7 @@ export const Auth = ({ children }: IAuthProps): ReactElement => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    dispatch(fetchUserInfoThunk()).then(() => {
+    dispatch(fetchUserInfo()).then(() => {
       setIsLoading(false);
     });
   }, []);
