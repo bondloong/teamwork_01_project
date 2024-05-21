@@ -1,30 +1,33 @@
 import { ReactElement } from 'react';
 import { Button } from 'antd';
 import { TEXTS } from './LogOut.constants';
-import { logOut } from '@/entities/User';
 import { useNavigate } from 'react-router-dom';
-import { useAuthContext } from '@/shared/contexts';
 import { EAppRoutes } from '@/shared/types';
+import { useAppDispatch } from '@/shared/hooks';
+import { getIsUserLoading, logOut } from '@/entities/User';
+import { Loader } from '@/shared/ui';
+import { useSelector } from 'react-redux';
 
 export const LogOut = (): ReactElement => {
-  const { setUser } = useAuthContext();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const isLoading = useSelector(getIsUserLoading);
 
   const handleClick = (): void => {
-    logOut()
-      .then(() => {
-        setUser(null);
-
-        navigate(EAppRoutes.Main);
-      })
-      .catch((error) => {
-        console.log('LogOut failed', error);
-      });
+    dispatch(logOut()).then((result) => {
+      if (result.meta.requestStatus === 'fulfilled') {
+        navigate(EAppRoutes.Auth);
+      }
+    });
   };
 
   return (
-    <Button type="primary" onClick={handleClick}>
-      {TEXTS.button}
-    </Button>
+    <>
+      <Button type="primary" onClick={handleClick}>
+        {TEXTS.button}
+      </Button>
+
+      {isLoading && <Loader mode="dark" />}
+    </>
   );
 };

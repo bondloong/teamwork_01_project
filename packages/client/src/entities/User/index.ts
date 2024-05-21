@@ -1,9 +1,12 @@
 export {
   type IUser,
-  fetchUserInfo,
-  logOut,
-  signUp,
-  type TSignUpPayload,
-  logIn,
-  type TLogInPayload,
+  type IUserSchema,
+  getUserData,
+  getIsAuth,
+  getIsUserLoading,
+  userActions,
+  userReducer,
 } from './model';
+
+export { type TSignUpPayload, type TLogInPayload } from './api';
+export { fetchUserInfo, logOut, logIn, signUp } from './api';

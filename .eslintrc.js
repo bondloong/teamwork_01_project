@@ -15,4 +15,5 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-unused-vars': 'warn',
   },
+  ignorePatterns: ['dist/', 'dev-dist/'],
 };
