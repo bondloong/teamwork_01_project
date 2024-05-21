@@ -7,14 +7,15 @@ import { TInputValues } from '@/shared/hooks/useForm';
 import { signupSchema } from '../../model/validation/schemas';
 import { Form } from '../Form';
 import { TSignUpPayload, signUp } from '@/entities/User';
-import { useAuthContext } from '@/shared/contexts';
 import { useNavigate } from 'react-router-dom';
 import { EAppRoutes, EInputNames } from '@/shared/types';
+import { useAppDispatch } from '@/shared/hooks';
 
-export const Signup = ({ toggleFormButton, setIsLoading }: ICommonFormProps): ReactElement => {
-  const [mainError, setMainError] = useState<string | null>();
-  const { setUser } = useAuthContext();
+export const Signup = ({ toggleFormButton }: ICommonFormProps): ReactElement => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [mainError, setMainError] = useState<string | null>();
 
   const handleSubmit = (values: TInputValues<typeof SIGNUP_INPUTS>): void => {
     const login = values[EInputNames.Login];
@@ -29,8 +30,6 @@ export const Signup = ({ toggleFormButton, setIsLoading }: ICommonFormProps): Re
       setMainError(TEXTS.passwordRepeatError);
 
       return;
-    } else if (mainError !== null) {
-      setMainError(null);
     }
 
     const payload: TSignUpPayload = {
@@ -42,24 +41,11 @@ export const Signup = ({ toggleFormButton, setIsLoading }: ICommonFormProps): Re
       password,
     };
 
-    setIsLoading(true);
-
-    signUp(payload)
-      .then((res) => {
-        setUser({
-          ...payload,
-          id: res.id,
-        });
-
+    dispatch(signUp(payload)).then((result) => {
+      if (result.meta.requestStatus === 'fulfilled') {
         navigate(EAppRoutes.Main);
-      })
-      .catch((error) => {
-        console.log('SignUp failed', error);
-        setMainError(TEXTS.unknownError);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      }
+    });
   };
 
   return (
