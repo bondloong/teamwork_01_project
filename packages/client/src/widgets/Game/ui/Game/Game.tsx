@@ -27,11 +27,11 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   const shootingInterval = useRef<NodeJS.Timeout | null>(null);
   const backgroundImage = useRef(new Image());
   const backgroundX = useRef(0);
+  const enemySpeed = useRef(5);
 
   const [gameStarted, setGameStarted] = useState(false);
   const [cursor, setCursor] = useState<TCursor>('inherit');
   const [score, setScore] = useState(0);
-  const [enemySpeed] = useState(5);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -70,7 +70,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       handleMouseDownStartShooting(() => shootBullet(bullets, ship), shootingInterval);
     const handleMouseUp = (): void => handleMouseUpStopShooting(shootingInterval);
     const spawnEnemyInterval = setInterval(
-      () => spawnEnemy(enemies, canvasSize.width, canvasSize.height, enemySpeed),
+      () => spawnEnemy(enemies, canvasSize.width, canvasSize.height, enemySpeed.current),
       500
     );
 
@@ -88,6 +88,10 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       }
     };
   }, [canvasSize.width, canvasSize.height, gameStarted]);
+
+  useEffect(() => {
+    enemySpeed.current = 5 + Math.floor(score / 1000);
+  }, [score]);
 
   useEffect(() => {
     if (isFullscreen) {
