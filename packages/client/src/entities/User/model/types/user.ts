@@ -10,4 +10,5 @@ export interface IUser {
 
 export interface IUserSchema {
   userData: IUser | null;
+  isLoading: boolean;
 }

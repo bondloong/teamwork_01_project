@@ -8,19 +8,18 @@ import { MainPage } from '@/pages/MainPage';
 import { ReactElement } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '../../styles/_app.scss';
-import { AuthProvider } from '@/shared/contexts';
-import { fetchUserInfo } from '@/entities/User';
 import { ProtectedRoute } from '@/widgets/ProtectedRoute';
 import { useServiceWorker } from '../../model';
 import { EAppRoutes } from '@/shared/types';
 import { StoreProvider } from '../StoreProvider';
+import { Auth } from '../Auth';
 
 export const Application = (): ReactElement => {
   useServiceWorker();
 
   return (
     <StoreProvider>
-      <AuthProvider getUserInfo={fetchUserInfo}>
+      <Auth>
         <BrowserRouter>
           <Routes>
             <Route path={EAppRoutes.Main} element={<MainPage />} />
@@ -54,7 +53,7 @@ export const Application = (): ReactElement => {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
-      </AuthProvider>
+      </Auth>
     </StoreProvider>
   );
 };

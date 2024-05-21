@@ -3,15 +3,13 @@ export {
   type IUserSchema,
   getUserData,
   getIsAuth,
+  getIsUserLoading,
   userActions,
   userReducer,
+  fetchUserInfoThunk,
+  logOutThunk,
+  logInThunk,
+  signUpThunk,
 } from './model';
 
-export {
-  fetchUserInfo,
-  logOut,
-  signUp,
-  type TSignUpPayload,
-  logIn,
-  type TLogInPayload,
-} from './api';
+export { type TSignUpPayload, type TLogInPayload } from './api';

@@ -1,13 +1,14 @@
 import React, { ReactElement } from 'react';
 import { IProtectedRouteProps } from './ProtectedRoute.interfaces';
-import { useAuthContext } from '@/shared/contexts';
 import { Navigate } from 'react-router-dom';
 import { EAppRoutes } from '@/shared/types';
+import { useSelector } from 'react-redux';
+import { getIsAuth } from '@/entities/User';
 
 export const ProtectedRoute = ({ children }: IProtectedRouteProps): ReactElement => {
-  const { user } = useAuthContext();
+  const isAuth = useSelector(getIsAuth);
 
-  if (!user) {
+  if (!isAuth) {
     return <Navigate to={EAppRoutes.Auth} />;
   }
 
