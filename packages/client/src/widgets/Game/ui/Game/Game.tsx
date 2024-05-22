@@ -79,6 +79,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
     document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
+      gameOver.current = true;
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseup', handleMouseUp);
