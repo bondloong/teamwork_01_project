@@ -1,47 +1,38 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import { Button, Upload, Avatar, Row, Col, Modal, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import axios from 'axios';
-import { useAuthContext } from '@/shared/contexts';
-import { BaseLayout } from '@/layouts/BaseLayout';
 import { useNavigate } from 'react-router-dom';
-import classes from './ProfilePage.module.scss';
-import './ProfilePage.module.scss';
-import DEFAULT_AVATAR from './default-avatar.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { BaseLayout } from '@/layouts/BaseLayout';
 import { EAppRoutes } from '@/shared/types';
 import { fetchUserInfo, logOut, changeProfileAvatar } from '@/entities/User';
 import { ChangePasswordForm } from '../ChangePasswordForm/ChangePasswordForm';
 import { EditProfileForm } from '../EditProfileForm/EditProfileForm';
+import classes from './ProfilePage.module.scss';
+import DEFAULT_AVATAR from './default-avatar.png';
 
 const BASE_AVATAR_URL = 'https://ya-praktikum.tech/api/v2/resources';
-axios.defaults.withCredentials = true;
 
 export const ProfilePage = (): ReactElement => {
-  const { user, setUser } = useAuthContext();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state: IStateSchema) => state.user.userData);
   const [avatarLoading, setAvatarLoading] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
   useEffect(() => {
-    const fetchData = async (): Promise<void> => {
-      try {
-        const userInfo = await fetchUserInfo();
-        setUser(userInfo);
-      } catch (error) {
-        navigate(EAppRoutes.Auth);
-      }
-    };
-
-    fetchData();
-  }, [setUser, navigate]);
+    dispatch(fetchUserInfo()).catch(() => {
+      navigate(EAppRoutes.Auth);
+    });
+  }, [dispatch, navigate]);
 
   const handleAvatarChange = async (file: File): Promise<void> => {
     setAvatarLoading(true);
     try {
-      const updatedUser = await changeProfileAvatar(file);
-      setUser(updatedUser);
+      await dispatch(changeProfileAvatar(file)).unwrap();
       message.success('Avatar updated successfully!');
     } catch (error) {
+      message.error('Failed to update avatar. Please try again.');
       console.error('Avatar update failed', error);
     } finally {
       setAvatarLoading(false);
@@ -54,13 +45,12 @@ export const ProfilePage = (): ReactElement => {
   };
 
   const handleLogout = (): void => {
-    logOut()
+    dispatch(logOut())
       .then(() => {
         message.success('Logged out successfully!');
-        setUser(null);
         navigate(EAppRoutes.Main);
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         message.error('Failed to log out. Please try again.');
         console.error('Logout failed', error);
       });
@@ -85,7 +75,7 @@ export const ProfilePage = (): ReactElement => {
               </Button>
             </Upload>
           </div>
-          <EditProfileForm user={user} setUser={setUser} />
+          <EditProfileForm />
           <Button
             type="default"
             onClick={() => setPasswordModalVisible(true)}

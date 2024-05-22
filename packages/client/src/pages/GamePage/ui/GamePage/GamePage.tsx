@@ -1,5 +1,5 @@
 import { BaseLayout } from '@/layouts/BaseLayout';
-import {Game} from '@/widgets/Game';
+import { Game } from '@/widgets/Game';
 import { ReactElement } from 'react';
 
 export const GamePage = (): ReactElement => {

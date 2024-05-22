@@ -1,28 +1,27 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import { changeUserProfile } from '@/entities/User';
+import { type IUser } from '@/entities/User/model';
 import classes from './EditProfileForm.module.scss';
-import { IUser } from '@/entities/User';
 
 const { Item } = Form;
 
-interface EditProfileFormProps {
-  user: IUser | null;
-  setUser: (user: IUser | null) => void;
-}
-
-export const EditProfileForm: React.FC<EditProfileFormProps> = ({ user, setUser }) => {
+export const EditProfileForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: IStateSchema) => state.user.userData);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
   const handleSubmit = async (values: Partial<IUser>): Promise<void> => {
     setLoading(true);
     try {
-      const updatedUser = await changeUserProfile(values);
-      setUser(updatedUser);
+      await dispatch(changeUserProfile(values)).unwrap();
       message.success('Profile updated successfully!');
       setIsEditing(false);
     } catch (error) {
+      message.error('Failed to update profile. Please try again.');
       console.error('Update failed', error);
     } finally {
       setLoading(false);

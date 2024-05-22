@@ -1,6 +1,8 @@
 import React from 'react';
 import { Form, Input, Button, message } from 'antd';
-import { changeUserPassword, TChangePasswordPayload } from '@/entities/User';
+import { useDispatch } from 'react-redux';
+import { changeUserPassword } from '@/entities/User';
+import { TChangePasswordPayload } from '@/entities/User';
 
 const { Item } = Form;
 
@@ -14,16 +16,18 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
   setPasswordModalVisible,
 }) => {
   const [passwordForm] = Form.useForm();
+  const dispatch = useDispatch();
 
   const handlePasswordChange = async (values: {
     oldPassword: string;
     newPassword: string;
   }): Promise<void> => {
     try {
-      await changeUserPassword({
+      const payload: TChangePasswordPayload = {
         oldPassword: values.oldPassword,
         newPassword: values.newPassword,
-      });
+      };
+      await dispatch(changeUserPassword(payload)).unwrap();
       message.success('Password updated successfully!');
       setPasswordModalVisible(false);
       passwordForm.resetFields();
@@ -57,7 +61,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
           { required: true, message: 'Please confirm your new password' },
           // eslint-disable-next-line
           ({ getFieldValue }) => ({
-            validator(_: object, value: string): Promise<void> {
+            validator(_, value): Promise<void> {
               if (!value || getFieldValue('newPassword') === value) {
                 return Promise.resolve();
               }

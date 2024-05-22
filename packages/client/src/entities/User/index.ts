@@ -1,13 +1,20 @@
 export {
-  type IUser,
+  type IUserSchema,
+  getUserData,
+  getIsAuth,
+  getIsUserLoading,
+  userActions,
+  userReducer,
+} from './model';
+
+export { type TSignUpPayload, type TLogInPayload, type TChangePasswordPayload } from './api';
+
+export {
   fetchUserInfo,
   logOut,
-  signUp,
-  type TSignUpPayload,
   logIn,
-  type TLogInPayload,
+  signUp,
   changeUserPassword,
   changeProfileAvatar,
   changeUserProfile,
-  type TChangePasswordPayload,
-} from './model';
+} from './api';
