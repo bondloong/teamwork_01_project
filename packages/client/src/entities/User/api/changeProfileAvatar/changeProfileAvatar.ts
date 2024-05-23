@@ -1,12 +1,20 @@
 import { API, praktikumClient } from '@/shared/api';
 import { IUser } from '../../model';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const changeProfileAvatar = async (avatar: File): Promise<IUser> => {
-  const formData = new FormData();
-  formData.append('avatar', avatar);
-  return praktikumClient
-    .put(API.profileAvatar, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
-    .then((res) => res.data);
-};
+export const changeProfileAvatar = createAsyncThunk<IUser, File>(
+  'user/changeProfileAvatar',
+  async (avatar, thunkAPI) => {
+    const formData = new FormData();
+    formData.append('avatar', avatar);
+
+    try {
+      const response = await praktikumClient.put(API.profileAvatar, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue('Failed to change profile avatar');
+    }
+  }
+);

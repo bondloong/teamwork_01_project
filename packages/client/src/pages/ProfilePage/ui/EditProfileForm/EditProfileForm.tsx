@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '@/shared/hooks';
 import { changeUserProfile } from '@/entities/User';
 import { type IUser } from '@/entities/User/model';
 import classes from './EditProfileForm.module.scss';
@@ -8,7 +9,7 @@ import classes from './EditProfileForm.module.scss';
 const { Item } = Form;
 
 export const EditProfileForm: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const user = useSelector((state: IStateSchema) => state.user.userData);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
