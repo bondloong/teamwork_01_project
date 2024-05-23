@@ -2,26 +2,41 @@ import React, { ReactElement, useState, useEffect } from 'react';
 import { Button, Upload, Avatar, Row, Col, Modal, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { BaseLayout } from '@/layouts/BaseLayout';
 import { EAppRoutes } from '@/shared/types';
-import { fetchUserInfo, logOut, changeProfileAvatar } from '@/entities/User';
+import { useAppDispatch } from '@/shared/hooks';
+import {
+  fetchUserInfo,
+  logOut,
+  changeProfileAvatar,
+  getUserData,
+  getIsAuth,
+} from '@/entities/User';
 import { ChangePasswordForm } from '../ChangePasswordForm/ChangePasswordForm';
 import { EditProfileForm } from '../EditProfileForm/EditProfileForm';
 import classes from './ProfilePage.module.scss';
 import DEFAULT_AVATAR from './default-avatar.png';
+import { Navigate } from 'react-router-dom';
 
 const BASE_AVATAR_URL = 'https://ya-praktikum.tech/api/v2/resources';
 
 export const ProfilePage = (): ReactElement => {
-  const dispatch = useDispatch();
+  const isAuth = useSelector(getIsAuth);
+
+  if (!isAuth) {
+    return <Navigate to={EAppRoutes.Auth} />;
+  }
+
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state: IStateSchema) => state.user.userData);
+  const user = useSelector(getUserData);
   const [avatarLoading, setAvatarLoading] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchUserInfo()).catch(() => {
+    dispatch(fetchUserInfo()).catch((error: Error) => {
+      console.error('Failed to fetch user info', error);
       navigate(EAppRoutes.Auth);
     });
   }, [dispatch, navigate]);
