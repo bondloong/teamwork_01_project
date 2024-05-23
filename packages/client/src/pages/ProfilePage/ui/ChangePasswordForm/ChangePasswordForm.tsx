@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Button, message } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@/shared/hooks';
 import { changeUserPassword } from '@/entities/User';
 import { TChangePasswordPayload } from '@/entities/User';
 
@@ -16,7 +16,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
   setPasswordModalVisible,
 }) => {
   const [passwordForm] = Form.useForm();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handlePasswordChange = async (values: {
     oldPassword: string;
