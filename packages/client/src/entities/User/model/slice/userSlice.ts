@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { IUser, IUserSchema } from '../types';
 import {
   fetchUserInfo,
@@ -8,36 +8,12 @@ import {
   changeUserPassword,
   changeProfileAvatar,
   changeUserProfile,
-  type TChangePasswordPayload,
 } from '../../api';
 
 const initialState: IUserSchema = {
   userData: null,
   isLoading: false,
 };
-
-export const changePassword = createAsyncThunk(
-  'user/changePassword',
-  async (payload: TChangePasswordPayload) => {
-    await changeUserPassword(payload);
-  }
-);
-
-export const updateProfileAvatar = createAsyncThunk(
-  'user/updateProfileAvatar',
-  async (avatar: File) => {
-    const userData = await changeProfileAvatar(avatar);
-    return userData;
-  }
-);
-
-export const updateUserProfile = createAsyncThunk(
-  'user/updateUserProfile',
-  async (profileData: Partial<IUser>) => {
-    const userData = await changeUserProfile(profileData);
-    return userData;
-  }
-);
 
 const userSlice = createSlice({
   name: 'user',
@@ -100,37 +76,37 @@ const userSlice = createSlice({
       });
 
     builder
-      .addCase(changePassword.pending, (state) => {
+      .addCase(changeUserPassword.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(changePassword.fulfilled, (state) => {
+      .addCase(changeUserPassword.fulfilled, (state) => {
         state.isLoading = false;
       })
-      .addCase(changePassword.rejected, (state) => {
+      .addCase(changeUserPassword.rejected, (state) => {
         state.isLoading = false;
       });
 
     builder
-      .addCase(updateProfileAvatar.pending, (state) => {
+      .addCase(changeProfileAvatar.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateProfileAvatar.fulfilled, (state, action: PayloadAction<IUser>) => {
+      .addCase(changeProfileAvatar.fulfilled, (state, action: PayloadAction<IUser>) => {
         state.isLoading = false;
         state.userData = action.payload;
       })
-      .addCase(updateProfileAvatar.rejected, (state) => {
+      .addCase(changeProfileAvatar.rejected, (state) => {
         state.isLoading = false;
       });
 
     builder
-      .addCase(updateUserProfile.pending, (state) => {
+      .addCase(changeUserProfile.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateUserProfile.fulfilled, (state, action: PayloadAction<IUser>) => {
+      .addCase(changeUserProfile.fulfilled, (state, action: PayloadAction<IUser>) => {
         state.isLoading = false;
         state.userData = action.payload;
       })
-      .addCase(updateUserProfile.rejected, (state) => {
+      .addCase(changeUserProfile.rejected, (state) => {
         state.isLoading = false;
       });
   },
