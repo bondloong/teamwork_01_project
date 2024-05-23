@@ -44,7 +44,8 @@ export const ProfilePage = (): ReactElement => {
   const handleAvatarChange = async (file: File): Promise<void> => {
     setAvatarLoading(true);
     try {
-      await dispatch(changeProfileAvatar(file)).unwrap();
+      // eslint-disable-next-line
+      await dispatch(changeProfileAvatar(file) as any).unwrap();
       message.success('Avatar updated successfully!');
     } catch (error) {
       message.error('Failed to update avatar. Please try again.');
@@ -105,7 +106,7 @@ export const ProfilePage = (): ReactElement => {
       </Row>
       <Modal
         title="Change Password"
-        visible={passwordModalVisible}
+        open={passwordModalVisible}
         onCancel={() => setPasswordModalVisible(false)}
         footer={null}
       >
