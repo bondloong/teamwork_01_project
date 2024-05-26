@@ -7,7 +7,7 @@ import { TChangePasswordPayload } from '@/entities/User';
 const { Item } = Form;
 
 interface ChangePasswordFormProps {
-  passwordModalVisible: boolean;
+  isPasswordModalVisible: boolean;
   setPasswordModalVisible: (visible: boolean) => void;
 }
 
