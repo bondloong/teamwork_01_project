@@ -1,2 +1,2 @@
 export { changeUserPassword } from './changeUserPassword';
-export type { TChangePasswordPayload } from './changeUserPassword.interfaces';
+export type { IChangePasswordPayload } from './changeUserPassword.interfaces';

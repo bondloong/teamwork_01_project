@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button, message, Modal } from 'antd';
 import { useAppDispatch } from '@/shared/hooks';
 import { changeUserPassword } from '@/entities/User';
-import { TChangePasswordPayload } from '@/entities/User';
+import { IChangePasswordPayload } from '@/entities/User';
 import { TEXTS } from './PasswordForm.constants';
 import { IPasswordFormProps } from './PasswordForm.interfaces';
 
@@ -20,7 +20,7 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
     newPassword: string;
   }): Promise<void> => {
     try {
-      const payload: TChangePasswordPayload = {
+      const payload: IChangePasswordPayload = {
         oldPassword: values.oldPassword,
         newPassword: values.newPassword,
       };

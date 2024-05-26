@@ -1,4 +1,4 @@
-export type TChangePasswordPayload = {
+export type IChangePasswordPayload = {
   oldPassword: string;
   newPassword: string;
 };

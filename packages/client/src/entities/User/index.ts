@@ -7,7 +7,7 @@ export {
   userReducer,
 } from './model';
 
-export { type TSignUpPayload, type TLogInPayload, type TChangePasswordPayload } from './api';
+export { type TSignUpPayload, type TLogInPayload, type IChangePasswordPayload } from './api';
 
 export {
   fetchUserInfo,

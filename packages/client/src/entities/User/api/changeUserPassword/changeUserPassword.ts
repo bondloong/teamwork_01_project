@@ -1,8 +1,8 @@
 import { API, praktikumClient } from '@/shared/api';
-import { TChangePasswordPayload } from './changeUserPassword.interfaces';
+import { IChangePasswordPayload } from './changeUserPassword.interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const changeUserPassword = createAsyncThunk<void, TChangePasswordPayload>(
+export const changeUserPassword = createAsyncThunk<void, IChangePasswordPayload>(
   'user/changeUserPassword',
   async (payload, thunkAPI) => {
     try {
