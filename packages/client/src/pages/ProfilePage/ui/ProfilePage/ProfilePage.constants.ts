@@ -1,3 +1,5 @@
+import defaultAvatar from './default-avatar.png';
+
 export const TEXTS = {
   title: 'Profile Settings',
   changeAvatarButton: 'Change Avatar',
@@ -7,4 +9,4 @@ export const TEXTS = {
 } as const;
 
 export const BASE_AVATAR_URL = 'https://ya-praktikum.tech/api/v2/resources';
-export const DEFAULT_AVATAR = './default-avatar.png';
+export const DEFAULT_AVATAR = defaultAvatar;
