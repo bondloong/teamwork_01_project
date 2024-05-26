@@ -22,7 +22,7 @@ export const ProfilePage = (): ReactElement => {
   const navigate = useNavigate();
   const user = useSelector(getUserData);
   const [avatarLoading, setAvatarLoading] = useState(false);
-  const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+  const [isPasswordModalVisible, setPasswordModalVisible] = useState(false);
 
   useEffect(() => {
     dispatch(fetchUserInfo()).catch((error: Error) => {
@@ -86,12 +86,12 @@ export const ProfilePage = (): ReactElement => {
       </Row>
       <Modal
         title="Change Password"
-        open={passwordModalVisible}
+        open={isPasswordModalVisible}
         onCancel={() => setPasswordModalVisible(false)}
         footer={null}
       >
         <ChangePasswordForm
-          passwordModalVisible={passwordModalVisible}
+          isPasswordModalVisible={isPasswordModalVisible}
           setPasswordModalVisible={setPasswordModalVisible}
         />
       </Modal>
