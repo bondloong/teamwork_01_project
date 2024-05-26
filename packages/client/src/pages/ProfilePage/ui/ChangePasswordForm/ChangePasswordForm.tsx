@@ -4,15 +4,11 @@ import { useAppDispatch } from '@/shared/hooks';
 import { changeUserPassword } from '@/entities/User';
 import { TChangePasswordPayload } from '@/entities/User';
 import { TEXTS } from './ChangePasswordForm.constants';
+import { IChangePasswordFormProps } from './ChangePasswordForm.interfaces';
 
 const { Item } = Form;
 
-interface ChangePasswordFormProps {
-  isPasswordModalVisible: boolean;
-  setIsPasswordModalVisible: (visible: boolean) => void;
-}
-
-export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
+export const ChangePasswordForm: React.FC<IChangePasswordFormProps> = ({
   isPasswordModalVisible,
   setIsPasswordModalVisible,
 }) => {
