@@ -2,9 +2,10 @@ import React from 'react';
 import { Form, Input, Button, message, Modal } from 'antd';
 import { useAppDispatch } from '@/shared/hooks';
 import { changeUserPassword } from '@/entities/User';
-import { IChangePasswordPayload } from '@/entities/User';
+import { passwordValidationSchema } from './PasswordForm.validation';
 import { TEXTS } from './PasswordForm.constants';
 import { IPasswordFormProps } from './PasswordForm.interfaces';
+import { ValidationError } from 'yup';
 
 const { Item } = Form;
 
@@ -19,18 +20,22 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
     oldPassword: string;
     newPassword: string;
   }): Promise<void> => {
-    const payload: IChangePasswordPayload = {
-      oldPassword: values.oldPassword,
-      newPassword: values.newPassword,
-    };
-    const result = await dispatch(changeUserPassword(payload));
-    if (result.meta.requestStatus === 'fulfilled') {
-      message.success(TEXTS.passwordUpdateSuccess);
-      setIsPasswordModalVisible(false);
-      passwordForm.resetFields();
-    } else {
-      message.error(TEXTS.passwordUpdateFailed);
-    }
+    await passwordValidationSchema.validate(values).catch((error: ValidationError) => {
+      message.error(error.errors[0]);
+      throw error;
+    });
+
+    dispatch(changeUserPassword(values))
+      .unwrap()
+      .then(() => {
+        message.success(TEXTS.passwordUpdateSuccess);
+        setIsPasswordModalVisible(false);
+        passwordForm.resetFields();
+      })
+      .catch((error) => {
+        message.error(TEXTS.passwordUpdateFailed);
+        console.error('Password update failed', error);
+      });
   };
 
   return (

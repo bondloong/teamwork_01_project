@@ -4,8 +4,10 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/shared/hooks';
 import { changeUserProfile } from '@/entities/User';
 import { type IUser } from '@/entities/User/model';
-import classes from './ProfileForm.module.scss';
+import { profileValidationSchema } from './ProfileForm.validation';
 import { TEXTS } from './ProfileForm.constants';
+import classes from './ProfileForm.module.scss';
+import { ValidationError } from 'yup';
 
 const { Item } = Form;
 
@@ -18,16 +20,26 @@ export const ProfileForm: React.FC = () => {
 
   const handleSubmit = async (values: Partial<IUser>): Promise<void> => {
     setLoading(true);
-    try {
-      await dispatch(changeUserProfile(values)).unwrap();
-      message.success(TEXTS.profileUpdateSuccess);
-      setIsEditing(false);
-    } catch (error) {
-      message.error(TEXTS.profileUpdateFailed);
-      console.error('Update failed', error);
-    } finally {
+
+    await profileValidationSchema.validate(values).catch((error: ValidationError) => {
+      message.error(error.errors[0]);
       setLoading(false);
-    }
+      throw error;
+    });
+
+    dispatch(changeUserProfile(values))
+      .unwrap()
+      .then(() => {
+        message.success(TEXTS.profileUpdateSuccess);
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        message.error(TEXTS.profileUpdateFailed);
+        console.error('Update failed', error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
