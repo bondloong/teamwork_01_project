@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button, message, Modal } from 'antd';
 import { useAppDispatch } from '@/shared/hooks';
 import { changeUserPassword } from '@/entities/User';
 import { TChangePasswordPayload } from '@/entities/User';
+import { TEXTS } from './ChangePasswordForm.constants';
 
 const { Item } = Form;
 
@@ -28,55 +29,62 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
         newPassword: values.newPassword,
       };
       await dispatch(changeUserPassword(payload)).unwrap();
-      message.success('Password updated successfully!');
+      message.success(TEXTS.passwordUpdateSuccess);
       setPasswordModalVisible(false);
       passwordForm.resetFields();
     } catch (error) {
-      message.error('Failed to update password. Please try again.');
+      message.error(TEXTS.passwordUpdateFailed);
       console.error('Password update failed', error);
     }
   };
 
   return (
-    <Form form={passwordForm} layout="vertical" onFinish={handlePasswordChange}>
-      <Item
-        name="oldPassword"
-        label="Old Password"
-        rules={[{ required: true, message: 'Please enter your old password' }]}
-      >
-        <Input.Password />
-      </Item>
-      <Item
-        name="newPassword"
-        label="New Password"
-        rules={[{ required: true, message: 'Please enter your new password' }]}
-      >
-        <Input.Password />
-      </Item>
-      <Item
-        name="confirmNewPassword"
-        label="Confirm New Password"
-        dependencies={['newPassword']}
-        rules={[
-          { required: true, message: 'Please confirm your new password' },
-          // eslint-disable-next-line
-          ({ getFieldValue }) => ({
-            validator(_, value): Promise<void> {
-              if (!value || getFieldValue('newPassword') === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('The two passwords do not match!'));
-            },
-          }),
-        ]}
-      >
-        <Input.Password />
-      </Item>
-      <Item>
-        <Button type="primary" htmlType="submit">
-          Save Password
-        </Button>
-      </Item>
-    </Form>
+    <Modal
+      title={TEXTS.passwordModalTitle}
+      open={isPasswordModalVisible}
+      onCancel={() => setPasswordModalVisible(false)}
+      footer={null}
+    >
+      <Form form={passwordForm} layout="vertical" onFinish={handlePasswordChange}>
+        <Item
+          name="oldPassword"
+          label={TEXTS.oldPassword}
+          rules={[{ required: true, message: TEXTS.oldPasswordRequired }]}
+        >
+          <Input.Password />
+        </Item>
+        <Item
+          name="newPassword"
+          label={TEXTS.newPassword}
+          rules={[{ required: true, message: TEXTS.newPasswordRequired }]}
+        >
+          <Input.Password />
+        </Item>
+        <Item
+          name="confirmNewPassword"
+          label={TEXTS.confirmNewPassword}
+          dependencies={['newPassword']}
+          rules={[
+            { required: true, message: TEXTS.confirmNewPasswordRequired },
+            // eslint-disable-next-line
+            ({ getFieldValue }) => ({
+              validator(_, value): Promise<void> {
+                if (!value || getFieldValue('newPassword') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error(TEXTS.passwordMismatch));
+              },
+            }),
+          ]}
+        >
+          <Input.Password />
+        </Item>
+        <Item>
+          <Button type="primary" htmlType="submit">
+            {TEXTS.savePasswordButton}
+          </Button>
+        </Item>
+      </Form>
+    </Modal>
   );
 };

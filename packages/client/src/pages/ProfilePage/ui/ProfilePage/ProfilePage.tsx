@@ -1,5 +1,5 @@
 import React, { ReactElement, useState, useEffect } from 'react';
-import { Button, Upload, Avatar, Row, Col, Modal, message } from 'antd';
+import { Button, Upload, Avatar, Row, Col, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -11,10 +11,8 @@ import { fetchUserInfo, uploadProfileAvatar, getUserData, getIsAuth } from '@/en
 import { ChangePasswordForm } from '../ChangePasswordForm/ChangePasswordForm';
 import { EditProfileForm } from '../EditProfileForm/EditProfileForm';
 import classes from './ProfilePage.module.scss';
-import DEFAULT_AVATAR from './default-avatar.png';
+import { TEXTS, BASE_AVATAR_URL, DEFAULT_AVATAR } from './ProfilePage.constants';
 import { Navigate } from 'react-router-dom';
-
-const BASE_AVATAR_URL = 'https://ya-praktikum.tech/api/v2/resources';
 
 export const ProfilePage = (): ReactElement => {
   const isAuth = useSelector(getIsAuth);
@@ -36,9 +34,9 @@ export const ProfilePage = (): ReactElement => {
     try {
       // eslint-disable-next-line
       await dispatch(uploadProfileAvatar(file) as any).unwrap();
-      message.success('Avatar updated successfully!');
+      message.success(TEXTS.avatarUpdateSuccess);
     } catch (error) {
-      message.error('Failed to update avatar. Please try again.');
+      message.error(TEXTS.avatarUpdateFailed);
       console.error('Avatar update failed', error);
     } finally {
       setAvatarLoading(false);
@@ -60,7 +58,7 @@ export const ProfilePage = (): ReactElement => {
     <BaseLayout>
       <Row justify="center">
         <Col className={classes.wrapper} xs={24} sm={18} md={12} lg={10}>
-          <h1 className={classes.header}>Profile Settings</h1>
+          <h1 className={classes.header}>{TEXTS.title}</h1>
           <div className={classes.avatarContainer}>
             <Avatar className={classes.avatarImage} size={100} src={avatarSrc} />
             <Upload
@@ -69,7 +67,7 @@ export const ProfilePage = (): ReactElement => {
               accept=".jpeg,.jpg,.png,.gif,.webp"
             >
               <Button icon={<UploadOutlined />} loading={avatarLoading}>
-                Change Avatar
+                {TEXTS.changeAvatarButton}
               </Button>
             </Upload>
           </div>
@@ -79,22 +77,15 @@ export const ProfilePage = (): ReactElement => {
             onClick={() => setPasswordModalVisible(true)}
             className={classes.changePasswordButton}
           >
-            Change Password
+            {TEXTS.changePasswordButton}
           </Button>
           <LogOut danger />
         </Col>
       </Row>
-      <Modal
-        title="Change Password"
-        open={isPasswordModalVisible}
-        onCancel={() => setPasswordModalVisible(false)}
-        footer={null}
-      >
-        <ChangePasswordForm
-          isPasswordModalVisible={isPasswordModalVisible}
-          setPasswordModalVisible={setPasswordModalVisible}
-        />
-      </Modal>
+      <ChangePasswordForm
+        isPasswordModalVisible={isPasswordModalVisible}
+        setPasswordModalVisible={setPasswordModalVisible}
+      />
     </BaseLayout>
   );
 };
