@@ -12,7 +12,7 @@ interface ChangePasswordFormProps {
 }
 
 export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
-  passwordModalVisible,
+  isPasswordModalVisible,
   setPasswordModalVisible,
 }) => {
   const [passwordForm] = Form.useForm();
