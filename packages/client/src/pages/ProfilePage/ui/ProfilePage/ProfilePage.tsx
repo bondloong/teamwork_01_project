@@ -7,8 +7,8 @@ import { BaseLayout } from '@/layouts/BaseLayout';
 import { EAppRoutes } from '@/shared/types';
 import { useAppDispatch } from '@/shared/hooks';
 import { LogOut } from '@/features/LogOut';
+import { PasswordForm } from '@/widgets/PasswordForm';
 import { fetchUserInfo, uploadProfileAvatar, getUserData, getIsAuth } from '@/entities/User';
-import { ChangePasswordForm } from '../ChangePasswordForm/ChangePasswordForm';
 import { EditProfileForm } from '../EditProfileForm/EditProfileForm';
 import classes from './ProfilePage.module.scss';
 import { TEXTS, BASE_AVATAR_URL, DEFAULT_AVATAR } from './ProfilePage.constants';
@@ -82,7 +82,7 @@ export const ProfilePage = (): ReactElement => {
           <LogOut danger />
         </Col>
       </Row>
-      <ChangePasswordForm
+      <PasswordForm
         isPasswordModalVisible={isPasswordModalVisible}
         setIsPasswordModalVisible={setIsPasswordModalVisible}
       />

@@ -3,12 +3,12 @@ import { Form, Input, Button, message, Modal } from 'antd';
 import { useAppDispatch } from '@/shared/hooks';
 import { changeUserPassword } from '@/entities/User';
 import { TChangePasswordPayload } from '@/entities/User';
-import { TEXTS } from './ChangePasswordForm.constants';
-import { IChangePasswordFormProps } from './ChangePasswordForm.interfaces';
+import { TEXTS } from './PasswordForm.constants';
+import { IPasswordFormProps } from './PasswordForm.interfaces';
 
 const { Item } = Form;
 
-export const ChangePasswordForm: React.FC<IChangePasswordFormProps> = ({
+export const PasswordForm: React.FC<IPasswordFormProps> = ({
   isPasswordModalVisible,
   setIsPasswordModalVisible,
 }) => {
