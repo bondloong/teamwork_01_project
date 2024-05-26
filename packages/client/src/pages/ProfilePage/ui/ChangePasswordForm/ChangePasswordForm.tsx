@@ -14,7 +14,7 @@ interface ChangePasswordFormProps {
 
 export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
   isPasswordModalVisible,
-  setPasswordModalVisible,
+  setIsPasswordModalVisible,
 }) => {
   const [passwordForm] = Form.useForm();
   const dispatch = useAppDispatch();
@@ -30,7 +30,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
       };
       await dispatch(changeUserPassword(payload)).unwrap();
       message.success(TEXTS.passwordUpdateSuccess);
-      setPasswordModalVisible(false);
+      setIsPasswordModalVisible(false);
       passwordForm.resetFields();
     } catch (error) {
       message.error(TEXTS.passwordUpdateFailed);
@@ -42,7 +42,7 @@ export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
     <Modal
       title={TEXTS.passwordModalTitle}
       open={isPasswordModalVisible}
-      onCancel={() => setPasswordModalVisible(false)}
+      onCancel={() => setIsPasswordModalVisible(false)}
       footer={null}
     >
       <Form form={passwordForm} layout="vertical" onFinish={handlePasswordChange}>
