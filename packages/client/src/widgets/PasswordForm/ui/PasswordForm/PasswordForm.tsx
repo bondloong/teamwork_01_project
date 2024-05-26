@@ -19,18 +19,17 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
     oldPassword: string;
     newPassword: string;
   }): Promise<void> => {
-    try {
-      const payload: IChangePasswordPayload = {
-        oldPassword: values.oldPassword,
-        newPassword: values.newPassword,
-      };
-      await dispatch(changeUserPassword(payload)).unwrap();
+    const payload: IChangePasswordPayload = {
+      oldPassword: values.oldPassword,
+      newPassword: values.newPassword,
+    };
+    const result = await dispatch(changeUserPassword(payload));
+    if (result.meta.requestStatus === 'fulfilled') {
       message.success(TEXTS.passwordUpdateSuccess);
       setIsPasswordModalVisible(false);
       passwordForm.resetFields();
-    } catch (error) {
+    } else {
       message.error(TEXTS.passwordUpdateFailed);
-      console.error('Password update failed', error);
     }
   };
 
