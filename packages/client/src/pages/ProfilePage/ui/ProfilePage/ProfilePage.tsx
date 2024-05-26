@@ -61,15 +61,10 @@ export const ProfilePage = (): ReactElement => {
   };
 
   const handleLogout = (): void => {
-    dispatch(logOut())
-      .then(() => {
-        message.success('Logged out successfully!');
-        navigate(EAppRoutes.Main);
-      })
-      .catch((error: Error) => {
-        message.error('Failed to log out. Please try again.');
-        console.error('Logout failed', error);
-      });
+    dispatch(logOut()).then(() => {
+      message.success('Logged out successfully!');
+      navigate(EAppRoutes.Main);
+    });
   };
 
   const avatarSrc = user?.avatar ? `${BASE_AVATAR_URL}${user.avatar}` : DEFAULT_AVATAR;
