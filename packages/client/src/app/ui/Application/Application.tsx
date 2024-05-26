@@ -40,15 +40,6 @@ export const Application = (): ReactElement => {
               }
             />
 
-            <Route
-              path={EAppRoutes.LeaderBoard}
-              element={
-                <ProtectedRoute>
-                  <LeaderboardPage />
-                </ProtectedRoute>
-              }
-            />
-
             <Route path={EAppRoutes.Forum}>
               <Route
                 index

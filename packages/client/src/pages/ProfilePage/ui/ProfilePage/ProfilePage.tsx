@@ -6,13 +6,8 @@ import { useSelector } from 'react-redux';
 import { BaseLayout } from '@/layouts/BaseLayout';
 import { EAppRoutes } from '@/shared/types';
 import { useAppDispatch } from '@/shared/hooks';
-import {
-  fetchUserInfo,
-  logOut,
-  uploadProfileAvatar,
-  getUserData,
-  getIsAuth,
-} from '@/entities/User';
+import { LogOut } from '@/features/LogOut';
+import { fetchUserInfo, uploadProfileAvatar, getUserData, getIsAuth } from '@/entities/User';
 import { ChangePasswordForm } from '../ChangePasswordForm/ChangePasswordForm';
 import { EditProfileForm } from '../EditProfileForm/EditProfileForm';
 import classes from './ProfilePage.module.scss';
@@ -23,11 +18,6 @@ const BASE_AVATAR_URL = 'https://ya-praktikum.tech/api/v2/resources';
 
 export const ProfilePage = (): ReactElement => {
   const isAuth = useSelector(getIsAuth);
-
-  if (!isAuth) {
-    return <Navigate to={EAppRoutes.Auth} />;
-  }
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useSelector(getUserData);
@@ -60,14 +50,11 @@ export const ProfilePage = (): ReactElement => {
     return false;
   };
 
-  const handleLogout = (): void => {
-    dispatch(logOut()).then(() => {
-      message.success('Logged out successfully!');
-      navigate(EAppRoutes.Main);
-    });
-  };
-
   const avatarSrc = user?.avatar ? `${BASE_AVATAR_URL}${user.avatar}` : DEFAULT_AVATAR;
+
+  if (!isAuth) {
+    return <Navigate to={EAppRoutes.Auth} />;
+  }
 
   return (
     <BaseLayout>
@@ -94,9 +81,7 @@ export const ProfilePage = (): ReactElement => {
           >
             Change Password
           </Button>
-          <Button type="primary" danger onClick={handleLogout}>
-            Log out
-          </Button>
+          <LogOut danger />
         </Col>
       </Row>
       <Modal
