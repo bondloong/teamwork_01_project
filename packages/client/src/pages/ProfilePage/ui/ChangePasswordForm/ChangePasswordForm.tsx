@@ -9,7 +9,7 @@ const { Item } = Form;
 
 interface ChangePasswordFormProps {
   isPasswordModalVisible: boolean;
-  setPasswordModalVisible: (visible: boolean) => void;
+  setIsPasswordModalVisible: (visible: boolean) => void;
 }
 
 export const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
