@@ -4,11 +4,12 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/shared/hooks';
 import { changeUserProfile } from '@/entities/User';
 import { type IUser } from '@/entities/User/model';
-import classes from './EditProfileForm.module.scss';
+import classes from './ProfileForm.module.scss';
+import { TEXTS } from './ProfileForm.constants';
 
 const { Item } = Form;
 
-export const EditProfileForm: React.FC = () => {
+export const ProfileForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useSelector((state: IStateSchema) => state.user.userData);
   const [form] = Form.useForm();
@@ -19,10 +20,10 @@ export const EditProfileForm: React.FC = () => {
     setLoading(true);
     try {
       await dispatch(changeUserProfile(values)).unwrap();
-      message.success('Profile updated successfully!');
+      message.success(TEXTS.profileUpdateSuccess);
       setIsEditing(false);
     } catch (error) {
-      message.error('Failed to update profile. Please try again.');
+      message.error(TEXTS.profileUpdateFailed);
       console.error('Update failed', error);
     } finally {
       setLoading(false);
@@ -33,44 +34,44 @@ export const EditProfileForm: React.FC = () => {
     <Form form={form} layout="vertical" onFinish={handleSubmit} initialValues={user || undefined}>
       <Item
         name="first_name"
-        label="First Name"
-        rules={[{ required: true, message: 'Please enter your first name' }]}
+        label={TEXTS.firstName}
+        rules={[{ required: true, message: TEXTS.firstNameRequired }]}
       >
         <Input readOnly={!isEditing} />
       </Item>
       <Item
         name="second_name"
-        label="Second Name"
-        rules={[{ required: true, message: 'Please enter your second name' }]}
+        label={TEXTS.secondName}
+        rules={[{ required: true, message: TEXTS.secondNameRequired }]}
       >
         <Input readOnly={!isEditing} />
       </Item>
       <Item
         name="display_name"
-        label="Display Name"
-        rules={[{ required: true, message: 'Please enter your display name' }]}
+        label={TEXTS.displayName}
+        rules={[{ required: true, message: TEXTS.displayNameRequired }]}
       >
         <Input readOnly={!isEditing} />
       </Item>
       <Item
         name="login"
-        label="Login"
-        rules={[{ required: true, message: 'Please enter your login' }]}
+        label={TEXTS.login}
+        rules={[{ required: true, message: TEXTS.loginRequired }]}
       >
         <Input readOnly={!isEditing} />
       </Item>
       <Item
         name="email"
-        label="Email"
-        rules={[{ required: true, type: 'email', message: 'Please enter a valid email' }]}
+        label={TEXTS.email}
+        rules={[{ required: true, type: 'email', message: TEXTS.emailRequired }]}
       >
         <Input readOnly={!isEditing} />
       </Item>
       <Item
         className={classes.phoneField}
         name="phone"
-        label="Phone"
-        rules={[{ required: true, message: 'Please enter your phone number' }]}
+        label={TEXTS.phone}
+        rules={[{ required: true, message: TEXTS.phoneRequired }]}
       >
         <Input readOnly={!isEditing} />
       </Item>
@@ -81,14 +82,14 @@ export const EditProfileForm: React.FC = () => {
           loading={loading}
           style={{ display: isEditing ? 'block' : 'none' }}
         >
-          Save Changes
+          {TEXTS.saveChanges}
         </Button>
         <Button
           type="default"
           onClick={() => setIsEditing(true)}
           style={{ display: !isEditing ? 'block' : 'none' }}
         >
-          Change Data
+          {TEXTS.changeData}
         </Button>
       </Item>
     </Form>

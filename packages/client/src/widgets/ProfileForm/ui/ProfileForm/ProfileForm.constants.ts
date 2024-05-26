@@ -1,0 +1,18 @@
+export const TEXTS = {
+  firstName: 'First Name',
+  firstNameRequired: 'Please enter your first name',
+  secondName: 'Second Name',
+  secondNameRequired: 'Please enter your second name',
+  displayName: 'Display Name',
+  displayNameRequired: 'Please enter your display name',
+  login: 'Login',
+  loginRequired: 'Please enter your login',
+  email: 'Email',
+  emailRequired: 'Please enter a valid email',
+  phone: 'Phone',
+  phoneRequired: 'Please enter your phone number',
+  saveChanges: 'Save Changes',
+  changeData: 'Change Data',
+  profileUpdateSuccess: 'Profile updated successfully!',
+  profileUpdateFailed: 'Failed to update profile. Please try again.',
+} as const;

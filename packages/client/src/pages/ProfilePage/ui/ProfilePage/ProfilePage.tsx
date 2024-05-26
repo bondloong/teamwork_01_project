@@ -8,8 +8,8 @@ import { EAppRoutes } from '@/shared/types';
 import { useAppDispatch } from '@/shared/hooks';
 import { LogOut } from '@/features/LogOut';
 import { PasswordForm } from '@/widgets/PasswordForm';
+import { ProfileForm } from '@/widgets/ProfileForm';
 import { fetchUserInfo, uploadProfileAvatar, getUserData, getIsAuth } from '@/entities/User';
-import { EditProfileForm } from '../EditProfileForm/EditProfileForm';
 import classes from './ProfilePage.module.scss';
 import { TEXTS, BASE_AVATAR_URL, DEFAULT_AVATAR } from './ProfilePage.constants';
 import { Navigate } from 'react-router-dom';
@@ -71,7 +71,7 @@ export const ProfilePage = (): ReactElement => {
               </Button>
             </Upload>
           </div>
-          <EditProfileForm />
+          <ProfileForm />
           <Button
             type="default"
             onClick={() => setIsPasswordModalVisible(true)}
