@@ -9,7 +9,7 @@ import { useAppDispatch } from '@/shared/hooks';
 import {
   fetchUserInfo,
   logOut,
-  changeProfileAvatar,
+  uploadProfileAvatar,
   getUserData,
   getIsAuth,
 } from '@/entities/User';
@@ -45,7 +45,7 @@ export const ProfilePage = (): ReactElement => {
     setAvatarLoading(true);
     try {
       // eslint-disable-next-line
-      await dispatch(changeProfileAvatar(file) as any).unwrap();
+      await dispatch(uploadProfileAvatar(file) as any).unwrap();
       message.success('Avatar updated successfully!');
     } catch (error) {
       message.error('Failed to update avatar. Please try again.');

@@ -15,6 +15,6 @@ export {
   logIn,
   signUp,
   changeUserPassword,
-  changeProfileAvatar,
+  uploadProfileAvatar,
   changeUserProfile,
 } from './api';

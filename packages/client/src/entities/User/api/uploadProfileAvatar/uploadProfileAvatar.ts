@@ -2,8 +2,8 @@ import { API, praktikumClient } from '@/shared/api';
 import { IUser } from '../../model';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const changeProfileAvatar = createAsyncThunk<IUser, File>(
-  'user/changeProfileAvatar',
+export const uploadProfileAvatar = createAsyncThunk<IUser, File>(
+  'user/uploadProfileAvatar',
   async (avatar, thunkAPI) => {
     const formData = new FormData();
     formData.append('avatar', avatar);

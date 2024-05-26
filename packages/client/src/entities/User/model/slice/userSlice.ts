@@ -6,7 +6,7 @@ import {
   logOut,
   signUp,
   changeUserPassword,
-  changeProfileAvatar,
+  uploadProfileAvatar,
   changeUserProfile,
 } from '../../api';
 
@@ -87,14 +87,14 @@ const userSlice = createSlice({
       });
 
     builder
-      .addCase(changeProfileAvatar.pending, (state) => {
+      .addCase(uploadProfileAvatar.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(changeProfileAvatar.fulfilled, (state, action: PayloadAction<IUser>) => {
+      .addCase(uploadProfileAvatar.fulfilled, (state, action: PayloadAction<IUser>) => {
         state.isLoading = false;
         state.userData = action.payload;
       })
-      .addCase(changeProfileAvatar.rejected, (state) => {
+      .addCase(uploadProfileAvatar.rejected, (state) => {
         state.isLoading = false;
       });
 
