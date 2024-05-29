@@ -33,7 +33,13 @@ export const ProfilePage = (): ReactElement => {
     setAvatarLoading(true);
     try {
       // eslint-disable-next-line
-      await dispatch(uploadProfileAvatar(file) as any).unwrap();
+      await dispatch(uploadProfileAvatar(file) as any).then((result) => {
+      if (result.meta.requestStatus === 'fulfilled') {
+       message.success(TEXTS.avatarUpdateSuccess);
+      } else {
+      message.error(TEXTS.avatarUpdateFailed);
+      }
+    });
       message.success(TEXTS.avatarUpdateSuccess);
     } catch (error) {
       message.error(TEXTS.avatarUpdateFailed);
