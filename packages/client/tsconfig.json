@@ -17,9 +17,11 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "rollup/parseAst": ["./node_modules/rollup/dist/parseAst"]
     }
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.server.json" }],
+  "exclude": ["vitest.config.ts"]
 }
