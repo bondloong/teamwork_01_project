@@ -48,8 +48,7 @@ const createServer = async (): Promise<void> => {
         // Применяем встроенные HTML-преобразования vite и плагинов
         template = await vite.transformIndexHtml(url, template);
 
-        // Загружаем модуль клиента, который писали выше,
-        // он будет рендерить HTML-код
+        // Загружаем модуль клиента (точка входа для SSR)
         render = (await vite.ssrLoadModule(path.join(clientPath, 'src/entry-server.tsx'))).render;
       } else {
         // Если в prod-режиме
@@ -59,7 +58,7 @@ const createServer = async (): Promise<void> => {
         // Получаем путь до сбилдженого модуля клиента, чтобы не тащить средства сборки клиента на сервер
         const pathToServer = path.join(clientPath, 'dist/server/entry-server.js');
 
-        // Импортируем этот модуль и вызываем с инишл стейтом
+        // Импортируем этот модуль
         render = (await import(pathToServer)).render;
       }
 
