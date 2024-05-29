@@ -1,7 +1,6 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { Button, Upload, Avatar, Row, Col, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { BaseLayout } from '@/layouts/BaseLayout';
 import { EAppRoutes } from '@/shared/types';
@@ -9,7 +8,7 @@ import { useAppDispatch } from '@/shared/hooks';
 import { LogOut } from '@/features/LogOut';
 import { PasswordForm } from '@/widgets/PasswordForm';
 import { ProfileForm } from '@/widgets/ProfileForm';
-import { fetchUserInfo, uploadProfileAvatar, getUserData, getIsAuth } from '@/entities/User';
+import { uploadProfileAvatar, getUserData, getIsAuth } from '@/entities/User';
 import classes from './ProfilePage.module.scss';
 import { TEXTS, BASE_AVATAR_URL, DEFAULT_AVATAR } from './ProfilePage.constants';
 import { Navigate } from 'react-router-dom';
@@ -17,29 +16,20 @@ import { Navigate } from 'react-router-dom';
 export const ProfilePage = (): ReactElement => {
   const isAuth = useSelector(getIsAuth);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const user = useSelector(getUserData);
   const [avatarLoading, setAvatarLoading] = useState(false);
   const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
 
-  useEffect(() => {
-    dispatch(fetchUserInfo()).catch((error: Error) => {
-      console.error('Failed to fetch user info', error);
-      navigate(EAppRoutes.Auth);
-    });
-  }, [dispatch, navigate]);
-
   const handleAvatarChange = async (file: File): Promise<void> => {
     setAvatarLoading(true);
     try {
-      // eslint-disable-next-line
-      await dispatch(uploadProfileAvatar(file) as any).then((result) => {
-      if (result.meta.requestStatus === 'fulfilled') {
-       message.success(TEXTS.avatarUpdateSuccess);
-      } else {
-      message.error(TEXTS.avatarUpdateFailed);
-      }
-    });
+      await dispatch(uploadProfileAvatar(file)).then((result) => {
+        if (result.meta.requestStatus === 'fulfilled') {
+          message.success(TEXTS.avatarUpdateSuccess);
+        } else {
+          message.error(TEXTS.avatarUpdateFailed);
+        }
+      });
       message.success(TEXTS.avatarUpdateSuccess);
     } catch (error) {
       message.error(TEXTS.avatarUpdateFailed);
