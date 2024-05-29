@@ -5,6 +5,8 @@ export enum EInputNames {
   Password = 'password',
   PasswordRepeat = 'passwordRepeat',
   NewPassword = 'newPassword',
+  OldPassword = 'oldPassword',
   Email = 'email',
   Phone = 'phone',
+  DisplayName = 'display_name',
 }

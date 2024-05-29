@@ -9,7 +9,7 @@ export const passwordValidationSchema = yup.object().shape({
       'Password must be 8-40 characters long, contain at least one uppercase letter, one number, and may include special characters'
     )
     .required('New password is required'),
-  confirmNewPassword: yup
+  passwordRepeat: yup
     .string()
     .oneOf([yup.ref('newPassword'), undefined], 'Passwords must match')
     .required('Please confirm your new password'),

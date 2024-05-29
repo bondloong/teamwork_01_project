@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Button, message, Modal } from 'antd';
 import { useAppDispatch } from '@/shared/hooks';
+import { EInputNames } from '@/shared/types';
 import { changeUserPassword } from '@/entities/User';
 import { passwordValidationSchema } from './PasswordForm.validation';
 import { TEXTS } from './PasswordForm.constants';
@@ -47,29 +48,29 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
     >
       <Form form={passwordForm} layout="vertical" onFinish={handlePasswordChange}>
         <Item
-          name="oldPassword"
+          name={EInputNames.OldPassword}
           label={TEXTS.oldPassword}
           rules={[{ required: true, message: TEXTS.oldPasswordRequired }]}
         >
           <Input.Password />
         </Item>
         <Item
-          name="newPassword"
+          name={EInputNames.NewPassword}
           label={TEXTS.newPassword}
           rules={[{ required: true, message: TEXTS.newPasswordRequired }]}
         >
           <Input.Password />
         </Item>
         <Item
-          name="confirmNewPassword"
+          name={EInputNames.PasswordRepeat}
           label={TEXTS.confirmNewPassword}
-          dependencies={['newPassword']}
+          dependencies={[EInputNames.NewPassword]}
           rules={[
             { required: true, message: TEXTS.confirmNewPasswordRequired },
             // eslint-disable-next-line
             ({ getFieldValue }) => ({
               validator(_, value): Promise<void> {
-                if (!value || getFieldValue('newPassword') === value) {
+                if (!value || getFieldValue(EInputNames.NewPassword) === value) {
                   return Promise.resolve();
                 }
                 return Promise.reject(new Error(TEXTS.passwordMismatch));

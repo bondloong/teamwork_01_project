@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/shared/hooks';
+import { EInputNames } from '@/shared/types';
 import { changeUserProfile } from '@/entities/User';
 import { type IUser } from '@/entities/User/model';
 import { profileValidationSchema } from './ProfileForm.validation';
@@ -45,35 +46,35 @@ export const ProfileForm: React.FC = () => {
   return (
     <Form form={form} layout="vertical" onFinish={handleSubmit} initialValues={user || undefined}>
       <Item
-        name="first_name"
+        name={EInputNames.FirstName}
         label={TEXTS.firstName}
         rules={[{ required: true, message: TEXTS.firstNameRequired }]}
       >
         <Input readOnly={!isEditing} />
       </Item>
       <Item
-        name="second_name"
+        name={EInputNames.SecondName}
         label={TEXTS.secondName}
         rules={[{ required: true, message: TEXTS.secondNameRequired }]}
       >
         <Input readOnly={!isEditing} />
       </Item>
       <Item
-        name="display_name"
+        name={EInputNames.DisplayName}
         label={TEXTS.displayName}
         rules={[{ required: true, message: TEXTS.displayNameRequired }]}
       >
         <Input readOnly={!isEditing} />
       </Item>
       <Item
-        name="login"
+        name={EInputNames.Login}
         label={TEXTS.login}
         rules={[{ required: true, message: TEXTS.loginRequired }]}
       >
         <Input readOnly={!isEditing} />
       </Item>
       <Item
-        name="email"
+        name={EInputNames.Email}
         label={TEXTS.email}
         rules={[{ required: true, type: 'email', message: TEXTS.emailRequired }]}
       >
@@ -81,7 +82,7 @@ export const ProfileForm: React.FC = () => {
       </Item>
       <Item
         className={classes.phoneField}
-        name="phone"
+        name={EInputNames.Phone}
         label={TEXTS.phone}
         rules={[{ required: true, message: TEXTS.phoneRequired }]}
       >
