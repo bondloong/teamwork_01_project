@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dotenv from 'dotenv';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 dotenv.config();
 
 const SERVICE_WORKER = 'service-worker';
@@ -32,6 +32,7 @@ export default defineConfig({
     },
   },
   build: {
+    outDir: join(__dirname, 'dist/client'),
     rollupOptions: {
       input: {
         app: './index.html',
@@ -39,10 +40,22 @@ export default defineConfig({
         [SERVICE_WORKER]: './sw.ts',
       },
       output: {
-        entryFileNames: (chunk) =>
+        entryFileNames: (chunk) => {
           // Для чанка с именем 'service-worker' сохраняем исходной имя файла. Остальные чанки складываем в assests, добавляя хэш к имени
-          chunk.name === SERVICE_WORKER ? '[name].js' : 'assets/[name]-[hash].js',
+          switch (chunk.name) {
+            case SERVICE_WORKER:
+            case 'entry-server':
+              return '[name].js';
+
+            default:
+              return 'assets/[name]-[hash].js';
+          }
+        },
       },
     },
+  },
+  ssr: {
+    // собирать бандл для сервера в формате cjs, который запустится в Node.js среде.
+    format: 'cjs',
   },
 });
