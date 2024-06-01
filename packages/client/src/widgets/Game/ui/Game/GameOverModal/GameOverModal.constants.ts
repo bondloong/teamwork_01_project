@@ -4,4 +4,5 @@ export const TEXTS = {
   tryAgain: 'Хотите начать заново?',
   tryAgainButton: 'Начать заново',
   backButton: ' В главное меню',
+  gameEnded: 'Конец игры!',
 };

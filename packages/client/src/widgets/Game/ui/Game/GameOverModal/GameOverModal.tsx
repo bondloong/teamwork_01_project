@@ -11,9 +11,7 @@ export const GameOverModal: React.FC<IGameOverModalProps> = ({ onClose, score })
   const navigate = useNavigate();
   const handleClose = (): void => {
     setVisible(false);
-    if (onClose) {
-      onClose();
-    }
+    onClose?.();
   };
   const NavigateToMain = (): void => {
     navigate(EAppRoutes.Main);
@@ -29,9 +27,9 @@ export const GameOverModal: React.FC<IGameOverModalProps> = ({ onClose, score })
       className={classes.gameOverModal}
     >
       <div className={classes.gameOverModal__wrapper}>
-        <h1 className={classes.gameOverModal__title}>Конец игры!</h1>
+        <h1 className={classes.gameOverModal__title}>{TEXTS.gameEnded}</h1>
         <p className={classes.gameOverModal__score}>
-          {TEXTS.score} <span className={classes.gameOverModal__scoreValue}> {score} </span>
+          {TEXTS.score} <span className={classes.gameOverModal__scoreValue}>{score}</span>
         </p>
 
         <p>{TEXTS.tryAgain}</p>
