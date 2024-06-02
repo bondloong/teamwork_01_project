@@ -1,6 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { Button, Upload, Avatar, Row, Col, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Button, Row, Col, message } from 'antd';
 import { useSelector } from 'react-redux';
 import { BaseLayout } from '@/layouts/BaseLayout';
 import { EAppRoutes } from '@/shared/types';
@@ -8,6 +7,7 @@ import { useAppDispatch } from '@/shared/hooks';
 import { LogOut } from '@/features/LogOut';
 import { PasswordForm } from '@/widgets/PasswordForm';
 import { ProfileForm } from '@/widgets/ProfileForm';
+import { ProfileAvatar } from '@/widgets/ProfileAvatar';
 import { uploadProfileAvatar, getUserData, getIsAuth } from '@/entities/User';
 import classes from './ProfilePage.module.scss';
 import { TEXTS, BASE_AVATAR_URL, DEFAULT_AVATAR } from './ProfilePage.constants';
@@ -30,7 +30,6 @@ export const ProfilePage = (): ReactElement => {
           message.error(TEXTS.avatarUpdateFailed);
         }
       });
-      message.success(TEXTS.avatarUpdateSuccess);
     } catch (error) {
       message.error(TEXTS.avatarUpdateFailed);
       console.error('Avatar update failed', error);
@@ -39,7 +38,7 @@ export const ProfilePage = (): ReactElement => {
     }
   };
 
-  const handleBeforeUpload = (file: File): false => {
+  const handleBeforeUpload = (file: File): boolean => {
     handleAvatarChange(file);
     return false;
   };
@@ -55,18 +54,11 @@ export const ProfilePage = (): ReactElement => {
       <Row justify="center">
         <Col className={classes.wrapper} xs={24} sm={18} md={12} lg={10}>
           <h1 className={classes.header}>{TEXTS.title}</h1>
-          <div className={classes.avatarContainer}>
-            <Avatar className={classes.avatarImage} size={100} src={avatarSrc} />
-            <Upload
-              showUploadList={false}
-              beforeUpload={handleBeforeUpload}
-              accept=".jpeg,.jpg,.png,.gif,.webp"
-            >
-              <Button icon={<UploadOutlined />} loading={avatarLoading}>
-                {TEXTS.changeAvatarButton}
-              </Button>
-            </Upload>
-          </div>
+          <ProfileAvatar
+            avatarSrc={avatarSrc}
+            handleBeforeUpload={handleBeforeUpload}
+            isLoading={avatarLoading}
+          />
           <ProfileForm />
           <Button
             type="default"
