@@ -39,21 +39,21 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
   };
 
   const handlePasswordChange = async (): Promise<void> => {
+    const { isValid, errors } = validateFormData(values, PasswordSchema);
+    if (!isValid) {
+      setErrors(errors);
+      return;
+    }
+
+    if (values[EInputNames.NewPassword] !== values[EInputNames.PasswordRepeat]) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [EInputNames.PasswordRepeat]: TEXTS.passwordMismatch,
+      }));
+      return;
+    }
+
     try {
-      const { isValid, errors } = validateFormData(values, PasswordSchema);
-      if (!isValid) {
-        setErrors(errors);
-        return;
-      }
-
-      if (values[EInputNames.NewPassword] !== values[EInputNames.PasswordRepeat]) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [EInputNames.PasswordRepeat]: TEXTS.passwordMismatch,
-        }));
-        return;
-      }
-
       await dispatch(
         changeUserPassword({
           oldPassword: values[EInputNames.OldPassword],
@@ -66,9 +66,7 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
       if (error instanceof ValidationError) {
         const formErrors = error.inner.reduce(
           (acc: Record<string, string>, curr: ValidationError) => {
-            if (curr.path) {
-              acc[curr.path] = curr.message;
-            }
+            if (curr.path) acc[curr.path] = curr.message;
             return acc;
           },
           {}
