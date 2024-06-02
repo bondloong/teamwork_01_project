@@ -9,7 +9,7 @@ export const uploadProfileAvatar = createAsyncThunk<IUser, File>(
     formData.append('avatar', avatar);
 
     try {
-      const response = await praktikumClient.put(API.profileAvatar, formData, {
+      const response = await praktikumClient.put<IUser>(API.profileAvatar, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return response.data;
