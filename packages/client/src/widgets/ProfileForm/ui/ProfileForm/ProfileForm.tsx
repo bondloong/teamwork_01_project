@@ -1,94 +1,104 @@
-import React, { useState } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Input, Button, message } from 'antd';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/shared/hooks';
-import { EInputNames } from '@/shared/types';
 import { changeUserProfile } from '@/entities/User';
 import { type IUser } from '@/entities/User/model';
-import { profileValidationSchema } from './ProfileForm.validation';
 import { TEXTS } from './ProfileForm.constants';
 import classes from './ProfileForm.module.scss';
+import { useForm } from '@/shared/hooks';
 import { ValidationError } from 'yup';
-
-const { Item } = Form;
+import { PROFILE_INPUTS, ProfileSchema } from '../../model';
 
 export const ProfileForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useSelector((state: IStateSchema) => state.user.userData);
-  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleSubmit = async (values: Partial<IUser>): Promise<void> => {
+  const { values, setValue, errors, setErrors, validateFormData, validateString } =
+    useForm(PROFILE_INPUTS);
+
+  useEffect(() => {
+    if (user && !isEditing) {
+      PROFILE_INPUTS.forEach(({ name }) => {
+        if (values[name] === '') {
+          setValue(name, user[name as keyof IUser]?.toString() || '');
+        }
+      });
+    }
+  }, [user, values, setValue, isEditing]);
+
+  const handleBlur = (name: string): void => {
+    const value = values[name];
+    const schema = ProfileSchema[name];
+
+    if (schema) {
+      const error = validateString(value, schema);
+      setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+    }
+  };
+
+  const handleSubmit = async (): Promise<void> => {
     setLoading(true);
-
-    await profileValidationSchema.validate(values).catch((error: ValidationError) => {
-      message.error(error.errors[0]);
-      setLoading(false);
-      throw error;
-    });
-
-    dispatch(changeUserProfile(values))
-      .unwrap()
-      .then(() => {
-        message.success(TEXTS.profileUpdateSuccess);
-        setIsEditing(false);
-      })
-      .catch((error) => {
+    try {
+      const { isValid, errors } = validateFormData(values, ProfileSchema);
+      if (!isValid) {
+        setErrors(errors);
+        return;
+      }
+      await dispatch(changeUserProfile(values)).unwrap();
+      message.success(TEXTS.profileUpdateSuccess);
+      setIsEditing(false);
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        const formErrors = error.inner.reduce(
+          (acc: Record<string, string>, curr: ValidationError) => {
+            if (curr.path) {
+              acc[curr.path] = curr.message;
+            }
+            return acc;
+          },
+          {}
+        );
+        setErrors(formErrors);
+        message.error(error.errors[0]);
+      } else {
         message.error(TEXTS.profileUpdateFailed);
         console.error('Update failed', error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Form form={form} layout="vertical" onFinish={handleSubmit} initialValues={user || undefined}>
-      <Item
-        name={EInputNames.FirstName}
-        label={TEXTS.firstName}
-        rules={[{ required: true, message: TEXTS.firstNameRequired }]}
-      >
-        <Input readOnly={!isEditing} />
-      </Item>
-      <Item
-        name={EInputNames.SecondName}
-        label={TEXTS.secondName}
-        rules={[{ required: true, message: TEXTS.secondNameRequired }]}
-      >
-        <Input readOnly={!isEditing} />
-      </Item>
-      <Item
-        name={EInputNames.DisplayName}
-        label={TEXTS.displayName}
-        rules={[{ required: true, message: TEXTS.displayNameRequired }]}
-      >
-        <Input readOnly={!isEditing} />
-      </Item>
-      <Item
-        name={EInputNames.Login}
-        label={TEXTS.login}
-        rules={[{ required: true, message: TEXTS.loginRequired }]}
-      >
-        <Input readOnly={!isEditing} />
-      </Item>
-      <Item
-        name={EInputNames.Email}
-        label={TEXTS.email}
-        rules={[{ required: true, type: 'email', message: TEXTS.emailRequired }]}
-      >
-        <Input readOnly={!isEditing} />
-      </Item>
-      <Item
-        className={classes.phoneField}
-        name={EInputNames.Phone}
-        label={TEXTS.phone}
-        rules={[{ required: true, message: TEXTS.phoneRequired }]}
-      >
-        <Input readOnly={!isEditing} />
-      </Item>
-      <Item>
+    <form
+      className={classes.form}
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+    >
+      {PROFILE_INPUTS.map(({ name, placeholder, type }) => (
+        <div key={name} className={classes.formItem}>
+          <label className={classes.itemLabel} htmlFor={name}>
+            {TEXTS[name as keyof typeof TEXTS]}
+          </label>
+          <Input
+            id={name}
+            name={name}
+            type={type}
+            value={values[name] as string}
+            onChange={(e) => setValue(name, e.target.value)}
+            onBlur={() => handleBlur(name)}
+            readOnly={!isEditing}
+            placeholder={placeholder}
+          />
+          {errors[name] && <div className={classes.error}>{errors[name]}</div>}
+        </div>
+      ))}
+      <div className={classes.formButtonItem}>
         <Button
           type="primary"
           htmlType="submit"
@@ -104,7 +114,7 @@ export const ProfileForm: React.FC = () => {
         >
           {TEXTS.changeData}
         </Button>
-      </Item>
-    </Form>
+      </div>
+    </form>
   );
 };

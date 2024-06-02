@@ -1,3 +1,22 @@
-.phone-field {
-  margin-bottom: 40px;
+.form-item {
+  margin-bottom: 24px;
+}
+
+.item-label {
+  display: block;
+  padding-bottom: 6px;
+  font-weight: 600;
+}
+
+.form-button-item {
+  margin-top: 40px;
+}
+
+.error {
+  display: block;
+  line-height: 16px;
+  color: $text-error-color;
+  font-size: 14px;
+  transition: all 0.3s;
+  margin: 2px 0 0 0;
 }
