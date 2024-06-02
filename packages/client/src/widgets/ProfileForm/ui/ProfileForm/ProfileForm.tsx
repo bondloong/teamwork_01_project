@@ -9,25 +9,26 @@ import classes from './ProfileForm.module.scss';
 import { useForm } from '@/shared/hooks';
 import { ValidationError } from 'yup';
 import { PROFILE_INPUTS, ProfileSchema } from '../../model';
+import { getIsProfileLoading } from '@/entities/User';
 
 export const ProfileForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const user = useSelector((state: IStateSchema) => state.user.userData);
-  const [loading, setLoading] = useState(false);
+  const isProfileLoading = useSelector(getIsProfileLoading);
   const [isEditing, setIsEditing] = useState(false);
 
   const { values, setValue, errors, setErrors, validateFormData, validateString } =
     useForm(PROFILE_INPUTS);
 
   useEffect(() => {
-    if (user && !isEditing) {
+    if (user) {
       PROFILE_INPUTS.forEach(({ name }) => {
         if (values[name] === '') {
           setValue(name, user[name as keyof IUser]?.toString() || '');
         }
       });
     }
-  }, [user, values, setValue, isEditing]);
+  }, [user, values, setValue]);
 
   const handleBlur = (name: string): void => {
     const value = values[name];
@@ -40,7 +41,6 @@ export const ProfileForm: React.FC = () => {
   };
 
   const handleSubmit = async (): Promise<void> => {
-    setLoading(true);
     try {
       const { isValid, errors } = validateFormData(values, ProfileSchema);
       if (!isValid) {
@@ -67,8 +67,6 @@ export const ProfileForm: React.FC = () => {
         message.error(TEXTS.profileUpdateFailed);
         console.error('Update failed', error);
       }
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -102,7 +100,7 @@ export const ProfileForm: React.FC = () => {
         <Button
           type="primary"
           htmlType="submit"
-          loading={loading}
+          loading={isProfileLoading}
           style={{ display: isEditing ? 'block' : 'none' }}
         >
           {TEXTS.saveChanges}

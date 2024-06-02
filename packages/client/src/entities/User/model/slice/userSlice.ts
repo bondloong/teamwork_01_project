@@ -14,6 +14,7 @@ const initialState: IUserSchema = {
   userData: null,
   isLoading: false,
   isAvatarLoading: false,
+  isProfileLoading: false,
 };
 
 const userSlice = createSlice({
@@ -51,6 +52,16 @@ const userSlice = createSlice({
       })
       .addCase(uploadProfileAvatar.rejected, (state) => {
         state.isAvatarLoading = false;
+      })
+      .addCase(changeUserProfile.pending, (state) => {
+        state.isProfileLoading = true;
+      })
+      .addCase(changeUserProfile.fulfilled, (state, action: PayloadAction<IUser>) => {
+        state.isProfileLoading = false;
+        state.userData = action.payload;
+      })
+      .addCase(changeUserProfile.rejected, (state) => {
+        state.isProfileLoading = false;
       });
 
     builder
@@ -96,18 +107,6 @@ const userSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(changeUserPassword.rejected, (state) => {
-        state.isLoading = false;
-      });
-
-    builder
-      .addCase(changeUserProfile.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(changeUserProfile.fulfilled, (state, action: PayloadAction<IUser>) => {
-        state.isLoading = false;
-        state.userData = action.payload;
-      })
-      .addCase(changeUserProfile.rejected, (state) => {
         state.isLoading = false;
       });
   },

@@ -12,4 +12,5 @@ export interface IUserSchema {
   userData: IUser | null;
   isLoading: boolean;
   isAvatarLoading: boolean;
+  isProfileLoading: boolean;
 }
