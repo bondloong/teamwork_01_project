@@ -13,4 +13,5 @@ export interface IUserSchema {
   isLoading: boolean;
   isAvatarLoading: boolean;
   isProfileLoading: boolean;
+  isPasswordLoading: boolean;
 }

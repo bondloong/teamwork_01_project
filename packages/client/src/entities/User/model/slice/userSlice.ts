@@ -15,6 +15,7 @@ const initialState: IUserSchema = {
   isLoading: false,
   isAvatarLoading: false,
   isProfileLoading: false,
+  isPasswordLoading: false,
 };
 
 const userSlice = createSlice({
@@ -101,13 +102,13 @@ const userSlice = createSlice({
 
     builder
       .addCase(changeUserPassword.pending, (state) => {
-        state.isLoading = true;
+        state.isPasswordLoading = true;
       })
       .addCase(changeUserPassword.fulfilled, (state) => {
-        state.isLoading = false;
+        state.isPasswordLoading = false;
       })
       .addCase(changeUserPassword.rejected, (state) => {
-        state.isLoading = false;
+        state.isPasswordLoading = false;
       });
   },
 });

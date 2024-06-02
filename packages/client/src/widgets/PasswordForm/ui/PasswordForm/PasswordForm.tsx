@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Input, Button, message, Modal } from 'antd';
 import { useAppDispatch } from '@/shared/hooks';
+import { useSelector } from 'react-redux';
 import { EInputNames } from '@/shared/types';
 import { changeUserPassword } from '@/entities/User';
 import { TEXTS } from './PasswordForm.constants';
@@ -9,13 +10,14 @@ import { PASSWORD_INPUTS, PasswordSchema } from '../../model';
 import { useForm } from '@/shared/hooks';
 import { ValidationError } from 'yup';
 import classes from './PasswordForm.module.scss';
+import { getIsPasswordLoading } from '@/entities/User';
 
 export const PasswordForm: React.FC<IPasswordFormProps> = ({
   isPasswordModalVisible,
   setIsPasswordModalVisible,
 }) => {
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
+  const isPasswordLoading = useSelector(getIsPasswordLoading);
 
   const { values, setValue, errors, setErrors, validateFormData, validateString, resetForm } =
     useForm(PASSWORD_INPUTS);
@@ -37,7 +39,6 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
   };
 
   const handlePasswordChange = async (): Promise<void> => {
-    setLoading(true);
     try {
       const { isValid, errors } = validateFormData(values, PasswordSchema);
       if (!isValid) {
@@ -50,7 +51,6 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
           ...prevErrors,
           [EInputNames.PasswordRepeat]: TEXTS.passwordMismatch,
         }));
-        setLoading(false);
         return;
       }
 
@@ -79,8 +79,6 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
         message.error(TEXTS.passwordUpdateFailed);
         console.error('Password update failed', error);
       }
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -116,7 +114,7 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
           </div>
         ))}
         <div className={classes.formButtonItem}>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit" loading={isPasswordLoading}>
             {TEXTS.savePasswordButton}
           </Button>
         </div>

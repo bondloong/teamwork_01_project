@@ -5,6 +5,7 @@ export {
   getIsUserLoading,
   getIsAvatarLoading,
   getIsProfileLoading,
+  getIsPasswordLoading,
   userActions,
   userReducer,
 } from './model';

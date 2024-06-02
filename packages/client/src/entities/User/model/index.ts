@@ -5,5 +5,6 @@ export {
   getIsUserLoading,
   getIsAvatarLoading,
   getIsProfileLoading,
+  getIsPasswordLoading,
 } from './selectors';
 export { userActions, userReducer } from './slice';
