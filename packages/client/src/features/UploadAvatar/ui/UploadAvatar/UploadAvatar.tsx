@@ -1,20 +1,13 @@
-import { useState } from 'react';
 import { useAppDispatch } from '@/shared/hooks';
 import { uploadProfileAvatar } from '@/entities/User';
 import { message } from 'antd';
+import { IUploadAvatarReturn } from './UploadAvatar.interfaces';
 import { TEXTS } from '../UploadAvatar/UploadAvatar.constants';
 
-interface UseUploadAvatarReturn {
-  loading: boolean;
-  handleBeforeUpload: (file: File) => boolean;
-}
-
-export const UploadAvatar = (): UseUploadAvatarReturn => {
+export const UploadAvatar = (): IUploadAvatarReturn => {
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
 
   const handleAvatarChange = async (file: File): Promise<void> => {
-    setLoading(true);
     try {
       const result = await dispatch(uploadProfileAvatar(file)).unwrap();
       if (result) {
@@ -25,8 +18,6 @@ export const UploadAvatar = (): UseUploadAvatarReturn => {
     } catch (error) {
       message.error(TEXTS.avatarUpdateFailed);
       console.error('Avatar update failed', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -36,7 +27,6 @@ export const UploadAvatar = (): UseUploadAvatarReturn => {
   };
 
   return {
-    loading,
     handleBeforeUpload,
   };
 };

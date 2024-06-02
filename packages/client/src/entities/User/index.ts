@@ -3,6 +3,7 @@ export {
   getUserData,
   getIsAuth,
   getIsUserLoading,
+  getIsAvatarLoading,
   userActions,
   userReducer,
 } from './model';
