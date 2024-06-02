@@ -1,6 +1,6 @@
 import { FC, useRef, useState, useEffect } from 'react';
-import { SpaceHD } from './assets/index';
-import { IBullet, IEnemy, IGameProps, TCursor } from './GameInterfaces';
+import { SpaceHD, Blaster, EnemyIsDefeated, GameOver } from './assets/index';
+import { IBullet, IEnemy, IGameAudio, IGameProps, TCursor } from './GameInterfaces';
 import classes from './Game.module.scss';
 import {
   drawStartGame,
@@ -10,6 +10,8 @@ import {
   shootBullet,
   spawnEnemy,
   gameLoop,
+  loadAudioFiles,
+  stopAllAudio,
 } from './models';
 import { GameOverModal } from './GameOverModal';
 import { useFullscreen } from '@/shared/hooks/useFullscreen';
@@ -27,6 +29,11 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   const [gameOver, setGameOver] = useState(false);
   const shootingInterval = useRef<NodeJS.Timeout | null>(null);
   const backgroundImage = useRef(new Image());
+  const audio = useRef<IGameAudio>({
+    blasterAudio: null,
+    enemyIsDefeatedAudio: null,
+    gameOverAudio: null,
+  });
   const backgroundX = useRef(0);
   const enemySpeed = useRef(5);
 
@@ -68,12 +75,20 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
     backgroundImage.current.src = SpaceHD; // Загрузка фона
     backgroundImage.current.onload = (): void => {
       // Запуск игры после отрисовки фона
-      requestAnimationFrame(() => gameLoop(gameConfig));
+      loadAudioFiles([Blaster, EnemyIsDefeated, GameOver]).then((audioElements) => {
+        const [blasterAudio, enemyIsDefeatedAudio, gameOverAudio] = audioElements;
+        audio.current = { blasterAudio, enemyIsDefeatedAudio, gameOverAudio };
+        requestAnimationFrame(() => gameLoop({ ...gameConfig, audio: audio.current }));
+      });
     };
 
     const handleMouseMove = (event: MouseEvent): void => handleMouseMoveShip(event, canvas, ship);
     const handleMouseDown = (): void =>
-      handleMouseDownStartShooting(() => shootBullet(bullets, ship), shootingInterval);
+      handleMouseDownStartShooting(
+        () => shootBullet(bullets, ship),
+        shootingInterval,
+        audio.current.blasterAudio
+      );
     const handleMouseUp = (): void => handleMouseUpStopShooting(shootingInterval);
     const spawnEnemyInterval = setInterval(
       () => spawnEnemy(enemies, canvasSize.width, canvasSize.height, enemySpeed.current),
@@ -107,7 +122,12 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       setCanvasSize({ width, height });
     }
   }, [isFullscreen, width, height]);
-  if (gameOver) return <GameOverModal score={score} onClose={handleGameOver} />;
+  if (gameOver) {
+    stopAllAudio(audio.current);
+    audio.current.gameOverAudio?.play();
+    return <GameOverModal score={score} onClose={handleGameOver} />;
+  }
+
   return (
     <section ref={gameRef} className={classes.game}>
       <h2 className={`${classes.score} ${isFullscreen ? classes.scoreIsFullscreen : ''}`}>
