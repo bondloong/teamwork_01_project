@@ -12,6 +12,4 @@ export const ProfileSchema: Record<(typeof PROFILE_INPUTS)[number]['name'], Stri
   [EInputNames.Login]: INPUT_VALIDATION_SCHEMAS.login.required(REQUIRED_ERROR),
   [EInputNames.Email]: INPUT_VALIDATION_SCHEMAS.email.required(REQUIRED_ERROR),
   [EInputNames.Phone]: INPUT_VALIDATION_SCHEMAS.phone.required(REQUIRED_ERROR),
-  [EInputNames.Password]: INPUT_VALIDATION_SCHEMAS.password.required(REQUIRED_ERROR),
-  [EInputNames.PasswordRepeat]: INPUT_VALIDATION_SCHEMAS.password.required(REQUIRED_ERROR),
 } as const;

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { TInputValues, TUseForm } from './useForm.interfaces';
 import { validateFormData, validateString } from './utils';
 
@@ -33,6 +33,23 @@ export const useForm: TUseForm = (inputs) => {
     }));
   };
 
+  const resetForm = useCallback(() => {
+    setValues(
+      inputs.reduce<TInputValues<typeof inputs>>((acc, input) => {
+        acc[input.name] = '';
+
+        return acc;
+      }, {})
+    );
+    setErrors(
+      inputs.reduce<TInputValues<typeof inputs>>((acc, input) => {
+        acc[input.name] = '';
+
+        return acc;
+      }, {})
+    );
+  }, [inputs]);
+
   const inputNames = useMemo<(typeof inputs)[number]['name'][]>(
     () => inputs.map(({ name }) => name),
     [inputs]
@@ -44,6 +61,7 @@ export const useForm: TUseForm = (inputs) => {
     errors,
     setError,
     setErrors,
+    resetForm,
     inputNames,
     validateFormData,
     validateString,

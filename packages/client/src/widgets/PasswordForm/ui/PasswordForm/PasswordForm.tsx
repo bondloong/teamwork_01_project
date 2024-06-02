@@ -1,42 +1,82 @@
-import React from 'react';
-import { Form, Input, Button, message, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Input, Button, message, Modal } from 'antd';
 import { useAppDispatch } from '@/shared/hooks';
 import { EInputNames } from '@/shared/types';
 import { changeUserPassword } from '@/entities/User';
-import { passwordValidationSchema } from './PasswordForm.validation';
 import { TEXTS } from './PasswordForm.constants';
 import { IPasswordFormProps } from './PasswordForm.interfaces';
+import { PASSWORD_INPUTS, PasswordSchema } from '../../model';
+import { useForm } from '@/shared/hooks';
 import { ValidationError } from 'yup';
-
-const { Item } = Form;
+import classes from './PasswordForm.module.scss';
 
 export const PasswordForm: React.FC<IPasswordFormProps> = ({
   isPasswordModalVisible,
   setIsPasswordModalVisible,
 }) => {
-  const [passwordForm] = Form.useForm();
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
-  const handlePasswordChange = async (values: {
-    oldPassword: string;
-    newPassword: string;
-  }): Promise<void> => {
-    await passwordValidationSchema.validate(values).catch((error: ValidationError) => {
-      message.error(error.errors[0]);
-      throw error;
-    });
+  const { values, setValue, errors, setErrors, validateFormData, validateString, resetForm } =
+    useForm(PASSWORD_INPUTS);
 
-    dispatch(changeUserPassword(values))
-      .unwrap()
-      .then(() => {
-        message.success(TEXTS.passwordUpdateSuccess);
-        setIsPasswordModalVisible(false);
-        passwordForm.resetFields();
-      })
-      .catch((error) => {
+  useEffect(() => {
+    if (!isPasswordModalVisible) {
+      resetForm();
+    }
+  }, [isPasswordModalVisible, resetForm]);
+
+  const handleBlur = (name: string): void => {
+    const value = values[name];
+    const schema = PasswordSchema[name];
+
+    if (schema) {
+      const error = validateString(value, schema);
+      setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+    }
+  };
+
+  const handlePasswordChange = async (): Promise<void> => {
+    setLoading(true);
+    try {
+      const { isValid, errors } = validateFormData(values, PasswordSchema);
+      if (!isValid) {
+        setErrors(errors);
+        return;
+      }
+
+      if (values[EInputNames.NewPassword] !== values[EInputNames.PasswordRepeat]) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [EInputNames.PasswordRepeat]: TEXTS.passwordMismatch,
+        }));
+        setLoading(false);
+        return;
+      }
+
+      await dispatch(changeUserPassword(values)).unwrap();
+      message.success(TEXTS.passwordUpdateSuccess);
+      setIsPasswordModalVisible(false);
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        const formErrors = error.inner.reduce(
+          (acc: Record<string, string>, curr: ValidationError) => {
+            if (curr.path) {
+              acc[curr.path] = curr.message;
+            }
+            return acc;
+          },
+          {}
+        );
+        setErrors(formErrors);
+        message.error(error.errors[0]);
+      } else {
         message.error(TEXTS.passwordUpdateFailed);
         console.error('Password update failed', error);
-      });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,46 +86,36 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
       onCancel={() => setIsPasswordModalVisible(false)}
       footer={null}
     >
-      <Form form={passwordForm} layout="vertical" onFinish={handlePasswordChange}>
-        <Item
-          name={EInputNames.OldPassword}
-          label={TEXTS.oldPassword}
-          rules={[{ required: true, message: TEXTS.oldPasswordRequired }]}
-        >
-          <Input.Password />
-        </Item>
-        <Item
-          name={EInputNames.NewPassword}
-          label={TEXTS.newPassword}
-          rules={[{ required: true, message: TEXTS.newPasswordRequired }]}
-        >
-          <Input.Password />
-        </Item>
-        <Item
-          name={EInputNames.PasswordRepeat}
-          label={TEXTS.confirmNewPassword}
-          dependencies={[EInputNames.NewPassword]}
-          rules={[
-            { required: true, message: TEXTS.confirmNewPasswordRequired },
-            // eslint-disable-next-line
-            ({ getFieldValue }) => ({
-              validator(_, value): Promise<void> {
-                if (!value || getFieldValue(EInputNames.NewPassword) === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error(TEXTS.passwordMismatch));
-              },
-            }),
-          ]}
-        >
-          <Input.Password />
-        </Item>
-        <Item>
-          <Button type="primary" htmlType="submit">
+      <form
+        className={classes.form}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handlePasswordChange();
+        }}
+      >
+        {PASSWORD_INPUTS.map(({ name, placeholder, type }) => (
+          <div key={name} className={classes.formItem}>
+            <label className={classes.itemLabel} htmlFor={name}>
+              {TEXTS[name as keyof typeof TEXTS]}
+            </label>
+            <Input.Password
+              id={name}
+              name={name}
+              type={type}
+              value={values[name] as string}
+              onChange={(e) => setValue(name, e.target.value)}
+              onBlur={() => handleBlur(name)}
+              placeholder={placeholder}
+            />
+            {errors[name] && <div className={classes.error}>{errors[name]}</div>}
+          </div>
+        ))}
+        <div className={classes.formButtonItem}>
+          <Button type="primary" htmlType="submit" loading={loading}>
             {TEXTS.savePasswordButton}
           </Button>
-        </Item>
-      </Form>
+        </div>
+      </form>
     </Modal>
   );
 };

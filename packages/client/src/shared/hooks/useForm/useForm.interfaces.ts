@@ -18,4 +18,5 @@ export type TUseForm = (inputs: Readonly<IInputData[]>) => {
   setErrors: Dispatch<SetStateAction<TInputValues<readonly IInputData[]>>>;
   validateFormData: TValidateFormData;
   validateString: TValidateString;
+  resetForm: () => void;
 };
