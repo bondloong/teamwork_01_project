@@ -54,7 +54,12 @@ export const PasswordForm: React.FC<IPasswordFormProps> = ({
         return;
       }
 
-      await dispatch(changeUserPassword(values)).unwrap();
+      await dispatch(
+        changeUserPassword({
+          oldPassword: values[EInputNames.OldPassword],
+          newPassword: values[EInputNames.NewPassword],
+        })
+      ).unwrap();
       message.success(TEXTS.passwordUpdateSuccess);
       setIsPasswordModalVisible(false);
     } catch (error) {
