@@ -5,4 +5,5 @@ export const API = {
   signUp: '/auth/signup',
   logIn: '/auth/signin',
   logOut: '/auth/logout',
+  leaderBoard: '/leaderboard',
 } as const;

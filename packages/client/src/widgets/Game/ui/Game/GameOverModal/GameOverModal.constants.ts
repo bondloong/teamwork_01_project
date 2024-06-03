@@ -5,4 +5,5 @@ export const TEXTS = {
   tryAgainButton: 'Начать заново',
   backButton: ' В главное меню',
   gameEnded: 'Конец игры!',
+  leaderboardButton: 'Таблица лидеров',
 };
