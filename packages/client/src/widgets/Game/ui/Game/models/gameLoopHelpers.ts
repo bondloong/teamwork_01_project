@@ -51,7 +51,7 @@ export const enemiesCheckCollision = (
   enemies: React.MutableRefObject<IEnemy[]>,
   bullets: React.MutableRefObject<IBullet[]>,
   setScore: React.Dispatch<React.SetStateAction<number>>,
-  blasterAudio: HTMLAudioElement
+  blasterAudio: HTMLAudioElement | null
 ): void => {
   const checkCollision = (bullet: IBullet, enemy: IEnemy): boolean => {
     return Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y) < enemy.size;

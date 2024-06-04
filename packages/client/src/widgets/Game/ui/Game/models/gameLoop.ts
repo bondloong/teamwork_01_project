@@ -45,7 +45,7 @@ export const gameLoop = ({
   drawEnemies(enemies, ctx, ship, setGameOver);
 
   // Проверка столкновений пуль с врагами
-  enemiesCheckCollision(enemies, bullets, setScore, audio.enemyIsDefeatedAudio!);
+  enemiesCheckCollision(enemies, bullets, setScore, audio.enemyHit);
 
   requestAnimationFrame(() =>
     gameLoop({

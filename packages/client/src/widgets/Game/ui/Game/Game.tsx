@@ -1,5 +1,5 @@
 import { FC, useRef, useState, useEffect } from 'react';
-import { SpaceHD, Blaster, EnemyIsDefeated, GameOver } from './assets/index';
+import { SpaceHD, BlasterSound, EnemyHitSound, GameOverSound } from './assets/index';
 import { IBullet, IEnemy, IGameAudio, IGameProps, TCursor } from './GameInterfaces';
 import classes from './Game.module.scss';
 import {
@@ -31,7 +31,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   const backgroundImage = useRef(new Image());
   const audio = useRef<IGameAudio>({
     blasterAudio: null,
-    enemyIsDefeatedAudio: null,
+    enemyHit: null,
     gameOverAudio: null,
   });
   const backgroundX = useRef(0);
@@ -75,11 +75,17 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
     backgroundImage.current.src = SpaceHD; // Загрузка фона
     backgroundImage.current.onload = (): void => {
       // Запуск игры после отрисовки фона
-      loadAudioFiles([Blaster, EnemyIsDefeated, GameOver]).then((audioElements) => {
-        const [blasterAudio, enemyIsDefeatedAudio, gameOverAudio] = audioElements;
-        audio.current = { blasterAudio, enemyIsDefeatedAudio, gameOverAudio };
-        requestAnimationFrame(() => gameLoop({ ...gameConfig, audio: audio.current }));
-      });
+      loadAudioFiles([BlasterSound, EnemyHitSound, GameOverSound])
+        .then((audioElements) => {
+          const [blasterAudio, enemyHit, gameOverAudio] = audioElements;
+          audio.current = { blasterAudio, enemyHit, gameOverAudio };
+        })
+        .catch(() => {
+          console.log('Не удалось загрузить звук(');
+        })
+        .finally(() => {
+          requestAnimationFrame(() => gameLoop({ ...gameConfig, audio: audio.current }));
+        });
     };
 
     const handleMouseMove = (event: MouseEvent): void => handleMouseMoveShip(event, canvas, ship);

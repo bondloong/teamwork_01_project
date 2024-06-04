@@ -9,7 +9,7 @@ export const loadAudioFiles: LoadAudioFiles = (audioPaths) => {
     return audio;
   });
 
-  const loadPromises: Promise<HTMLAudioElement>[] = audioElements.map((audio) => {
+  const loadingPromises: Promise<HTMLAudioElement>[] = audioElements.map((audio) => {
     return new Promise((resolve, reject) => {
       audio.addEventListener('canplaythrough', () => resolve(audio), { once: true });
       audio.addEventListener(
@@ -21,7 +21,7 @@ export const loadAudioFiles: LoadAudioFiles = (audioPaths) => {
     });
   });
 
-  return Promise.all(loadPromises);
+  return Promise.all(loadingPromises);
 };
 
 export const stopAllAudio = (audioElements: IGameAudio): void => {

@@ -27,6 +27,6 @@ export type TCursor = 'inherit' | 'none';
 
 export interface IGameAudio {
   blasterAudio: HTMLAudioElement | null;
-  enemyIsDefeatedAudio: HTMLAudioElement | null;
+  enemyHit: HTMLAudioElement | null;
   gameOverAudio: HTMLAudioElement | null;
 }
