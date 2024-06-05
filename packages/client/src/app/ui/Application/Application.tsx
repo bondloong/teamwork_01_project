@@ -1,6 +1,7 @@
 import { AuthPage } from '@/pages/AuthPage';
 import { ForumPage } from '@/pages/ForumPage';
 import { GamePage } from '@/pages/GamePage';
+import { ProfilePage } from '@/pages/ProfilePage';
 import { LeaderboardPage } from '@/pages/LeaderboardPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { TopicPage } from '@/pages/TopicPage';
@@ -27,6 +28,8 @@ export const Application = (): ReactElement => {
             <Route path={EAppRoutes.Auth} element={<AuthPage />} />
 
             <Route path={EAppRoutes.Game} element={<GamePage />} />
+
+            <Route path={EAppRoutes.Profile} element={<ProfilePage />} />
 
             <Route
               path={EAppRoutes.LeaderBoard}
