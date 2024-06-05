@@ -24,3 +24,9 @@ export interface IEnemy {
 }
 
 export type TCursor = 'inherit' | 'none';
+
+export interface IGameAudio {
+  blasterAudio: HTMLAudioElement | null;
+  enemyHit: HTMLAudioElement | null;
+  gameOverAudio: HTMLAudioElement | null;
+}
