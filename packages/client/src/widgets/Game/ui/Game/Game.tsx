@@ -11,7 +11,6 @@ import {
   spawnEnemy,
   gameLoop,
 } from './models';
-import { GameOverModal } from './GameOverModal';
 import { useFullscreen } from '@/shared/hooks/useFullscreen';
 
 export const Game: FC<IGameProps> = ({ width, height }) => {
@@ -24,7 +23,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   const ship = useRef({ x: width / 2, y: height / 2, size: 20 });
   const bullets = useRef<Array<IBullet>>([]);
   const enemies = useRef<Array<IEnemy>>([]);
-  const [gameOver, setGameOver] = useState(false);
+  const gameOver = useRef(false);
   const shootingInterval = useRef<NodeJS.Timeout | null>(null);
   const backgroundImage = useRef(new Image());
   const backgroundX = useRef(0);
@@ -33,10 +32,6 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   const [gameStarted, setGameStarted] = useState(false);
   const [cursor, setCursor] = useState<TCursor>('inherit');
   const [score, setScore] = useState(0);
-
-  const handleGameOver = (): void => {
-    setTimeout(() => window.location.reload(), 100);
-  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -62,7 +57,6 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       bullets,
       enemies,
       setScore,
-      setGameOver,
     };
 
     backgroundImage.current.src = SpaceHD; // Загрузка фона
@@ -85,7 +79,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
     document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      setGameOver(true);
+      gameOver.current = true;
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseup', handleMouseUp);
@@ -107,7 +101,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       setCanvasSize({ width, height });
     }
   }, [isFullscreen, width, height]);
-  if (gameOver) return <GameOverModal score={score} onClose={handleGameOver} />;
+
   return (
     <section ref={gameRef} className={classes.game}>
       <h2 className={`${classes.score} ${isFullscreen ? classes.scoreIsFullscreen : ''}`}>
