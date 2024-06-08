@@ -6,6 +6,7 @@ import path from 'path';
 
 import fs from 'fs/promises';
 import { createServer as createViteServer, ViteDevServer } from 'vite';
+import serialize from 'serialize-javascript';
 
 const port = process.env.PORT || 80;
 // Путь к корневой папке
@@ -67,9 +68,10 @@ const createServer = async (): Promise<void> => {
 
       // Заменяем комментарий на сгенерированную HTML-строку
       const html = template.replace(`<!--ssr-outlet-->`, appHtml).replace(
-        `<!--ssr-initial-state--> 
-        <div id="root"><!--ssr-outlet--></div>`,
-        `<script>window.APP_INITIAL_STATE = ${JSON.stringify(initialState)}</script>`
+        `<!--ssr-initial-state-->`,
+        `<script>window.APP_INITIAL_STATE = ${serialize(initialState, {
+          isJSON: true,
+        })}</script>`
       );
 
       // Завершаем запрос и отдаём HTML-страницу
