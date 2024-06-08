@@ -37,7 +37,7 @@ const createServer = async (): Promise<void> => {
 
     // Пробуем приложение отрендерить в строку и вернуть ее в ответе
     try {
-      let render: () => Promise<string>;
+      let render: () => Promise<{ html: string; initialState: unknown }>;
       let template: string;
 
       // Есди в dev-режиме (переменная vite определена)
@@ -63,10 +63,14 @@ const createServer = async (): Promise<void> => {
       }
 
       // Получаем HTML-строку из JSX
-      const appHtml = await render();
+      const { html: appHtml, initialState } = await render();
 
       // Заменяем комментарий на сгенерированную HTML-строку
-      const html = template.replace(`<!--ssr-outlet-->`, appHtml);
+      const html = template.replace(`<!--ssr-outlet-->`, appHtml).replace(
+        `<!--ssr-initial-state--> 
+        <div id="root"><!--ssr-outlet--></div>`,
+        `<script>window.APP_INITIAL_STATE = ${JSON.stringify(initialState)}</script>`
+      );
 
       // Завершаем запрос и отдаём HTML-страницу
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
