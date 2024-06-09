@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import express from 'express';
+import express, { Request as ExpressRequest } from 'express';
 import path from 'path';
 
 import fs from 'fs/promises';
@@ -38,7 +38,7 @@ const createServer = async (): Promise<void> => {
 
     // Пробуем приложение отрендерить в строку и вернуть ее в ответе
     try {
-      let render: () => Promise<{ html: string; initialState: unknown }>;
+      let render: (req: ExpressRequest) => Promise<{ html: string; initialState: unknown }>;
       let template: string;
 
       // Есди в dev-режиме (переменная vite определена)
@@ -64,7 +64,7 @@ const createServer = async (): Promise<void> => {
       }
 
       // Получаем HTML-строку из JSX
-      const { html: appHtml, initialState } = await render();
+      const { html: appHtml, initialState } = await render(req);
 
       // Заменяем комментарий на сгенерированную HTML-строку
       const html = template.replace(`<!--ssr-outlet-->`, appHtml).replace(
