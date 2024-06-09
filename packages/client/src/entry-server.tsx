@@ -1,5 +1,4 @@
 import ReactDOM from 'react-dom/server';
-import { Application } from '@/app';
 import './app/styles/_reset.scss';
 import './app/styles/_app.scss';
 import { configureStore } from '@reduxjs/toolkit';
