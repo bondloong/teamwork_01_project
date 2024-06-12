@@ -11,6 +11,6 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|sass|scss)$': '<rootDir>/src/shared/tests/stubs/styleMock.ts',
-    '\\.(png|webp|jpg|jpeg|gif)$': '<rootDir>/src/shared/tests/stubs/imageStub.ts',
+    '\\.(png|webp|jpg|jpeg|gif|mp3)$': '<rootDir>/src/shared/tests/stubs/imageStub.ts',
   },
 };

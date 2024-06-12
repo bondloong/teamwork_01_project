@@ -1,4 +1,4 @@
-import { IBullet, IEnemy, IShip } from '../GameInterfaces';
+import { IBullet, IEnemy, IGameAudio, IShip } from '../GameInterfaces';
 import { drawBullets, drawEnemies, drawShip, enemiesCheckCollision, moveBG } from '.';
 
 interface IGameLoopProps {
@@ -13,6 +13,7 @@ interface IGameLoopProps {
   enemies: React.MutableRefObject<IEnemy[]>;
   setScore: React.Dispatch<React.SetStateAction<number>>;
   setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
+  audio: IGameAudio;
 }
 
 export const gameLoop = ({
@@ -27,6 +28,7 @@ export const gameLoop = ({
   enemies,
   setScore,
   setGameOver,
+  audio,
 }: IGameLoopProps): void => {
   if (!ctx || gameOver) return;
 
@@ -43,7 +45,7 @@ export const gameLoop = ({
   drawEnemies(enemies, ctx, ship, setGameOver);
 
   // Проверка столкновений пуль с врагами
-  enemiesCheckCollision(enemies, bullets, setScore);
+  enemiesCheckCollision(enemies, bullets, setScore, audio.enemyHit);
 
   requestAnimationFrame(() =>
     gameLoop({
@@ -58,6 +60,7 @@ export const gameLoop = ({
       bullets,
       enemies,
       setScore,
+      audio,
     })
   );
 };

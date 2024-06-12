@@ -50,7 +50,8 @@ export const drawBullets = (
 export const enemiesCheckCollision = (
   enemies: React.MutableRefObject<IEnemy[]>,
   bullets: React.MutableRefObject<IBullet[]>,
-  setScore: React.Dispatch<React.SetStateAction<number>>
+  setScore: React.Dispatch<React.SetStateAction<number>>,
+  blasterAudio: HTMLAudioElement | null
 ): void => {
   const checkCollision = (bullet: IBullet, enemy: IEnemy): boolean => {
     return Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y) < enemy.size;
@@ -62,6 +63,10 @@ export const enemiesCheckCollision = (
       if (hit) {
         bullets.current.splice(bulletIndex, 1);
         setScore((prev) => prev + 100);
+        if (blasterAudio) {
+          blasterAudio.currentTime = 0;
+          blasterAudio.play();
+        }
       }
       return hit;
     };

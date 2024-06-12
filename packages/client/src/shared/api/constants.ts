@@ -6,4 +6,7 @@ export const API = {
   logIn: '/auth/signin',
   logOut: '/auth/logout',
   leaderBoard: '/leaderboard',
+  profileAvatar: '/user/profile/avatar',
+  password: '/user/password',
+  profile: '/user/profile',
 } as const;

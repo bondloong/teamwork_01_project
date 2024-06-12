@@ -1,10 +1,21 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { IUser, IUserSchema } from '../types';
-import { fetchUserInfo, logIn, logOut, signUp } from '../../api';
+import {
+  fetchUserInfo,
+  logIn,
+  logOut,
+  signUp,
+  changeUserPassword,
+  uploadProfileAvatar,
+  changeUserProfile,
+} from '../../api';
 
 const initialState: IUserSchema = {
   userData: null,
   isLoading: false,
+  isAvatarLoading: false,
+  isProfileLoading: false,
+  isPasswordLoading: false,
 };
 
 const userSlice = createSlice({
@@ -14,12 +25,10 @@ const userSlice = createSlice({
     setUserData: (state, { payload }: PayloadAction<IUser>) => {
       state.userData = payload;
     },
-
     logout: (state) => {
       state.userData = null;
     },
   },
-
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserInfo.pending, (state) => {
@@ -27,7 +36,6 @@ const userSlice = createSlice({
       })
       .addCase(fetchUserInfo.fulfilled, (state, action: PayloadAction<IUser>) => {
         state.isLoading = false;
-
         state.userData = action.payload;
       })
       .addCase(fetchUserInfo.rejected, (state) => {
@@ -36,12 +44,33 @@ const userSlice = createSlice({
       });
 
     builder
+      .addCase(uploadProfileAvatar.pending, (state) => {
+        state.isAvatarLoading = true;
+      })
+      .addCase(uploadProfileAvatar.fulfilled, (state, action: PayloadAction<IUser>) => {
+        state.isAvatarLoading = false;
+        state.userData = action.payload;
+      })
+      .addCase(uploadProfileAvatar.rejected, (state) => {
+        state.isAvatarLoading = false;
+      })
+      .addCase(changeUserProfile.pending, (state) => {
+        state.isProfileLoading = true;
+      })
+      .addCase(changeUserProfile.fulfilled, (state, action: PayloadAction<IUser>) => {
+        state.isProfileLoading = false;
+        state.userData = action.payload;
+      })
+      .addCase(changeUserProfile.rejected, (state) => {
+        state.isProfileLoading = false;
+      });
+
+    builder
       .addCase(logOut.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(logOut.fulfilled, (state) => {
         state.isLoading = false;
-
         state.userData = null;
       })
       .addCase(logOut.rejected, (state) => {
@@ -69,6 +98,17 @@ const userSlice = createSlice({
       })
       .addCase(signUp.rejected, (state) => {
         state.isLoading = false;
+      });
+
+    builder
+      .addCase(changeUserPassword.pending, (state) => {
+        state.isPasswordLoading = true;
+      })
+      .addCase(changeUserPassword.fulfilled, (state) => {
+        state.isPasswordLoading = false;
+      })
+      .addCase(changeUserPassword.rejected, (state) => {
+        state.isPasswordLoading = false;
       });
   },
 });
