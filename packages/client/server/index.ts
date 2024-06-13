@@ -38,6 +38,7 @@ const createServer = async (): Promise<void> => {
 
     // Пробуем приложение отрендерить в строку и вернуть ее в ответе
     try {
+      // Обновим тип метода render
       let render: (req: ExpressRequest) => Promise<{ html: string; initialState: unknown }>;
       let template: string;
 
@@ -67,6 +68,7 @@ const createServer = async (): Promise<void> => {
       const { html: appHtml, initialState } = await render(req);
 
       // Заменяем комментарий на сгенерированную HTML-строку
+      // глобально создаётся объект со стейтом для приложения.
       const html = template.replace(`<!--ssr-outlet-->`, appHtml).replace(
         `<!--ssr-initial-state-->`,
         `<script>window.APP_INITIAL_STATE = ${serialize(initialState, {
