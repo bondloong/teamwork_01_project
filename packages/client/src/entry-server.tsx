@@ -13,8 +13,8 @@ import {
 } from 'react-router-dom/server';
 import { createFetchRequest } from './entry-server.utils';
 import { routes } from './routes';
-// Точка входа для генерации html на сервере
 
+// Точка входа для генерации html на сервере
 interface IRenderOptions {
   html: string;
   initialState: {
