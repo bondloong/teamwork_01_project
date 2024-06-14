@@ -1,44 +1,31 @@
 import { Table } from 'antd';
 import { ReactElement, useState, useEffect } from 'react';
-import { tableColumns } from './LeaderBoard.constants';
-import { dataSourceMock } from './mocks';
+import { tableColumns, formData, teamName } from './LeaderBoard.constants';
 import { TLeaderBoardItem } from './LeaderBoard.interfaces';
 import { fetchLeaderboardByTeam } from '@/entities/leaderboard';
-type IFormData = {
-  ratingFieldName: 'rating';
-  cursor: 0;
-  limit: 50;
-};
-type LeaderboardResponse = {
-  ratingFieldName: 'rating';
-  cursor: number;
-  limit: number;
-};
+import { mapLeaderboardItem } from './LeaderBoard.utils';
 
-// TODO: MOVE ALL THE TYPES INTO A SINGLE FILE
 export const LeaderBoard = (): ReactElement => {
-  const [data, setData] = useState<LeaderboardResponse[]>([]);
+  const [data, setData] = useState<TLeaderBoardItem[]>([]);
+
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
-      const teamName = 'teamone';
-      const formData = {
-        ratingFieldName: 'rating',
-        cursor: 0,
-        limit: 50,
-      };
-      const result = await fetchLeaderboardByTeam(teamName, formData as IFormData);
-      console.log(result, setData);
-      // setData(result);
+      try {
+        const result = await fetchLeaderboardByTeam(teamName, formData);
+
+        if (Array.isArray(result)) {
+          const transformedData = result.map(mapLeaderboardItem);
+          setData(transformedData);
+        } else {
+          console.error('Wrong format:', result);
+        }
+      } catch (error) {
+        console.error('Error fetching leaderboard data:', error);
+      }
     };
-    console.log(data);
 
     fetchData();
   }, []);
-  const dataWithRanks = dataSourceMock.map<TLeaderBoardItem>((item, index) => ({
-    ...item,
-    position: index + 1,
-    key: index,
-  }));
 
-  return <Table columns={tableColumns} dataSource={dataWithRanks} pagination={false} />;
+  return <Table columns={tableColumns} dataSource={data} pagination={false} />;
 };

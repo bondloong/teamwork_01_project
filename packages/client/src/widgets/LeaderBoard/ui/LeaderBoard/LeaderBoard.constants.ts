@@ -1,22 +1,28 @@
 import { TableColumnsType } from 'antd';
-import { TLeaderBoardItem } from './LeaderBoard.interfaces';
+import { TLeaderBoardItem, TLeaderboardData } from './LeaderBoard.interfaces';
 
 export const tableColumns: TableColumnsType<TLeaderBoardItem> = [
   {
     title: 'Position',
     key: 'position',
-    dataIndex: 'position',
+    dataIndex: 'key',
     width: '150px',
   },
   {
     title: 'User',
     key: 'user',
-    dataIndex: 'login',
+    dataIndex: 'user',
     width: '150px',
   },
   {
     title: 'Scores',
     key: 'scores',
-    dataIndex: 'scores',
+    dataIndex: 'rating',
   },
 ];
+export const teamName = 'teamone';
+export const formData: TLeaderboardData = {
+  ratingFieldName: 'rating',
+  cursor: 0,
+  limit: 50,
+};

@@ -11,9 +11,8 @@ export const GameOverModal: React.FC<IGameOverModalProps> = ({ onClose, score })
   const [visible, setVisible] = useState(true);
   const navigate = useNavigate();
   const teamName = 'teamone';
-  //TODO: получение email пользователя из локального хранилища
-  // const userEmail = localStorage.getItem('userEmail');
-  const userEmail = 'miz99@yandex.ru';
+
+  const userName = `userName${Math.floor(Math.random() * 1000)}`;
   const handleClose = (): void => {
     setVisible(false);
     onClose?.();
@@ -26,7 +25,7 @@ export const GameOverModal: React.FC<IGameOverModalProps> = ({ onClose, score })
   };
   useEffect(() => {
     const handleSubmit = async (): Promise<void> => {
-      await submitScore(score, teamName, userEmail);
+      await submitScore(score, teamName, userName);
     };
     handleSubmit();
   }, []);

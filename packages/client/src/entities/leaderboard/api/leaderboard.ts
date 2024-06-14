@@ -1,15 +1,6 @@
 import { API, praktikumClient } from '@/shared/api';
+import { TLeaderboardData } from '@/widgets/LeaderBoard/ui/LeaderBoard/LeaderBoard.interfaces';
 
-type IFormData = {
-  ratingFieldName: 'rating';
-  cursor: number;
-  limit: number;
-};
-type LeaderboardResponse = {
-  ratingFieldName: 'rating';
-  cursor: number;
-  limit: number;
-};
 type IScore = {
   user: string;
   rating: number;
@@ -17,13 +8,11 @@ type IScore = {
 
 export const fetchLeaderboardByTeam = async (
   teamName: string,
-  formData: IFormData
-): Promise<LeaderboardResponse> => {
+  formData: TLeaderboardData
+): Promise<TLeaderboardData> => {
   try {
-    const response = await praktikumClient
-      .post(`${API.leaderBoard}/${teamName}`, formData)
-      .then((res) => res.data);
-    return response;
+    const response = await praktikumClient.post(`${API.leaderBoard}/${teamName}`, formData);
+    return response.data;
   } catch (error) {
     console.error('Error fetching leaderboard:', error);
     throw error;
@@ -33,20 +22,18 @@ export const fetchLeaderboardByTeam = async (
 export const submitScore = async (
   score: number,
   teamName: string,
-  userEmail: string
+  userName: string
 ): Promise<IScore> => {
   try {
-    const response = await praktikumClient
-      .post(API.leaderBoard, {
-        data: {
-          user: userEmail,
-          rating: score,
-        },
-        ratingFieldName: 'rating',
-        teamName,
-      })
-      .then((res) => res.data);
-    return response;
+    const response = await praktikumClient.post(API.leaderBoard, {
+      data: {
+        user: userName,
+        rating: score,
+      },
+      ratingFieldName: 'rating',
+      teamName,
+    });
+    return response.data;
   } catch (error) {
     console.error('Error submitting score:', error);
     throw error;
