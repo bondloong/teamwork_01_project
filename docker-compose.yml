@@ -1,42 +1,138 @@
+# Важно: при запуске docker-compose надо указать файл с env-переменными, например, файл с тестовыми значениями .env.sample (реальные данные в репозитории не храним)
+# docker-compose --env-file .env.sample up
+# если рядом с docker-compose.yaml лежит файл .env, то docker-compose будет использовать его по-умолчанию
+
+# версия синтаксиса
 version: "3.9"
 
+# Описываем образы, каждый из которых соответствует отдельному приложению (база данных, server и client)
 services:
-    client:
-        container_name: prakticum-client
-        image: prakticum-client
-        build:
-            context: .
-            dockerfile: Dockerfile.client
-            args:
-              CLIENT_PORT: ${CLIENT_PORT}
-        restart: always
-        ports:
-            - "${CLIENT_PORT}:80"
-        environment:
-          - CLIENT_PORT=${CLIENT_PORT}
-          - SERVER_PORT=${SERVER_PORT}
-    server:
-        container_name: prakticum-server
-        image: prackicum-server
-        build:
-            context: .
-            dockerfile: Dockerfile.server
-            args:
-              SERVER_PORT: ${SERVER_PORT}
-        restart: always
-        ports:
-            - "${SERVER_PORT}:${SERVER_PORT}"
-        environment:
-          SERVER_PORT: ${SERVER_PORT}
+  # MongoDB ставим впереди server, так как server зависит от этого сервиса
+  mongo:
+    # Здесь именно image, потому что мы его сами не пишем, он будет взят с докерхаба
+    image: mongo
 
-    postgres:
-      image: postgres:14     
-      ports:
-        - "${POSTGRES_PORT}:${POSTGRES_PORT}"
-      environment:
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_DB: ${POSTGRES_DB}
-      volumes:
-        - ./tmp/pgdata:/var/lib/postgresql/data
+    # Можно не задавать имя контейнера, но мы зададим через env-переменную, чтобы потом использовать эту переменную в качсетве хоста для подключения к БД
+    container_name: ${MONGO_HOST}
+
+    # Всегда перезапускать контейнер, когда он останавливается
+    restart: always
+
+    # Эти переменные будут проброшены внутрь контейнера mongo и из них будут браться указаные значения для создаваемой БД
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+
+    # Связываем файлы хоста (папка ./mongo) с файлами в контейнере /data/db
+    volumes:
+      - ./mongo:/data/db
+
+    # Проброс порта — на какой порт хоста какой порт контейнера
+    # Свзяваем порт подключения к БД Mongo внутри контейнера с портом на внешней машине
+    # По-умолчанию,порт подключения в Mongo - 27017. Оставим без изменений и свяжем с таким же портом на хосте
+    ports:
+      - '${MONGO_PORT}:${MONGO_PORT}'
+
+##############################################################################
+
+  # Образ для серверного приложения (которое общается с БД и предоставляет апи форума, темы и пр.)
+  server:
+    # Имя контейнера после того, как контейнер будет запущен
+    container_name: prakticum-server-container
+
+    # Задаем имя создаваемого образа
+    image: prackicum-server-image
+      
+    # Как будем создавать контейнер? Какой Dockerfile использовать?
+    build:
+      # Dockerfile берем из текущей папки
+      context: .
+      # Имя докер-файла
+      dockerfile: Dockerfile.server
+      # Аргументы, которые будут переданы в процесс сборки образа
+      args:
+        SERVER_PORT: ${SERVER_PORT}
+      
+    # Всегда перезапускать контейнер, когда он останавливается
+    restart: always
+      
+    # Связываем порт приложения на хост-машине с портом приложения внутри контейнера
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+
+    # env-переменные, которые будут доступны внутри контейнера
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      MONGO_HOST: ${MONGO_HOST}
+      MONGO_PORT: ${MONGO_PORT}
+
+    # Контейнер prakticum-server-container должен быть запущен после того, как запуститься кконтейнер mongo и пройдет инициализация БД (то есть надо какое-то время подождать. Для этого внутри Dockerfile.server используется скрипт wait-for)
+    depends_on:
+      - mongo
+
+##############################################################################
+
+  # # Образ для клиентского приложения
+  # client:
+  #     container_name: prakticum-client
+  #     image: prakticum-client
+  #     build:
+  #         context: .
+  #         dockerfile: Dockerfile.client
+  #         args:
+  #           CLIENT_PORT: ${CLIENT_PORT}
+  #     restart: always
+  #     ports:
+  #         - "${CLIENT_PORT}:80"
+  #     environment:
+  #       - CLIENT_PORT=${CLIENT_PORT}
+  #       - SERVER_PORT=${SERVER_PORT}
+
+
+# ########################################################################
+# version: "3.9"
+
+# services:
+#     client:
+#         container_name: prakticum-client
+#         image: prakticum-client
+#         build:
+#             context: .
+#             dockerfile: Dockerfile.client
+#             args:
+#               CLIENT_PORT: ${CLIENT_PORT}
+#         restart: always
+#         ports:
+#             - "${CLIENT_PORT}:80"
+#         environment:
+#           - CLIENT_PORT=${CLIENT_PORT}
+#           - SERVER_PORT=${SERVER_PORT}
+#     server:
+#         container_name: prakticum-server
+#         image: prackicum-server
+#         build:
+#             context: .
+#             dockerfile: Dockerfile.server
+#             args:
+#               SERVER_PORT: ${SERVER_PORT}
+#         restart: always
+#         ports:
+#             - "${SERVER_PORT}:${SERVER_PORT}"
+#         environment:
+#           SERVER_PORT: ${SERVER_PORT}
+
+#     postgres:
+#       image: postgres:14     
+#       ports:
+#         - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+#       environment:
+#         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#         POSTGRES_USER: ${POSTGRES_USER}
+#         POSTGRES_DB: ${POSTGRES_DB}
+#       volumes:
+#         - ./tmp/pgdata:/var/lib/postgresql/data
 

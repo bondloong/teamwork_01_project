@@ -1,27 +1,53 @@
+# Значения по-умолчанию для аргументов NODE_VERSION и SERVER_POR, если они не были переданы снаружи (например, можно установить значение аргументов args в docker-compose и тогда значения из docker-compose будут иметь приоритет)
 ARG NODE_VERSION=18
 ARG SERVER_PORT=3001
 
+# Какой образ какой версии надо взять за основу вашего контейнера
+# Инструкция AS, чтобы задать имя временному контейнеру, создаваемому на первом этапе сборки, и использовать это имя в качестве базы для второго этапа.
 FROM node:$NODE_VERSION-buster as base
 
+# Рабочая директория внутри контейнера: всю работу проводить в папке /app
 WORKDIR /app
 
+# Следующая стадия создания образа берет за основу то, что было создано на стадии base
 FROM base as builder
 
+# Копируем файлы package.json и yarn.lock в рабочую директорию ./app
 COPY package.json yarn.lock ./
+
+# Запускаем установку зависимостей
 RUN yarn install --frozen-lockfile
 
+# Копируем все файлы из текущей папки в WORKDIR
 COPY . .
 
+# Выполняем команду yarn lerna bootstrap
 RUN yarn lerna bootstrap
+
+# Удаляем папку с билдом (если такая вдруг есть) server/dist и запускаем билд приложения (компиляция *.ts в *.js)
 RUN rm -rf /app/packages/server/dist/ && yarn build --scope=server
 
-
+# Создаем новый слой с легковсеной версией node (-slim)
 FROM node:$NODE_VERSION-buster-slim as production
+# Заново устанавливаем рабочую директорию /app
 WORKDIR /app
 
+# Копируем файлы со слоя builder из папки /app/packages/server/dist/ (билд нашего серверного приложения) в папку /app/ итогового контейнера 
 COPY --from=builder /app/packages/server/dist/ /app/
+
+# копируем package.json для сервера
 COPY --from=builder /app/packages/server/package.json /app/package.json
+
+# и станавливаем зависимости для сервера
+# флаг --production=true установит только те зависимости, которые нужны для продакшена (без devDependencies)
 RUN yarn install --production=true
 
+# Указываем, какие порты внутри контейнера должны быть доступны во внешнем мире
 EXPOSE $SERVER_PORT
-CMD [ "node", "/app/index.js" ]
+
+# Т.к. Mongo база данных запускается не мгновенно после запуска контейнера, нам надо дождаться пока база данных будет инициализирована и только после этого запускать 
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.12.1/wait /wait
+RUN chmod +x /wait
+
+# Дожидаемся запуска контейнера с Mongo БД и инициализации БД. После запуска контейнера выполняем команды node /app/index.js - запускаем наше серверное приложение
+CMD /wait && node /app/index.js
