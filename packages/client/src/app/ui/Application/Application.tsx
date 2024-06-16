@@ -13,47 +13,50 @@ import { ProtectedRoute } from '@/widgets/ProtectedRoute';
 import { useServiceWorker } from '../../model';
 import { EAppRoutes } from '@/shared/types';
 import { Auth } from '../Auth';
+import { StoreProvider } from '../StoreProvider';
 
 export const Application = (): ReactElement => {
   useServiceWorker();
 
   return (
-    <Auth>
-      <BrowserRouter>
-        <Routes>
-          <Route path={EAppRoutes.Main} element={<MainPage />} />
+    <StoreProvider>
+      <Auth>
+        <BrowserRouter>
+          <Routes>
+            <Route path={EAppRoutes.Main} element={<MainPage />} />
 
-          <Route path={EAppRoutes.Auth} element={<AuthPage />} />
+            <Route path={EAppRoutes.Auth} element={<AuthPage />} />
 
-          <Route path={EAppRoutes.Game} element={<GamePage />} />
+            <Route path={EAppRoutes.Game} element={<GamePage />} />
 
-          <Route path={EAppRoutes.Profile} element={<ProfilePage />} />
+            <Route path={EAppRoutes.Profile} element={<ProfilePage />} />
 
-          <Route
-            path={EAppRoutes.LeaderBoard}
-            element={
-              <ProtectedRoute>
-                <LeaderboardPage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route path={EAppRoutes.Forum}>
             <Route
-              index
+              path={EAppRoutes.LeaderBoard}
               element={
                 <ProtectedRoute>
-                  <ForumPage />
+                  <LeaderboardPage />
                 </ProtectedRoute>
               }
             />
 
-            <Route path=":topicId" element={<TopicPage />} />
-          </Route>
+            <Route path={EAppRoutes.Forum}>
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <ForumPage />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </BrowserRouter>
-    </Auth>
+              <Route path=":topicId" element={<TopicPage />} />
+            </Route>
+
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </BrowserRouter>
+      </Auth>
+    </StoreProvider>
   );
 };
