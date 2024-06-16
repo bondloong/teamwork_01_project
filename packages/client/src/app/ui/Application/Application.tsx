@@ -10,50 +10,54 @@ import { ReactElement } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '../../styles/_app.scss';
 import { ProtectedRoute } from '@/widgets/ProtectedRoute';
-import { useServiceWorker } from '../../model';
+import { createReduxStore, useServiceWorker } from '../../model';
 import { EAppRoutes } from '@/shared/types';
 import { Auth } from '../Auth';
+import { Provider } from 'react-redux';
 
 export const Application = (): ReactElement => {
   useServiceWorker();
+  const store = createReduxStore();
 
   return (
-    <Auth>
-      <BrowserRouter>
-        <Routes>
-          <Route path={EAppRoutes.Main} element={<MainPage />} />
+    <Provider store={store}>
+      <Auth>
+        <BrowserRouter>
+          <Routes>
+            <Route path={EAppRoutes.Main} element={<MainPage />} />
 
-          <Route path={EAppRoutes.Auth} element={<AuthPage />} />
+            <Route path={EAppRoutes.Auth} element={<AuthPage />} />
 
-          <Route path={EAppRoutes.Game} element={<GamePage />} />
+            <Route path={EAppRoutes.Game} element={<GamePage />} />
 
-          <Route path={EAppRoutes.Profile} element={<ProfilePage />} />
+            <Route path={EAppRoutes.Profile} element={<ProfilePage />} />
 
-          <Route
-            path={EAppRoutes.LeaderBoard}
-            element={
-              <ProtectedRoute>
-                <LeaderboardPage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route path={EAppRoutes.Forum}>
             <Route
-              index
+              path={EAppRoutes.LeaderBoard}
               element={
                 <ProtectedRoute>
-                  <ForumPage />
+                  <LeaderboardPage />
                 </ProtectedRoute>
               }
             />
 
-            <Route path=":topicId" element={<TopicPage />} />
-          </Route>
+            <Route path={EAppRoutes.Forum}>
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <ForumPage />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </BrowserRouter>
-    </Auth>
+              <Route path=":topicId" element={<TopicPage />} />
+            </Route>
+
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </BrowserRouter>
+      </Auth>
+    </Provider>
   );
 };
