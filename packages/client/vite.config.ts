@@ -12,7 +12,8 @@ export default defineConfig({
     port: Number(process.env.CLIENT_PORT) || 3000,
   },
   define: {
-    __SERVER_PORT__: process.env.SERVER_PORT,
+    __API_SERVER_PORT__: JSON.stringify(process.env.API_SERVER_PORT),
+    __API_SERVER_HOST__: JSON.stringify(process.env.API_SERVER_HOST),
   },
   plugins: [react()],
   resolve: {

@@ -1,6 +1,6 @@
 # Значения по-умолчанию для аргументов NODE_VERSION и SERVER_POR, если они не были переданы снаружи (например, можно установить значение аргументов args в docker-compose и тогда значения из docker-compose будут иметь приоритет)
 ARG NODE_VERSION=18
-ARG SERVER_PORT=3001
+ARG API_SERVER_PORT=3001
 
 # Какой образ какой версии надо взять за основу вашего контейнера
 # Инструкция AS, чтобы задать имя временному контейнеру, создаваемому на первом этапе сборки, и использовать это имя в качестве базы для второго этапа.
@@ -43,7 +43,7 @@ COPY --from=builder /app/packages/server/package.json /app/package.json
 RUN yarn install --production=true
 
 # Указываем, какие порты внутри контейнера должны быть доступны во внешнем мире
-EXPOSE $SERVER_PORT
+EXPOSE $API_SERVER_PORT
 
 # Т.к. Mongo база данных запускается не мгновенно после запуска контейнера, нам надо дождаться пока база данных будет инициализирована и только после этого запускать 
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.12.1/wait /wait

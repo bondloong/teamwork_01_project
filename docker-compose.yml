@@ -39,7 +39,7 @@ services:
   # Образ для серверного приложения (которое общается с БД и предоставляет апи форума, темы и пр.)
   server:
     # Имя контейнера после того, как контейнер будет запущен
-    container_name: ${SERVER_HOST}
+    container_name: ${API_SERVER_HOST}
 
     # Задаем имя создаваемого образа
     image: prackicum-server-image
@@ -52,18 +52,18 @@ services:
       dockerfile: Dockerfile.server
       # Аргументы, которые будут переданы в процесс сборки образа
       args:
-        SERVER_PORT: ${SERVER_PORT}
+        API_SERVER_PORT: ${API_SERVER_PORT}
       
     # Всегда перезапускать контейнер, когда он останавливается
     restart: always
       
     # Связываем порт приложения на хост-машине с портом приложения внутри контейнера
     ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+      - "${API_SERVER_PORT}:${API_SERVER_PORT}"
 
     # env-переменные, которые будут доступны внутри контейнера
     environment:
-      SERVER_PORT: ${SERVER_PORT}
+      API_SERVER_PORT: ${API_SERVER_PORT}
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
@@ -104,8 +104,8 @@ services:
     # env-переменные, которые будут доступны внутри контейнера
     environment:
       - CLIENT_PORT=${CLIENT_PORT}
-      - SERVER_PORT=${SERVER_PORT}
-      - SERVER_HOST=${SERVER_HOST}
+      - API_SERVER_PORT=${API_SERVER_PORT}
+      - API_SERVER_HOST=${API_SERVER_HOST}
 
     # Запускать контейнер после запуска контейнера server
     depends_on:

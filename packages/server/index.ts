@@ -7,7 +7,7 @@ import { MongoClient } from 'mongodb';
 
 const app = express();
 app.use(cors());
-const port = Number(process.env.SERVER_PORT) || 3001;
+const port = Number(process.env.API_SERVER_PORT) || 3001;
 
 app.use('/api', (_, res) => {
   res.json('👋 Howdy from the server API:)');
