@@ -1,13 +1,13 @@
+import { AuthPage } from '@/pages/AuthPage';
+import { ForumPage } from '@/pages/ForumPage';
+import { GamePage } from '@/pages/GamePage';
+import { LeaderboardPage } from '@/pages/LeaderboardPage';
 import { MainPage } from '@/pages/MainPage';
-import { EAppRoutes } from './shared/types';
-import { AuthPage } from './pages/AuthPage';
-import { GamePage } from './pages/GamePage';
-import { ProfilePage } from './pages/ProfilePage';
-import { ProtectedRoute } from './widgets/ProtectedRoute';
-import { LeaderboardPage } from './pages/LeaderboardPage';
-import { ForumPage } from './pages/ForumPage';
-import { TopicPage } from './pages/TopicPage';
-import { NotFoundPage } from './pages/NotFoundPage';
+import { NotFoundPage } from '@/pages/NotFoundPage';
+import { ProfilePage } from '@/pages/ProfilePage';
+import { TopicPage } from '@/pages/TopicPage';
+import { EAppRoutes } from '@/shared/types';
+import { ProtectedRoute } from '@/widgets/ProtectedRoute';
 import { RouteObject } from 'react-router-dom';
 
 export const routes: RouteObject[] = [

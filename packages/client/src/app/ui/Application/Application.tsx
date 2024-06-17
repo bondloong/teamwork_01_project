@@ -1,19 +1,25 @@
-import { AuthPage } from '@/pages/AuthPage';
-import { ForumPage } from '@/pages/ForumPage';
-import { GamePage } from '@/pages/GamePage';
-import { ProfilePage } from '@/pages/ProfilePage';
-import { LeaderboardPage } from '@/pages/LeaderboardPage';
-import { NotFoundPage } from '@/pages/NotFoundPage';
-import { TopicPage } from '@/pages/TopicPage';
-import { MainPage } from '@/pages/MainPage';
 import { ReactElement } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, RouteObject, Routes } from 'react-router-dom';
 import '../../styles/_app.scss';
-import { ProtectedRoute } from '@/widgets/ProtectedRoute';
 import { useServiceWorker } from '../../model';
-import { EAppRoutes } from '@/shared/types';
 import { Auth } from '../Auth';
 import { StoreProvider } from '../StoreProvider';
+import { routes } from '@/app/model/constants/routes';
+
+const renderRoutes = (routes: RouteObject[]): JSX.Element[] => {
+  return routes.map((route) => {
+    // Проверяем наличие вложенных маршрутов
+    if (route.children) {
+      return (
+        <Route key={route.path as string} path={route.path} element={route.element}>
+          {renderRoutes(route.children)}
+        </Route>
+      );
+    }
+
+    return <Route key={route.path as string} path={route.path} element={route.element} />;
+  });
+};
 
 export const Application = (): ReactElement => {
   useServiceWorker();
@@ -22,39 +28,7 @@ export const Application = (): ReactElement => {
     <StoreProvider>
       <Auth>
         <BrowserRouter>
-          <Routes>
-            <Route path={EAppRoutes.Main} element={<MainPage />} />
-
-            <Route path={EAppRoutes.Auth} element={<AuthPage />} />
-
-            <Route path={EAppRoutes.Game} element={<GamePage />} />
-
-            <Route path={EAppRoutes.Profile} element={<ProfilePage />} />
-
-            <Route
-              path={EAppRoutes.LeaderBoard}
-              element={
-                <ProtectedRoute>
-                  <LeaderboardPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route path={EAppRoutes.Forum}>
-              <Route
-                index
-                element={
-                  <ProtectedRoute>
-                    <ForumPage />
-                  </ProtectedRoute>
-                }
-              />
-
-              <Route path=":topicId" element={<TopicPage />} />
-            </Route>
-
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+          <Routes>{renderRoutes(routes)}</Routes>
         </BrowserRouter>
       </Auth>
     </StoreProvider>

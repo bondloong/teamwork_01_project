@@ -12,7 +12,7 @@ import {
   StaticRouterProvider,
 } from 'react-router-dom/server';
 import { createFetchRequest } from './entry-server.utils';
-import { routes } from './routes';
+import { routes } from './app/model/constants/routes';
 
 // Точка входа для генерации html на сервере
 interface IRenderOptions {

@@ -38,7 +38,7 @@ const createServer = async (): Promise<void> => {
 
     // Пробуем приложение отрендерить в строку и вернуть ее в ответе
     try {
-      // Обновим тип метода render
+      // Объявим тип метода render
       let render: (req: ExpressRequest) => Promise<{ html: string; initialState: unknown }>;
       let template: string;
 
