@@ -61,6 +61,11 @@ services:
     ports:
       - "${API_SERVER_PORT}:${API_SERVER_PORT}"
 
+    # Т.к. Mongo база данных запускается не мгновенно после запуска контейнера, нам надо дождаться пока база данных будет инициализирована и только после этого запускать
+    # Альтернативой является использование wait-for в Dockerfile.server
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:${MONGO_PORT}/${MONGO_INITDB_DATABASE} --quiet
+
     # env-переменные, которые будут доступны внутри контейнера
     environment:
       API_SERVER_PORT: ${API_SERVER_PORT}
