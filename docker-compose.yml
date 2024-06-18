@@ -13,7 +13,7 @@ services:
     image: mongo
 
     # Можно не задавать имя контейнера, но мы зададим через env-переменную, чтобы потом использовать эту переменную в качсетве хоста для подключения к БД
-    container_name: ${MONGO_HOST}
+    container_name: ${MONGO_CONTAINER}
 
     # Всегда перезапускать контейнер, когда он останавливается
     restart: always
@@ -39,7 +39,7 @@ services:
   # Образ для серверного приложения (которое общается с БД и предоставляет апи форума, темы и пр.)
   server:
     # Имя контейнера после того, как контейнер будет запущен
-    container_name: ${API_SERVER_HOST}
+    container_name: ${API_SERVER_CONTAINER}
 
     # Задаем имя создаваемого образа
     image: prackicum-server-image
@@ -67,7 +67,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-      MONGO_HOST: ${MONGO_HOST}
+      MONGO_CONTAINER: ${MONGO_CONTAINER}
       MONGO_PORT: ${MONGO_PORT}
 
     # Контейнер prakticum-server-container должен быть запущен после того, как запуститься кконтейнер mongo и пройдет инициализация БД (то есть надо какое-то время подождать. Для этого внутри Dockerfile.server используется скрипт wait-for)

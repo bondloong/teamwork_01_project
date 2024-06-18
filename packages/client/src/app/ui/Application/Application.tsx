@@ -23,10 +23,10 @@ export const Application = (): ReactElement => {
   // docker-compose установит связь между контейнерами. Контейнеры смогут общаться между собой по имени контейнера. Поэтому используем API_SERVER_HOST, который также является именем контейнера для контейнера с апи-сервером
   useEffect(() => {
     if (typeof fetch === 'function') {
-      const host = __API_SERVER_HOST__ || 'localhost';
-      const port = __API_SERVER_PORT__ || '3001';
+      const host = __API_SERVER_HOST__;
+      const port = __API_SERVER_PORT__;
 
-      fetch?.(`http://${host}:${port}/api`)
+      fetch?.(`${host}:${port}/api`)
         .then((res) => res.json())
         .then(console.log);
     }

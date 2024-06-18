@@ -42,7 +42,8 @@ COPY --from=builder /app/packages/client/package.json /app/package.json
 RUN yarn install --production=true
 
 # Указываем, какие порты внутри контейнера должны быть доступны во внешнем мире
-EXPOSE $CLIENT_PORT
+# Можно не указывать, если заполнено поле ports в docker-compose.yml
+# EXPOSE $CLIENT_PORT
 
 # Запускаем наш сервер, который будет разавать статику с SSR
 CMD [ "node", "/app/server/index.js" ]

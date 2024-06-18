@@ -17,7 +17,7 @@ app.get('*', (_, res) => {
   res.json('You are awesome)');
 });
 
-const dbUrl = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`;
+const dbUrl = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${process.env.MONGO_CONTAINER}:${process.env.MONGO_PORT}`;
 
 const dbName = process.env.MONGO_INITDB_DATABASE;
 const client = new MongoClient(dbUrl);

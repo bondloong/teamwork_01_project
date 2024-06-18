@@ -43,7 +43,8 @@ COPY --from=builder /app/packages/server/package.json /app/package.json
 RUN yarn install --production=true
 
 # Указываем, какие порты внутри контейнера должны быть доступны во внешнем мире
-EXPOSE $API_SERVER_PORT
+# Можно не указывать, если заполнено поле ports в docker-compose.yml
+#EXPOSE $API_SERVER_PORT
 
 # Т.к. Mongo база данных запускается не мгновенно после запуска контейнера, нам надо дождаться пока база данных будет инициализирована и только после этого запускать 
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.12.1/wait /wait
