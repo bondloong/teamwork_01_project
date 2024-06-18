@@ -6,13 +6,16 @@ dotenv.config();
 
 const SERVICE_WORKER = 'service-worker';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    port: Number(process.env.CLIENT_PORT) || 3000,
+    port: 5555,
   },
   define: {
-    __SERVER_PORT__: process.env.SERVER_PORT,
+    __API_SERVER_PORT__: JSON.stringify(isDev ? 3001 : process.env.API_SERVER_PORT),
+    __API_SERVER_HOST__: JSON.stringify(isDev ? 'http://localhost' : process.env.API_SERVER_HOST),
   },
   plugins: [react()],
   resolve: {

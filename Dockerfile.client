@@ -1,28 +1,49 @@
+# Значения по-умолчанию для аргументов NODE_VERSION и SERVER_POR, если они не были переданы снаружи (например, можно установить значение аргументов args в docker-compose и тогда значения из docker-compose будут иметь приоритет)
 ARG NODE_VERSION=18
 ARG CLIENT_PORT=3001
 
+# Какой образ какой версии надо взять за основу вашего контейнера
+# Инструкция AS, чтобы задать имя временному контейнеру, создаваемому на первом этапе сборки, и использовать это имя в качестве базы для второго этапа.
 FROM node:$NODE_VERSION-buster as base
 
+# Рабочая директория внутри контейнера: всю работу проводить в папке /app
 WORKDIR /app
 
+# Следующая стадия создания образа берет за основу то, что было создано на стадии base
 FROM base as builder
 
+# Копируем файлы package.json и yarn.lock в рабочую директорию ./app
 COPY package.json yarn.lock ./
+
+# Запускаем установку зависимостей
 RUN yarn install --frozen-lockfile
 
+# Копируем все файлы из текущей папки в WORKDIR
 COPY . .
 
+# Выполняем команду yarn lerna bootstrap
 RUN yarn lerna bootstrap
+
+# Удаляем папку с билдом (если такая вдруг есть) client/dist и запускаем билд приложения
 RUN rm -rf /app/packages/client/dist/ && yarn build --scope=client
 
-
+# Создаем новый слой с легковсеной версией node (-slim)
 FROM node:$NODE_VERSION-buster-slim as production
+# Заново устанавливаем рабочую директорию /app
 WORKDIR /app
 
+# копируем файлы из слоя builder и рабочуюдиректорию текущего слоя
 COPY --from=builder /app/packages/client/dist/ /app/dist/
 COPY --from=builder /app/packages/client/server/ /app/server/
 COPY --from=builder /app/packages/client/package.json /app/package.json
+
+# и станавливаем зависимости для сервера
+# флаг --production=true установит только те зависимости, которые нужны для продакшена (без devDependencies)
 RUN yarn install --production=true
 
-EXPOSE $CLIENT_PORT
+# Указываем, какие порты внутри контейнера должны быть доступны во внешнем мире
+# Можно не указывать, если заполнено поле ports в docker-compose.yml
+# EXPOSE $CLIENT_PORT
+
+# Запускаем наш сервер, который будет разавать статику с SSR
 CMD [ "node", "/app/server/index.js" ]
