@@ -1,31 +1,30 @@
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppDispatch } from '@/app';
 import { Table } from 'antd';
-import { ReactElement, useState, useEffect } from 'react';
-import { tableColumns, formData, teamName } from './LeaderBoard.constants';
-import { TLeaderBoardItem } from './LeaderBoard.interfaces';
 import { fetchLeaderboardByTeam } from '@/entities/leaderboard';
-import { mapLeaderboardItem } from './LeaderBoard.utils';
+import { tableColumns, formData, teamName } from './LeaderBoard.constants';
+import {
+  getLeaderboardData,
+  getLeaderboardLoading,
+  getLeaderboardError,
+} from '@/entities/leaderboard';
 
-export const LeaderBoard = (): ReactElement => {
-  const [data, setData] = useState<TLeaderBoardItem[]>([]);
+export const LeaderBoard = (): JSX.Element => {
+  const dispatch = useDispatch<AppDispatch>();
+  const data = useSelector(getLeaderboardData);
+
+  const isLoading = useSelector(getLeaderboardLoading);
+  const error = useSelector(getLeaderboardError);
 
   useEffect(() => {
-    const fetchData = async (): Promise<void> => {
-      try {
-        const result = await fetchLeaderboardByTeam(teamName, formData);
+    dispatch(fetchLeaderboardByTeam({ teamName, formData }));
+  }, [dispatch]);
 
-        if (Array.isArray(result)) {
-          const transformedData = result.map(mapLeaderboardItem);
-          setData(transformedData);
-        } else {
-          console.error('Wrong format:', result);
-        }
-      } catch (error) {
-        console.error('Error fetching leaderboard data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return <Table columns={tableColumns} dataSource={data} pagination={false} />;
 };
+
+export default LeaderBoard;

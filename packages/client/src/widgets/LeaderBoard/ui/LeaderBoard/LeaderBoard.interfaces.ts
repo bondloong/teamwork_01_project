@@ -1,10 +1,7 @@
 export type TLeaderBoardItem = {
   position: number;
-  key: string | number;
   user: string;
   rating: number;
-  id: number;
-  userId: number;
 };
 
 export type TLeaderboardData = {
@@ -12,9 +9,14 @@ export type TLeaderboardData = {
   cursor: number;
   limit: number;
 };
-export type LeaderboardResponseItem = {
+export type TLeaderboardResponseItem = {
   data: {
     user?: string;
     rating: number;
   };
+};
+
+export type TScore = {
+  user: string;
+  rating: number;
 };

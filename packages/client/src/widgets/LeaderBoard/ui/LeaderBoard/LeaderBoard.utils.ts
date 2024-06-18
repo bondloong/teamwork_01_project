@@ -1,8 +1,8 @@
-import { LeaderboardResponseItem } from './LeaderBoard.interfaces';
+import { TLeaderboardResponseItem } from './LeaderBoard.interfaces';
 import { TLeaderBoardItem } from './LeaderBoard.interfaces';
 
 export const mapLeaderboardItem = (
-  item: LeaderboardResponseItem,
+  item: TLeaderboardResponseItem,
   index: number
 ): TLeaderBoardItem => ({
   position: index + 1,

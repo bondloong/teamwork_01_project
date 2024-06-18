@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/app';
 import { Modal, Button } from 'antd';
 import classes from './GameOverModal.module.scss';
 import { EAppRoutes } from '@/shared/types';
@@ -8,6 +10,7 @@ import { TEXTS } from './GameOverModal.constants';
 import { submitScore } from '@/entities/leaderboard';
 
 export const GameOverModal: React.FC<IGameOverModalProps> = ({ onClose, score }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [visible, setVisible] = useState(true);
   const navigate = useNavigate();
   const teamName = 'teamone';
@@ -25,7 +28,7 @@ export const GameOverModal: React.FC<IGameOverModalProps> = ({ onClose, score })
   };
   useEffect(() => {
     const handleSubmit = async (): Promise<void> => {
-      await submitScore(score, teamName, userName);
+      dispatch(submitScore({ score, teamName, userName }));
     };
     handleSubmit();
   }, []);

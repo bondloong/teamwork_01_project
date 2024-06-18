@@ -5,7 +5,8 @@ export const tableColumns: TableColumnsType<TLeaderBoardItem> = [
   {
     title: 'Position',
     key: 'position',
-    dataIndex: 'key',
+    dataIndex: 'index',
+    render: (text, record, index) => index + 1,
     width: '150px',
   },
   {
