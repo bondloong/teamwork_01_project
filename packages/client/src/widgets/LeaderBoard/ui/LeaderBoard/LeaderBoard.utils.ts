@@ -1,10 +1,9 @@
-import { TLeaderboardResponseItem } from './LeaderBoard.interfaces';
-import { TLeaderBoardItem } from './LeaderBoard.interfaces';
+import { ILeaderBoardItem, ILeaderboardResponseItem } from './LeaderBoard.interfaces';
 
 export const mapLeaderboardItem = (
-  item: TLeaderboardResponseItem,
+  item: ILeaderboardResponseItem,
   index: number
-): TLeaderBoardItem => ({
+): ILeaderBoardItem => ({
   position: index + 1,
   key: index + 1,
   user: item.data.user || `User ${index + 1}`,

@@ -16,3 +16,9 @@ export interface TLeaderboardData {
   cursor: number;
   limit: number;
 }
+export interface IItem {
+  data: {
+    user?: string;
+    rating: number;
+  };
+}

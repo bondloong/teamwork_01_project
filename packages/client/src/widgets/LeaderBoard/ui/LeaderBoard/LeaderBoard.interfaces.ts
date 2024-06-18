@@ -1,22 +1,26 @@
-export type TLeaderBoardItem = {
+export interface ILeaderBoardItem {
   position: number;
   user: string;
   rating: number;
-};
+  key: string | number;
+  id: number;
+  userId: number;
+}
 
-export type TLeaderboardData = {
+export interface ILeaderboardData {
   ratingFieldName: 'rating';
   cursor: number;
   limit: number;
-};
-export type TLeaderboardResponseItem = {
+}
+
+export interface ILeaderboardResponseItem {
   data: {
     user?: string;
     rating: number;
   };
-};
+}
 
-export type TScore = {
+export interface IScore {
   user: string;
   rating: number;
-};
+}

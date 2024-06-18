@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ILeaderboardItem, ILeaderboardState } from '../types';
+import { ILeaderboardItem, ILeaderboardState, IItem } from '../types';
 import { fetchLeaderboardByTeam, submitScore } from '../../api';
 
 const initialState: ILeaderboardState = {
@@ -8,12 +8,6 @@ const initialState: ILeaderboardState = {
   error: null,
 };
 
-interface IItem {
-  data: {
-    user?: string;
-    rating: number;
-  };
-}
 const leaderboardSlice = createSlice({
   name: 'leaderboard',
   initialState,

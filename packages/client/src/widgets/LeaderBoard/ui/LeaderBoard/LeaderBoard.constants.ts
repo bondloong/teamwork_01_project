@@ -1,7 +1,7 @@
 import { TableColumnsType } from 'antd';
-import { TLeaderBoardItem, TLeaderboardData } from './LeaderBoard.interfaces';
+import { ILeaderBoardItem, ILeaderboardData } from './LeaderBoard.interfaces';
 
-export const tableColumns: TableColumnsType<TLeaderBoardItem> = [
+export const tableColumns: TableColumnsType<ILeaderBoardItem> = [
   {
     title: 'Position',
     key: 'position',
@@ -22,7 +22,7 @@ export const tableColumns: TableColumnsType<TLeaderBoardItem> = [
   },
 ];
 export const teamName = 'teamone';
-export const formData: TLeaderboardData = {
+export const formData: ILeaderboardData = {
   ratingFieldName: 'rating',
   cursor: 0,
   limit: 50,

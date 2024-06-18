@@ -1,10 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { praktikumClient, API } from '@/shared/api';
-import { TScore } from '@/widgets/LeaderBoard/ui/LeaderBoard/LeaderBoard.interfaces';
+import { IScore } from '@/widgets/LeaderBoard/ui/LeaderBoard/LeaderBoard.interfaces';
 
 export const submitScore = createAsyncThunk(
   'leaderboard/submitScore',
-  async ({ score, teamName, userName }: { score: number; teamName: string; userName: string }) => {
+  async ({
+    score,
+    teamName,
+    userName,
+  }: {
+    score: IScore['rating'];
+    teamName: string;
+    userName: IScore['user'];
+  }) => {
     try {
       const response = await praktikumClient.post(API.leaderBoard, {
         data: {

@@ -1,1 +1,1 @@
-export type { ILeaderboardItem, ILeaderboardState } from './leaderboard';
+export type { ILeaderboardItem, ILeaderboardState, IItem } from './leaderboard';
