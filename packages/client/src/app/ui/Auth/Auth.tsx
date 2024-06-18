@@ -9,6 +9,7 @@ export const Auth = ({ children }: IAuthProps): ReactElement => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    //если юзер в стейт есть то не запрашивать
     dispatch(fetchUserInfo()).then(() => {
       setIsLoading(false);
     });

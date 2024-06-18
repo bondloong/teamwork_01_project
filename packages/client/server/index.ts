@@ -1,11 +1,12 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import express from 'express';
+import express, { Request as ExpressRequest } from 'express';
 import path from 'path';
 
 import fs from 'fs/promises';
 import { createServer as createViteServer, ViteDevServer } from 'vite';
+import serialize from 'serialize-javascript';
 
 const port = process.env.PORT || 80;
 // Путь к корневой папке
@@ -37,7 +38,8 @@ const createServer = async (): Promise<void> => {
 
     // Пробуем приложение отрендерить в строку и вернуть ее в ответе
     try {
-      let render: () => Promise<string>;
+      // Объявим тип метода render
+      let render: (req: ExpressRequest) => Promise<{ html: string; initialState: unknown }>;
       let template: string;
 
       // Есди в dev-режиме (переменная vite определена)
@@ -63,10 +65,16 @@ const createServer = async (): Promise<void> => {
       }
 
       // Получаем HTML-строку из JSX
-      const appHtml = await render();
+      const { html: appHtml, initialState } = await render(req);
 
       // Заменяем комментарий на сгенерированную HTML-строку
-      const html = template.replace(`<!--ssr-outlet-->`, appHtml);
+      // глобально создаётся объект со стейтом для приложения.
+      const html = template.replace(`<!--ssr-outlet-->`, appHtml).replace(
+        `<!--ssr-initial-state-->`,
+        `<script>window.APP_INITIAL_STATE = ${serialize(initialState, {
+          isJSON: true,
+        })}</script>`
+      );
 
       // Завершаем запрос и отдаём HTML-страницу
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
