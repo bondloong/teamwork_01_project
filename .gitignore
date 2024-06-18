@@ -5,3 +5,6 @@ node_modules/
 dist
 tmp
 dev-dist
+
+# Файлы базы данных, которые биндятся к файлам внутри контейнера mongo
+/mongo

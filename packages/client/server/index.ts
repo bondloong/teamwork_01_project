@@ -8,7 +8,7 @@ import fs from 'fs/promises';
 import { createServer as createViteServer, ViteDevServer } from 'vite';
 import serialize from 'serialize-javascript';
 
-const port = process.env.PORT || 80;
+const port = process.env.CLIENT_PORT || 8080;
 // Путь к корневой папке
 const clientPath = path.join(__dirname, '..');
 const isDev = process.env.NODE_ENV === 'development';

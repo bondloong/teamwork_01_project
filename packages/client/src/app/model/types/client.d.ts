@@ -12,4 +12,7 @@ declare global {
     user: IUserSchema;
     leaderboard: ILeaderboardState;
   }
+
+  declare const __API_SERVER_PORT__: number;
+  declare const __API_SERVER_HOST__: string;
 }
