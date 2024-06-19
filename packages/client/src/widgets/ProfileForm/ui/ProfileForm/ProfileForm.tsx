@@ -28,7 +28,7 @@ export const ProfileForm: React.FC = () => {
         }
       });
     }
-  }, [user, values, setValue]);
+  }, []);
 
   const handleBlur = (name: string): void => {
     const value = values[name];
