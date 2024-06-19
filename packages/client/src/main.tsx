@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createReduxStore } from './app/model';
 import { Provider } from 'react-redux';
 import { routes } from './app/model/constants/routes';
+import { Application } from './app';
 
 const router = createBrowserRouter(routes);
 
@@ -15,7 +16,9 @@ ReactDOM.hydrateRoot(
   document.getElementById('root') as HTMLElement,
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <Application>
+        <RouterProvider router={router} />
+      </Application>
     </Provider>
   </React.StrictMode>
 );

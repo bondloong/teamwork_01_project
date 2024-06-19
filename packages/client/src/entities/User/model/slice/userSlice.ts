@@ -12,7 +12,7 @@ import {
 
 const initialState: IUserSchema = {
   userData: null,
-  isLoading: false,
+  isLoading: true,
   isAvatarLoading: false,
   isProfileLoading: false,
   isPasswordLoading: false,
