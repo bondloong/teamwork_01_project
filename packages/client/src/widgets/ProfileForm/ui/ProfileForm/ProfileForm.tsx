@@ -16,19 +16,21 @@ export const ProfileForm: React.FC = () => {
   const user = useSelector((state: IStateSchema) => state.user.userData);
   const isProfileLoading = useSelector(getIsProfileLoading);
   const [isEditing, setIsEditing] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const { values, setValue, errors, setErrors, validateFormData, validateString } =
     useForm(PROFILE_INPUTS);
 
   useEffect(() => {
-    if (user) {
+    if (user && !isInitialized) {
       PROFILE_INPUTS.forEach(({ name }) => {
         if (values[name] === '') {
           setValue(name, user[name as keyof IUser]?.toString() || '');
         }
       });
+      setIsInitialized(true);
     }
-  }, [user, values, setValue]);
+  }, [user, isInitialized, setValue, values]);
 
   const handleBlur = (name: string): void => {
     const value = values[name];
