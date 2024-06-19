@@ -8,7 +8,7 @@ const REQUIRED_ERROR = 'Обязательное поле';
 export const ProfileSchema: Record<(typeof PROFILE_INPUTS)[number]['name'], StringSchema> = {
   [EInputNames.FirstName]: INPUT_VALIDATION_SCHEMAS.name.required(REQUIRED_ERROR),
   [EInputNames.SecondName]: INPUT_VALIDATION_SCHEMAS.name.required(REQUIRED_ERROR),
-  [EInputNames.DisplayName]: INPUT_VALIDATION_SCHEMAS.displayName.notRequired() as StringSchema<
+  [EInputNames.DisplayName]: INPUT_VALIDATION_SCHEMAS.name.notRequired() as StringSchema<
     string | undefined
   >,
   [EInputNames.Login]: INPUT_VALIDATION_SCHEMAS.login.required(REQUIRED_ERROR),
