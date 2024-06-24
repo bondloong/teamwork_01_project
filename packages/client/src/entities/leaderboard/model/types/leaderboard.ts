@@ -11,7 +11,7 @@ export interface ILeaderboardState {
   error: string | null;
 }
 
-export interface TLeaderboardData {
+export interface ILeaderboardData {
   ratingFieldName: string;
   cursor: number;
   limit: number;
