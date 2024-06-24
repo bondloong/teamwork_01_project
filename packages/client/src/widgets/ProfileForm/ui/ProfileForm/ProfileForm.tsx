@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Button, message } from 'antd';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/shared/hooks';
 import { changeUserProfile } from '@/entities/User';
-// import { type IUser } from '@/entities/User/model';
+import { type IUser } from '@/entities/User/model';
 import { TEXTS } from './ProfileForm.constants';
 import classes from './ProfileForm.module.scss';
 import { useForm } from '@/shared/hooks';
@@ -13,22 +13,22 @@ import { getIsProfileLoading } from '@/entities/User';
 
 export const ProfileForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  // const user = useSelector((state: IStateSchema) => state.user.userData);
+  const user = useSelector((state: IStateSchema) => state.user.userData);
   const isProfileLoading = useSelector(getIsProfileLoading);
   const [isEditing, setIsEditing] = useState(false);
 
   const { values, setValue, errors, setErrors, validateFormData, validateString } =
     useForm(PROFILE_INPUTS);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     PROFILE_INPUTS.forEach(({ name }) => {
-  //       if (values[name] === '') {
-  //         setValue(name, user[name as keyof IUser]?.toString() || '');
-  //       }
-  //     });
-  //   }
-  // }, [user, values, setValue]);
+  useEffect(() => {
+    if (user) {
+      PROFILE_INPUTS.forEach(({ name }) => {
+        if (values[name] === '') {
+          setValue(name, user[name as keyof IUser]?.toString() || '');
+        }
+      });
+    }
+  }, []);
 
   const handleBlur = (name: string): void => {
     const value = values[name];

@@ -1,27 +1,10 @@
 import { ReactElement, useEffect } from 'react';
-import { BrowserRouter, Route, RouteObject, Routes } from 'react-router-dom';
 import '../../styles/_app.scss';
 import { useServiceWorker } from '../../model';
 import { Auth } from '../Auth';
-import { StoreProvider } from '../StoreProvider';
-import { routes } from '@/app/model/constants/routes';
+import { IApplicationProps } from './Application.interfaces';
 
-const renderRoutes = (routes: RouteObject[]): JSX.Element[] => {
-  return routes.map((route) => {
-    // Проверяем наличие вложенных маршрутов
-    if (route.children) {
-      return (
-        <Route key={route.path as string} path={route.path} element={route.element}>
-          {renderRoutes(route.children)}
-        </Route>
-      );
-    }
-
-    return <Route key={route.path as string} path={route.path} element={route.element} />;
-  });
-};
-
-export const Application = (): ReactElement => {
+export const Application = ({ children }: IApplicationProps): ReactElement => {
   useServiceWorker();
 
   // @TODO Это пример работы с env-переменными для общения с сервером
@@ -34,17 +17,10 @@ export const Application = (): ReactElement => {
 
       fetch?.(`${host}:${port}/api`)
         .then((res) => res.json())
-        .then(console.log);
+        .then(console.log)
+        .catch((error) => console.warn('Error was catched: ', error.message));
     }
   }, []);
 
-  return (
-    <StoreProvider>
-      <Auth>
-        <BrowserRouter>
-          <Routes>{renderRoutes(routes)}</Routes>
-        </BrowserRouter>
-      </Auth>
-    </StoreProvider>
-  );
+  return <Auth>{children}</Auth>;
 };
