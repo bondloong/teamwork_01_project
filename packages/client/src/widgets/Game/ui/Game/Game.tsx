@@ -12,6 +12,7 @@ import {
   gameLoop,
   loadAudioFiles,
   stopAllAudio,
+  handleStartGameClick,
 } from './models';
 import { GameOverModal } from './GameOverModal';
 import { useFullscreen } from '@/shared/hooks/useFullscreen';
@@ -54,8 +55,28 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
     canvas.width = canvasSize.width;
     canvas.height = canvasSize.height;
 
+    const handleStartGame = (event: MouseEvent): void => {
+      handleStartGameClick(
+        event,
+        canvas,
+        canvasSize.width,
+        canvasSize.height,
+        setGameStarted,
+        setCursor
+      );
+      canvas.removeEventListener('click', handleStartGame);
+    };
+
     if (!gameStarted) {
-      drawStartGame(canvas, ctx, canvasSize.width, canvasSize.height, setGameStarted, setCursor);
+      drawStartGame(
+        canvas,
+        ctx,
+        canvasSize.width,
+        canvasSize.height,
+        setGameStarted,
+        setCursor,
+        handleStartGame
+      );
       return;
     }
 
@@ -93,7 +114,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
             })
             .finally(() => {
               if (audio.current) {
-                requestAnimationFrame(() => {
+                animationId.current = requestAnimationFrame(() => {
                   if (backgroundImage.current) {
                     gameLoop({
                       ...gameConfig,
