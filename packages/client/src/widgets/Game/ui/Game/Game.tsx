@@ -36,6 +36,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   });
   const backgroundX = useRef(0);
   const enemySpeed = useRef(5);
+  const animationId = useRef<number | null>(null);
 
   const [gameStarted, setGameStarted] = useState(false);
   const [cursor, setCursor] = useState<TCursor>('inherit');
@@ -70,6 +71,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       enemies,
       setScore,
       setGameOver,
+      animationId,
     };
 
     if (typeof window !== 'undefined') {
@@ -155,6 +157,9 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   }, [gameOver]);
 
   if (gameOver) {
+    if (animationId.current !== null) {
+      cancelAnimationFrame(animationId.current);
+    }
     return <GameOverModal score={score} onClose={handleGameOver} />;
   }
 
