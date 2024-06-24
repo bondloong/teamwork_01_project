@@ -1,0 +1,86 @@
+.wrapper {
+  width: 100%;
+  max-width: 700px;
+  margin-top: 32px;
+
+  .author {
+    margin-bottom: 16px;
+  }
+
+  .comments {
+    margin-bottom: 200px;
+
+    .header {
+      text-align: left;
+    }
+
+    &Wrapper {
+      max-height: 60vh;
+      overflow-y: scroll;
+      padding-right: 16px;
+
+      &::-webkit-scrollbar {
+        width: 6px; /* Ширина вертикальной полосы прокрутки */
+      }
+
+      /* Ползунок полосы прокрутки */
+      &::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 6px; /* Закругленные углы */
+      }
+
+      /* Ползунок при наведении */
+      &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+
+      /* Трек полосы прокрутки */
+      &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 6px; /* Закругленные углы */
+      }
+
+      /* Трек при наведении */
+      &::-webkit-scrollbar-track:hover {
+        background: #ddd;
+      }
+    }
+  }
+
+  .newComment {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-width: 700px;
+    background-color: #fff;
+    padding-top: 8px;
+  }
+}
+
+.header {
+  margin: 30px 0;
+  text-align: center;
+}
+
+.topicDate {
+  margin: 20px 0;
+  text-align: right;
+  color: #1677ff;
+}
+
+.commentLike {
+  align-self: flex-end;
+  margin-top: 20px;
+  display: block;
+  text-align: right;
+
+  span {
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+}

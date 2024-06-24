@@ -1,0 +1,28 @@
+.wrapper {
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 50px;
+
+  .topicsList {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 16px;
+  }
+
+  .topic {
+    &Content {
+      margin-bottom: 8px;
+      display: -webkit-box; /* Включить флексбоксы */
+      -webkit-line-clamp: 2; /* Количество строк */
+      -webkit-box-orient: vertical; /* Вертикальная ориентация */
+      overflow: hidden; /* Скрыть переполнение */
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.header {
+  margin: 50px 0;
+  text-align: center;
+}
