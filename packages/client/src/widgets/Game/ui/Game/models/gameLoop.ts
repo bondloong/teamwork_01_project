@@ -50,7 +50,6 @@ export const gameLoop = ({
   enemiesCheckCollision(enemies, bullets, setScore, audio.enemyHit);
 
   animationId.current = requestAnimationFrame(() => {
-    console.log(1);
     gameLoop({
       setGameOver,
       ctx,
