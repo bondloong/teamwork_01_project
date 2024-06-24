@@ -157,7 +157,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   }, [gameOver]);
 
   if (gameOver) {
-    if (animationId.current !== null) {
+    if (animationId.current) {
       cancelAnimationFrame(animationId.current);
     }
     return <GameOverModal score={score} onClose={handleGameOver} />;
