@@ -72,38 +72,36 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       setGameOver,
     };
 
-    if (typeof window !== 'undefined') {
-      if (!backgroundImage.current) {
-        backgroundImage.current = new Image();
-      }
+    if (!backgroundImage.current) {
+      backgroundImage.current = new Image();
+    }
 
-      if (backgroundImage.current) {
-        backgroundImage.current.src = SpaceHD; // Загрузка фона
-        backgroundImage.current.onload = (): void => {
-          // Запуск игры после отрисовки фона
-          loadAudioFiles([BlasterSound, EnemyHitSound, GameOverSound])
-            .then((audioElements) => {
-              const [blasterAudio, enemyHit, gameOverAudio] = audioElements;
-              audio.current = { blasterAudio, enemyHit, gameOverAudio };
-            })
-            .catch(() => {
-              console.log('Не удалось загрузить звук(');
-            })
-            .finally(() => {
-              if (audio.current) {
-                requestAnimationFrame(() => {
-                  if (backgroundImage.current) {
-                    gameLoop({
-                      ...gameConfig,
-                      audio: audio.current!,
-                      backgroundImage: backgroundImage as React.MutableRefObject<HTMLImageElement>,
-                    });
-                  }
-                });
-              }
-            });
-        };
-      }
+    if (backgroundImage.current) {
+      backgroundImage.current.src = SpaceHD; // Загрузка фона
+      backgroundImage.current.onload = (): void => {
+        // Запуск игры после отрисовки фона
+        loadAudioFiles([BlasterSound, EnemyHitSound, GameOverSound])
+          .then((audioElements) => {
+            const [blasterAudio, enemyHit, gameOverAudio] = audioElements;
+            audio.current = { blasterAudio, enemyHit, gameOverAudio };
+          })
+          .catch(() => {
+            console.log('Не удалось загрузить звук(');
+          })
+          .finally(() => {
+            if (audio.current) {
+              requestAnimationFrame(() => {
+                if (backgroundImage.current) {
+                  gameLoop({
+                    ...gameConfig,
+                    audio: audio.current!,
+                    backgroundImage: backgroundImage as React.MutableRefObject<HTMLImageElement>,
+                  });
+                }
+              });
+            }
+          });
+      };
     }
 
     const handleMouseMove = (event: MouseEvent): void => handleMouseMoveShip(event, canvas, ship);

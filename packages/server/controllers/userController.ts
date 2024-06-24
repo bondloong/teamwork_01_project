@@ -12,6 +12,12 @@ export const getUsers = async (_req: Request, res: Response): Promise<void> => {
 
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
+
+  if (!id) {
+    res.status(400).json({ error: 'Missing required parameter: id' });
+    return;
+  }
+
   try {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
@@ -25,10 +31,18 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
 };
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
-  const { first_name, second_name, phone, login, avatar, email } = req.body;
+  const { first_name, second_name, yandexUserId } = req.body;
+
+  if (!first_name || !second_name || !yandexUserId) {
+    res
+      .status(400)
+      .json({ error: 'Missing required fields: first_name, second_name, yandexUserId' });
+    return;
+  }
+
   try {
     const user = await prisma.user.create({
-      data: { first_name, second_name, phone, login, avatar, email },
+      data: { first_name, second_name, yandexUserId },
     });
     res.status(201).json(user);
   } catch (error) {
@@ -38,11 +52,22 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
 
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
-  const { first_name, second_name, phone, login, avatar, email } = req.body;
+  const { first_name, second_name } = req.body;
+
+  if (!id) {
+    res.status(400).json({ error: 'Missing required parameter: id' });
+    return;
+  }
+
+  if (!first_name || !second_name) {
+    res.status(400).json({ error: 'Missing required fields: first_name, second_name' });
+    return;
+  }
+
   try {
     const user = await prisma.user.update({
       where: { id },
-      data: { first_name, second_name, phone, login, avatar, email },
+      data: { first_name, second_name },
     });
     res.json(user);
   } catch (error) {
@@ -52,6 +77,12 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
 
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
+
+  if (!id) {
+    res.status(400).json({ error: 'Missing required parameter: id' });
+    return;
+  }
+
   try {
     await prisma.user.delete({ where: { id } });
     res.status(204).end();
