@@ -40,7 +40,7 @@ export const GameOverModal: React.FC<IGameOverModalProps> = ({ onClose, score })
           {TEXTS.tryAgainButton}
         </Button>
 
-        <Button type="link" onClick={NavigateToMain}>
+        <Button type="link" onClick={navigateMain}>
           {TEXTS.backButton}
         </Button>
       </div>
