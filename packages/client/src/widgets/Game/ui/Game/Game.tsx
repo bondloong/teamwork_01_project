@@ -174,13 +174,11 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
     if (gameOver) {
       stopAllAudio(audio.current);
       audio.current.gameOverAudio?.play().catch((error) => console.error(error));
+      animationId.current && cancelAnimationFrame(animationId.current);
     }
   }, [gameOver]);
 
   if (gameOver) {
-    if (animationId.current) {
-      cancelAnimationFrame(animationId.current);
-    }
     return <GameOverModal score={score} onClose={handleGameOver} />;
   }
 
