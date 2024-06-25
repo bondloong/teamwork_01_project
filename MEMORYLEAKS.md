@@ -6,8 +6,7 @@
 `gameHelpers.ts`
 
 **Описание:**
-Была допущена ошибка при удалении слушателя события `removeEventListener('click', () => handleStartGameClick);` из-за чего
-слушатель не удалялся и происходила утечка памяти.
+Была допущена ошибка при удалении слушателя события `removeEventListener('click', () => handleStartGameClick);` из-за чего слушатель не удалялся и происходила утечка памяти.
 
 **Решение:**
  Удаление слушателя было перенесено из `gameHelpers.ts` в `Game.tsx.` для использования корректного синтаксиса удаления:
@@ -26,12 +25,12 @@
 **Решение:**
 Использование `cancelAnimationFrame` для корректного завершения цикла анимации:
   ```javascript
-  if (gameOver) {
-    if (animationId.current !== null) {
-      cancelAnimationFrame(animationId.current);
+  useEffect(() => {
+    if (gameOver) {
+      // ...
+      animationId.current && cancelAnimationFrame(animationId.current);
     }
-    // ...
-  }
+  }, [gameOver]);
 ```
 
 ### 3. Мемоизация функций handleClose и NavigateToMain
@@ -43,14 +42,30 @@
 Функции `handleClose` и `NavigateToMain`, используемые в обработчиках событий, создавались заново при каждом рендере, что приводило к избыточным вычислениям.
 
 **Решение:**
-Использование `useCallback` для мемоизации функций `handleClose` и `NavigateToMain`:
+Компонент `GameOverModal` был обёрнут в `React.memo`, а функции `handleClose` и `navigateMain` были обёрнуты в `useCallback`:
   ```javascript
-  const handleClose = useCallback((): void => {
-    setVisible(false);
-    onClose?.();
-  }, [onClose]);
+  export const GameOverModal = React.memo(({ onClose, score }) => {
+    // ...
+    const handleClose = useCallback((): void => {
+      setVisible(false);
+      onClose?.();
+    }, [onClose]);
 
-  const NavigateToMain = useCallback((): void => {
-    navigate(EAppRoutes.Main);
-  }, [navigate]);
+    const navigateMain = useCallback((): void => {
+      navigate(EAppRoutes.Main);
+    }, []);
+
+    // ...
+  });
+```
+
+Также функция `handleGameOver` в родительском компоненте была обёрнута в `useCallback` для того, чтобы при ререндере родительского компонента не пересоздавалась ссылка в памяти:
+  ```javascript
+    const handleGameOver = useCallback((): void => {
+      setTimeout(() => window.location.reload(), 100);
+    }, []);
+
+    // ...
+
+    return <GameOverModal score={score} onClose={handleGameOver} />;
 ```
