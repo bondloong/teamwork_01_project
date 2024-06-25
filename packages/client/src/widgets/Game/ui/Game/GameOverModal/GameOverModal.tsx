@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button } from 'antd';
 import classes from './GameOverModal.module.scss';
@@ -6,7 +6,7 @@ import { EAppRoutes } from '@/shared/types';
 import { IGameOverModalProps } from './GameOverModal.interfaces';
 import { TEXTS } from './GameOverModal.constants';
 
-export const GameOverModal: React.FC<IGameOverModalProps> = ({ onClose, score }) => {
+export const GameOverModal: React.FC<IGameOverModalProps> = React.memo(({ onClose, score }) => {
   const [visible, setVisible] = useState(true);
   const navigate = useNavigate();
 
@@ -46,4 +46,4 @@ export const GameOverModal: React.FC<IGameOverModalProps> = ({ onClose, score })
       </div>
     </Modal>
   );
-};
+});

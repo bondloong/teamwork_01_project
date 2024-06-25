@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useEffect } from 'react';
+import { FC, useRef, useState, useEffect, useCallback } from 'react';
 import { SpaceHD, BlasterSound, EnemyHitSound, GameOverSound } from './assets/index';
 import { IBullet, IEnemy, IGameAudio, IGameProps, TCursor } from './GameInterfaces';
 import classes from './Game.module.scss';
@@ -43,9 +43,9 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   const [cursor, setCursor] = useState<TCursor>('inherit');
   const [score, setScore] = useState(0);
 
-  const handleGameOver = (): void => {
+  const handleGameOver = useCallback((): void => {
     setTimeout(() => window.location.reload(), 100);
-  };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
