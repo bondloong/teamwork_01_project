@@ -15,7 +15,7 @@ export const GameOverModal: React.FC<IGameOverModalProps> = ({ onClose, score })
     onClose?.();
   }, [onClose]);
 
-  const NavigateToMain = useCallback((): void => {
+  const navigateMain = useCallback((): void => {
     navigate(EAppRoutes.Main);
   }, [navigate]);
 
