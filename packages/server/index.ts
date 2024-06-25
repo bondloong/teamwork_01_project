@@ -9,7 +9,6 @@ import { MongoClient } from 'mongodb';
 import userRoutes from './routes/userRoutes';
 import topicRoutes from './routes/topicRoutes';
 import commentRoutes from './routes/commentRoutes';
-import likedTopicsRoutes from './routes/likedTopicsRoutes';
 
 const app = express();
 app.use(cors());
@@ -20,7 +19,6 @@ const port = Number(process.env.SERVER_PORT) || 3002;
 app.use('/api/users', userRoutes);
 app.use('/api/topics', topicRoutes);
 app.use('/api/comments', commentRoutes);
-app.use('/api/likedTopics', likedTopicsRoutes);
 
 app.get('*', (_, res) => {
   res.json('You are awesome)');
@@ -30,8 +28,11 @@ app.get('*', (_, res) => {
 console.log('MongoDB connection details:', process.env.DATABASE_URL);
 
 const dbUrl =
-  'mongodb+srv://admin:parol1@spaseship.whiq1c1.mongodb.net/starship?retryWrites=true&w=majority&appName=spaseship';
-const client = new MongoClient(dbUrl);
+  process.env.NODE_ENV === 'development'
+    ? process.env.CLOUD_DEV_DB_URL
+    : `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${process.env.MONGO_CONTAINER}:${process.env.MONGO_PORT}`;
+
+const client = new MongoClient(dbUrl || '');
 
 const connectDb = async (onSuccess: () => void): Promise<void> => {
   try {
@@ -48,6 +49,7 @@ const startApp = (): void => {
   app.listen(port, () => {
     console.log(`  ➜ 🎸 Server is listening on port: ${port}`);
 
+    // todo: удалить в будущем
     axios
       .get(`http://localhost:${port}/api/users`)
       .then((response) => {
@@ -73,15 +75,6 @@ const startApp = (): void => {
       })
       .catch((error) => {
         console.error('There was an error fetching the comments!', error);
-      });
-
-    axios
-      .get(`http://localhost:${port}/api/likedTopics`)
-      .then((response) => {
-        console.log('likedTopics:', response.data);
-      })
-      .catch((error) => {
-        console.error('There was an error fetching the likedTopics!', error);
       });
   });
 };
