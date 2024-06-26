@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useEffect } from 'react';
+import { FC, useRef, useState, useEffect, useCallback } from 'react';
 import { SpaceHD, BlasterSound, EnemyHitSound, GameOverSound } from './assets/index';
 import { IBullet, IEnemy, IGameAudio, IGameProps, TCursor } from './GameInterfaces';
 import classes from './Game.module.scss';
@@ -12,6 +12,7 @@ import {
   gameLoop,
   loadAudioFiles,
   stopAllAudio,
+  handleStartGameClick,
 } from './models';
 import { GameOverModal } from './GameOverModal';
 import { useFullscreen } from '@/shared/hooks/useFullscreen';
@@ -36,14 +37,15 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   });
   const backgroundX = useRef(0);
   const enemySpeed = useRef(5);
+  const animationId = useRef<number | null>(null);
 
   const [gameStarted, setGameStarted] = useState(false);
   const [cursor, setCursor] = useState<TCursor>('inherit');
   const [score, setScore] = useState(0);
 
-  const handleGameOver = (): void => {
+  const handleGameOver = useCallback((): void => {
     setTimeout(() => window.location.reload(), 100);
-  };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -53,8 +55,28 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
     canvas.width = canvasSize.width;
     canvas.height = canvasSize.height;
 
+    const handleStartGame = (event: MouseEvent): void => {
+      handleStartGameClick(
+        event,
+        canvas,
+        canvasSize.width,
+        canvasSize.height,
+        setGameStarted,
+        setCursor
+      );
+      canvas.removeEventListener('click', handleStartGame);
+    };
+
     if (!gameStarted) {
-      drawStartGame(canvas, ctx, canvasSize.width, canvasSize.height, setGameStarted, setCursor);
+      drawStartGame(
+        canvas,
+        ctx,
+        canvasSize.width,
+        canvasSize.height,
+        setGameStarted,
+        setCursor,
+        handleStartGame
+      );
       return;
     }
 
@@ -70,6 +92,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       enemies,
       setScore,
       setGameOver,
+      animationId,
     };
 
     if (!backgroundImage.current) {
@@ -144,9 +167,16 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       setCanvasSize({ width, height });
     }
   }, [isFullscreen, width, height]);
+
+  useEffect(() => {
+    if (gameOver) {
+      stopAllAudio(audio.current);
+      audio.current.gameOverAudio?.play().catch((error) => console.error(error));
+      animationId.current && cancelAnimationFrame(animationId.current);
+    }
+  }, [gameOver]);
+
   if (gameOver) {
-    stopAllAudio(audio.current);
-    audio.current.gameOverAudio?.play();
     return <GameOverModal score={score} onClose={handleGameOver} />;
   }
 
