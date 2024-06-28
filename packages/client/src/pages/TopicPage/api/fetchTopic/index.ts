@@ -1,0 +1,1 @@
+export { fetchTopic } from './fetchTopic';

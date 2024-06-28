@@ -1,0 +1,10 @@
+.topic {
+  &Content {
+    margin-bottom: 8px;
+    display: -webkit-box; /* Включить флексбоксы */
+    -webkit-line-clamp: 2; /* Количество строк */
+    -webkit-box-orient: vertical; /* Вертикальная ориентация */
+    overflow: hidden; /* Скрыть переполнение */
+    text-overflow: ellipsis;
+  }
+}

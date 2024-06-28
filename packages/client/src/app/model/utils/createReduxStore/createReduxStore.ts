@@ -1,4 +1,5 @@
 import { userReducer } from '@/entities/User';
+import { topicsReducer } from '@/entities/Topics';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { TCreateReduxStore } from './createReduxStore.interfaces';
 
@@ -12,6 +13,7 @@ declare global {
 
 export const reducer = combineReducers({
   user: userReducer,
+  topics: topicsReducer,
 });
 
 export const createReduxStore: TCreateReduxStore = () => {

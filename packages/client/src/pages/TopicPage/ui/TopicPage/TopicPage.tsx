@@ -1,11 +1,94 @@
 import { BaseLayout } from '@/layouts/BaseLayout';
 import { Breadcrumb, Button, Empty, Flex, Form, Input } from 'antd';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import classes from './TopicPage.module.scss';
 import { TopicComment } from '@/widgets/TopicComment';
+import { IComment, ITopic, getTopics } from '@/entities/Topics/model';
+import { fetchComments, fetchTopic } from '../../api';
+import { Loader } from '@/shared/ui';
+import { useParams } from 'react-router-dom';
+import { CreateCommentProps, createComment } from '../../api/createComment';
+import { addLikeToTopic } from '../../api/addLikeToTopic';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '@/shared/hooks';
+import { getUserData } from '@/entities/User';
+import { fetchTopicAuthor } from '@/entities/Topics/api';
+import { createTopicAuthor } from '@/entities/Topics/api/createTopicAuthor';
+import { removeLikeFromTopic } from '../../api/removeLikeFromTopic';
+import { LikeTwoTone } from '@ant-design/icons';
+
+interface FormValues {
+  comment: string;
+}
 
 export const TopicPage = (): ReactElement => {
   const [form] = Form.useForm();
+  const [topic, setTopic] = useState<ITopic>();
+  const [topicComments, setTopicComments] = useState<IComment[]>([]);
+  const { id } = useParams();
+  const { topicAuthor } = useSelector(getTopics);
+  const dispatch = useAppDispatch();
+  const user = useSelector(getUserData);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchTopicAuthor(user.id)).then((result) => {
+        if (result.meta.requestStatus === 'rejected') {
+          dispatch(
+            createTopicAuthor({
+              yandexUserId: String(user.id),
+              first_name: user.first_name,
+              second_name: user.second_name,
+            })
+          );
+        }
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (id) {
+      fetchTopic(id).then((result) => {
+        setTopic(result);
+        fetchComments(result.id).then((result) => {
+          setTopicComments(result);
+        });
+      });
+    }
+  }, []);
+
+  if (!topic || !topicAuthor) {
+    return <Loader />;
+  }
+  const addComment = (value: FormValues): void => {
+    const data: CreateCommentProps = {
+      content: value.comment,
+      authorId: topicAuthor!.id,
+      topicId: topic.id,
+    };
+
+    createComment(data).then((result) => {
+      setTopicComments((prev) => [...prev, result]);
+    });
+  };
+
+  const changeLike = (): void => {
+    if (topic.likedUsers.find((id) => id === topicAuthor.id)) {
+      removeLikeFromTopic({
+        userId: topicAuthor!.id,
+        topicId: topic.id,
+      }).then((result) => {
+        setTopic(result);
+      });
+    } else {
+      addLikeToTopic({
+        userId: topicAuthor!.id,
+        topicId: topic.id,
+      }).then((result) => {
+        setTopic(result);
+      });
+    }
+  };
 
   return (
     <BaseLayout>
@@ -27,35 +110,31 @@ export const TopicPage = (): ReactElement => {
             ]}
           />
 
-          <p className={classes.topicDate}>23.06.2024</p>
-          <h1 className={classes.header}>Topic Title</h1>
-          <h3 className={classes.author}>Author: Ilon Mask</h3>
+          <p className={classes.topicDate}>{new Date(topic.createdAt).toLocaleDateString()}</p>
+          <h1 className={classes.header}>{topic.title}</h1>
+          <h3 className={classes.author}>
+            Author: {`${topic.author.first_name} ${topic.author.second_name}`}
+          </h3>
 
-          <div className={classes.topicContent}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. In esse tempora quod, possimus
-            ad expedita laudantium facilis, eum repellat rem impedit? Earum exercitationem qui quo
-            facilis deleniti distinctio corporis iste!
-          </div>
+          <div className={classes.topicContent}>{topic.content}</div>
           <span className={classes.commentLike}>
-            <span style={{ color: '#1677ff' }}>Likes: </span> 10
+            <LikeTwoTone style={{ fontSize: 18 }} onClick={changeLike} /> {topic.likedUsers.length}
           </span>
 
           <div className={classes.comments}>
             <h2 className={classes.header}>Comments</h2>
-            {[1].length === 0 ? (
+            {topicComments.length === 0 ? (
               <Empty description={false} />
             ) : (
               <Flex vertical gap={16} className={classes.commentsWrapper}>
-                <TopicComment />
-                <TopicComment />
-                <TopicComment />
-                <TopicComment />
-                <TopicComment />
+                {topicComments.map((comment, i) => (
+                  <TopicComment key={i} {...comment} />
+                ))}
               </Flex>
             )}
           </div>
 
-          <Form form={form} className={classes.newComment}>
+          <Form<FormValues> form={form} className={classes.newComment} onFinish={addComment}>
             <Form.Item name="comment" rules={[{ required: true }]}>
               <Input.TextArea rows={3} autoSize={{ minRows: 3, maxRows: 3 }} />
             </Form.Item>

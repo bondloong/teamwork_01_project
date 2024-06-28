@@ -1,3 +1,4 @@
+import { ITopicsSchema } from '@/entities/Topics';
 import { IUser, IUserSchema } from '@/entities/User';
 
 declare global {
@@ -8,6 +9,7 @@ declare global {
 
   interface IStateSchema {
     user: IUserSchema;
+    topics: ITopicsSchema;
   }
 
   declare const __API_SERVER_PORT__: number;

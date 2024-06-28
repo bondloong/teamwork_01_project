@@ -1,0 +1,1 @@
+export { fetchTopicAuthor } from './fetchTopicAuthor';

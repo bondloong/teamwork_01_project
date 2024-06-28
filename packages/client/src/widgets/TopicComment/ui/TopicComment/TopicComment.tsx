@@ -1,15 +1,16 @@
 import { Avatar, Flex } from 'antd';
 import React, { FC } from 'react';
 import classes from './TopicComment.module.scss';
+import { IComment } from '@/entities/Topics/model';
 
-export const TopicComment: FC = () => {
+export const TopicComment: FC<IComment> = (data) => {
   return (
     <Flex gap={12}>
-      <Avatar size="small" icon={'f'} />
+      <Avatar size="small" icon={data.author.first_name[0]} />
       <Flex gap={4} vertical className={classes.commentRightBlock}>
-        <h5>Ilon mAsk</h5>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque minima cumque?</p>
-        <span className={classes.commentDate}>23.06.2024</span>
+        <h5>{`${data.author.first_name} ${data.author.second_name}`}</h5>
+        <p>{data.content}</p>
+        <span className={classes.commentDate}>{new Date(data.createdAt).toLocaleDateString()}</span>
       </Flex>
     </Flex>
   );

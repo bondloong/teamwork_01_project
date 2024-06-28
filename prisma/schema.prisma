@@ -8,21 +8,21 @@ datasource db {
 }
 
 // Модель пользователя
-model User {
+model Users {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   yandexUserId String @unique
   first_name   String
   second_name  String
-  topics       Topic[]  @relation("AuthorOfTopics")
+  topics       Topics[]  @relation("AuthorOfTopics")
   comments     Comment[]
 }
 
 // Модель топика
-model Topic {
+model Topics {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   content     String
-  author      User        @relation("AuthorOfTopics", fields: [authorId], references: [id])
+  author      Users        @relation("AuthorOfTopics", fields: [authorId], references: [id])
   authorId    String      @db.ObjectId
   comments    Comment[]
   likedUsers  String[]    @db.ObjectId
@@ -36,9 +36,9 @@ model Topic {
 model Comment {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   content   String
-  author    User      @relation(fields: [authorId], references: [id])
+  author    Users      @relation(fields: [authorId], references: [id])
   authorId  String    @db.ObjectId
-  topic     Topic     @relation(fields: [topicId], references: [id])
+  topic     Topics     @relation(fields: [topicId], references: [id])
   topicId   String    @db.ObjectId
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
