@@ -9,7 +9,7 @@ export const TopicCard: FC<ITopic> = (data) => {
       type="inner"
       title={data.title}
       extra={
-        <a style={{ color: '#1677ff' }} href={`/topic/${data.id}`}>
+        <a style={{ color: '#1677ff' }} href={`/forum/${data.id}`}>
           More
         </a>
       }

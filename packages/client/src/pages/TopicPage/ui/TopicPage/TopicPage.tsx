@@ -25,7 +25,7 @@ export const TopicPage = (): ReactElement => {
   const [form] = Form.useForm();
   const [topic, setTopic] = useState<ITopic>();
   const [topicComments, setTopicComments] = useState<IComment[]>([]);
-  const { id } = useParams();
+  const { topicId } = useParams();
   const { topicAuthor } = useSelector(getTopics);
   const dispatch = useAppDispatch();
   const user = useSelector(getUserData);
@@ -47,8 +47,8 @@ export const TopicPage = (): ReactElement => {
   }, [user]);
 
   useEffect(() => {
-    if (id) {
-      fetchTopic(id).then((result) => {
+    if (topicId) {
+      fetchTopic(topicId).then((result) => {
         setTopic(result);
         fetchComments(result.id).then((result) => {
           setTopicComments(result);
