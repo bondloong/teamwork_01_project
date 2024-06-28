@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("CLOUD_DEV_DB_URL")
+}
+
+// Модель пользователя
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  yandexUserId String @unique
+  first_name   String
+  second_name  String
+  topics       Topic[]  @relation("AuthorOfTopics")
+  comments     Comment[]
+}
+
+// Модель топика
+model Topic {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  author      User        @relation("AuthorOfTopics", fields: [authorId], references: [id])
+  authorId    String      @db.ObjectId
+  comments    Comment[]
+  likedUsers  String[]    @db.ObjectId
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([authorId])
+}
+
+// Модель комментария
+model Comment {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String    @db.ObjectId
+  topic     Topic     @relation(fields: [topicId], references: [id])
+  topicId   String    @db.ObjectId
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+

@@ -14,6 +14,7 @@ interface IGameLoopProps {
   setScore: React.Dispatch<React.SetStateAction<number>>;
   setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
   audio: IGameAudio;
+  animationId: React.MutableRefObject<number | null>;
 }
 
 export const gameLoop = ({
@@ -29,13 +30,14 @@ export const gameLoop = ({
   setScore,
   setGameOver,
   audio,
+  animationId,
 }: IGameLoopProps): void => {
   if (!ctx || gameOver) return;
 
   // Отрисовка движущегося экрана
   moveBG(backgroundX, backgroundImage, width, height, ctx);
 
-  //отрисовка положения корабля
+  // Отрисовка положения корабля
   drawShip(ctx, ship);
 
   // Отрисовка выстрелов
@@ -47,7 +49,7 @@ export const gameLoop = ({
   // Проверка столкновений пуль с врагами
   enemiesCheckCollision(enemies, bullets, setScore, audio.enemyHit);
 
-  requestAnimationFrame(() =>
+  animationId.current = requestAnimationFrame(() => {
     gameLoop({
       setGameOver,
       ctx,
@@ -61,6 +63,7 @@ export const gameLoop = ({
       enemies,
       setScore,
       audio,
-    })
-  );
+      animationId,
+    });
+  });
 };

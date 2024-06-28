@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useEffect } from 'react';
+import { FC, useRef, useState, useEffect, useCallback } from 'react';
 import { SpaceHD, BlasterSound, EnemyHitSound, GameOverSound } from './assets/index';
 import { IBullet, IEnemy, IGameAudio, IGameProps, TCursor } from './GameInterfaces';
 import classes from './Game.module.scss';
@@ -12,6 +12,7 @@ import {
   gameLoop,
   loadAudioFiles,
   stopAllAudio,
+  handleStartGameClick,
 } from './models';
 import { GameOverModal } from './GameOverModal';
 import { useFullscreen } from '@/shared/hooks/useFullscreen';
@@ -28,7 +29,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   const enemies = useRef<Array<IEnemy>>([]);
   const [gameOver, setGameOver] = useState(false);
   const shootingInterval = useRef<NodeJS.Timeout | null>(null);
-  const backgroundImage = useRef(new Image());
+  const backgroundImage: React.MutableRefObject<HTMLImageElement | null> = useRef(null);
   const audio = useRef<IGameAudio>({
     blasterAudio: null,
     enemyHit: null,
@@ -36,14 +37,15 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
   });
   const backgroundX = useRef(0);
   const enemySpeed = useRef(5);
+  const animationId = useRef<number | null>(null);
 
   const [gameStarted, setGameStarted] = useState(false);
   const [cursor, setCursor] = useState<TCursor>('inherit');
   const [score, setScore] = useState(0);
 
-  const handleGameOver = (): void => {
+  const handleGameOver = useCallback((): void => {
     setTimeout(() => window.location.reload(), 100);
-  };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -53,8 +55,28 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
     canvas.width = canvasSize.width;
     canvas.height = canvasSize.height;
 
+    const handleStartGame = (event: MouseEvent): void => {
+      handleStartGameClick(
+        event,
+        canvas,
+        canvasSize.width,
+        canvasSize.height,
+        setGameStarted,
+        setCursor
+      );
+      canvas.removeEventListener('click', handleStartGame);
+    };
+
     if (!gameStarted) {
-      drawStartGame(canvas, ctx, canvasSize.width, canvasSize.height, setGameStarted, setCursor);
+      drawStartGame(
+        canvas,
+        ctx,
+        canvasSize.width,
+        canvasSize.height,
+        setGameStarted,
+        setCursor,
+        handleStartGame
+      );
       return;
     }
 
@@ -70,23 +92,40 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       enemies,
       setScore,
       setGameOver,
+      animationId,
     };
 
-    backgroundImage.current.src = SpaceHD; // Загрузка фона
-    backgroundImage.current.onload = (): void => {
-      // Запуск игры после отрисовки фона
-      loadAudioFiles([BlasterSound, EnemyHitSound, GameOverSound])
-        .then((audioElements) => {
-          const [blasterAudio, enemyHit, gameOverAudio] = audioElements;
-          audio.current = { blasterAudio, enemyHit, gameOverAudio };
-        })
-        .catch(() => {
-          console.log('Не удалось загрузить звук(');
-        })
-        .finally(() => {
-          requestAnimationFrame(() => gameLoop({ ...gameConfig, audio: audio.current }));
-        });
-    };
+    if (!backgroundImage.current) {
+      backgroundImage.current = new Image();
+    }
+
+    if (backgroundImage.current) {
+      backgroundImage.current.src = SpaceHD; // Загрузка фона
+      backgroundImage.current.onload = (): void => {
+        // Запуск игры после отрисовки фона
+        loadAudioFiles([BlasterSound, EnemyHitSound, GameOverSound])
+          .then((audioElements) => {
+            const [blasterAudio, enemyHit, gameOverAudio] = audioElements;
+            audio.current = { blasterAudio, enemyHit, gameOverAudio };
+          })
+          .catch(() => {
+            console.log('Не удалось загрузить звук(');
+          })
+          .finally(() => {
+            if (audio.current) {
+              requestAnimationFrame(() => {
+                if (backgroundImage.current) {
+                  gameLoop({
+                    ...gameConfig,
+                    audio: audio.current!,
+                    backgroundImage: backgroundImage as React.MutableRefObject<HTMLImageElement>,
+                  });
+                }
+              });
+            }
+          });
+      };
+    }
 
     const handleMouseMove = (event: MouseEvent): void => handleMouseMoveShip(event, canvas, ship);
     const handleMouseDown = (): void =>
@@ -128,9 +167,16 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
       setCanvasSize({ width, height });
     }
   }, [isFullscreen, width, height]);
+
+  useEffect(() => {
+    if (gameOver) {
+      stopAllAudio(audio.current);
+      audio.current.gameOverAudio?.play().catch((error) => console.error(error));
+      animationId.current && cancelAnimationFrame(animationId.current);
+    }
+  }, [gameOver]);
+
   if (gameOver) {
-    stopAllAudio(audio.current);
-    audio.current.gameOverAudio?.play();
     return <GameOverModal score={score} onClose={handleGameOver} />;
   }
 
@@ -140,7 +186,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
         {score}
       </h2>
       <button onClick={toggleFullscreen} className={classes.fullscreenButton}>
-        Toggle Fullscreen
+        Toggle Fullscreen!
       </button>
       <canvas
         className={classes.canvas}
