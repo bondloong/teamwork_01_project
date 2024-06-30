@@ -14,7 +14,7 @@ export default defineConfig({
     port: 5555,
   },
   define: {
-    __API_SERVER_PORT__: JSON.stringify(isDev ? 3001 : process.env.API_SERVER_PORT),
+    __API_SERVER_PORT__: JSON.stringify(isDev ? 7001 : process.env.API_SERVER_PORT),
     __API_SERVER_HOST__: JSON.stringify(isDev ? 'http://localhost' : process.env.API_SERVER_HOST),
   },
   plugins: [react()],

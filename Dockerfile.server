@@ -38,6 +38,10 @@ COPY --from=builder /app/packages/server/dist/ /app/
 # копируем package.json для сервера
 COPY --from=builder /app/packages/server/package.json /app/package.json
 
+# Копируем схемы Prisma для даленейшей инициализации клиента prisma
+COPY --from=builder /app/packages/server/prisma /app/prisma
+
+
 # и станавливаем зависимости для сервера
 # флаг --production=true установит только те зависимости, которые нужны для продакшена (без devDependencies)
 RUN yarn install --production=true
@@ -54,4 +58,6 @@ RUN yarn install --production=true
 # Дожидаемся запуска контейнера с Mongo БД и инициализации БД. После запуска контейнера выполняем команды node /app/index.js - запускаем наше серверное приложение
 # Закомментировали после перехода на испольование healthcheck в docker-compose.yml
 #CMD /wait && node /app/index.js
-CMD node /app/index.js
+
+# npx prisma generate требуется для инициализации клиента prisma
+CMD npx prisma generate && node /app/index.js

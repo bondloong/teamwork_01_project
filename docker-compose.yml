@@ -67,13 +67,10 @@ services:
       test: echo 'db.runCommand("ping").ok' | mongo localhost:${MONGO_PORT}/${MONGO_INITDB_DATABASE} --quiet
 
     # env-переменные, которые будут доступны внутри контейнера
+    # При необходимости, внутрь контейнера можно передать env-переменные, содержащий данные для подключения к БД. В текущей реализации, вся необходимая информация содержится в DATABASE_URL
     environment:
       API_SERVER_PORT: ${API_SERVER_PORT}
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-      MONGO_CONTAINER: ${MONGO_CONTAINER}
-      MONGO_PORT: ${MONGO_PORT}
+      DATABASE_URL: ${DATABASE_URL}
 
     # Контейнер prakticum-server-container должен быть запущен после того, как запуститься кконтейнер mongo и пройдет инициализация БД (то есть надо какое-то время подождать. Для этого внутри Dockerfile.server используется скрипт wait-for)
     depends_on:

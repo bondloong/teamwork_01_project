@@ -1,20 +1,34 @@
 import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
 import cors from 'cors';
-dotenv.config();
 
 import express from 'express';
+
+// @TODO удалить axios из зависимостей после того, как будет окончена разработка
 import axios from 'axios';
-import { MongoClient } from 'mongodb';
 
 import userRoutes from './routes/userRoutes';
 import topicRoutes from './routes/topicRoutes';
 import commentRoutes from './routes/commentRoutes';
 
+const IS_DEV = process.env.NODE_ENV === 'development';
+
+let processEnv: dotenv.DotenvConfigOutput;
+
+if (IS_DEV) {
+  processEnv = dotenv.config({ path: '.env.dev' });
+} else {
+  processEnv = dotenv.config();
+}
+
+// Библиотека dotenv-expand используетя для того, чтобы в .env файлах можно было использовать другие env-переменные при определении env-переменных: TEST1=${TEST}
+dotenvExpand.expand(processEnv);
+
 const app = express();
 app.use(cors());
 app.use(express.json()); // Добавление json middleware
 
-const port = Number(process.env.SERVER_PORT) || 3002;
+const PORT = Number(process.env.API_SERVER_PORT);
 
 app.use('/api/users', userRoutes);
 app.use('/api/topics', topicRoutes);
@@ -24,59 +38,20 @@ app.get('*', (_, res) => {
   res.json('You are awesome)');
 });
 
-// Вывод переменных окружения для отладки
-console.log('MongoDB connection details:', process.env.DATABASE_URL);
-
-const dbUrl =
-  process.env.NODE_ENV === 'development'
-    ? process.env.CLOUD_DEV_DB_URL
-    : `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${process.env.MONGO_CONTAINER}:${process.env.MONGO_PORT}`;
-
-const client = new MongoClient(dbUrl || '');
-
-const connectDb = async (onSuccess: () => void): Promise<void> => {
-  try {
-    await client.connect();
-    console.log('Connected successfully to database');
-
-    onSuccess();
-  } catch (error) {
-    console.log('Could not connect to database', error);
-  }
-};
-
 const startApp = (): void => {
-  app.listen(port, () => {
-    console.log(`  ➜ 🎸 Server is listening on port: ${port}`);
+  app.listen(PORT, () => {
+    console.log(`  ➜ 🎸 Server is listening on port: ${PORT}`);
 
     // todo: удалить в будущем
     axios
-      .get(`http://localhost:${port}/api/users`)
+      .get(`http://localhost:${PORT}/api/users`)
       .then((response) => {
         console.log('users:', response.data);
       })
       .catch((error) => {
         console.error('There was an error fetching the users!', error);
       });
-
-    axios
-      .get(`http://localhost:${port}/api/topics`)
-      .then((response) => {
-        console.log('topics:', response.data);
-      })
-      .catch((error) => {
-        console.error('There was an error fetching the topics!', error);
-      });
-
-    axios
-      .get(`http://localhost:${port}/api/comments`)
-      .then((response) => {
-        console.log('comments:', response.data);
-      })
-      .catch((error) => {
-        console.error('There was an error fetching the comments!', error);
-      });
   });
 };
 
-connectDb(startApp);
+startApp();
