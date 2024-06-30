@@ -5,6 +5,6 @@ export enum EAppRoutes {
   LeaderBoard = '/leaderboard',
   Forum = '/forum',
   Profile = '/profile',
-  TopicId = ':topicId',
+  TopicId = '/forum/:topicId',
   All = '*',
 }

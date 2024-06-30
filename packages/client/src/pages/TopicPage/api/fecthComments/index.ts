@@ -1,0 +1,1 @@
+export { fetchComments } from './fetchComments';

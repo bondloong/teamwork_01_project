@@ -9,4 +9,6 @@ export enum EInputNames {
   Email = 'email',
   Phone = 'phone',
   DisplayName = 'display_name',
+  Title = 'title',
+  Content = 'content',
 }
