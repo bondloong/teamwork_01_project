@@ -4,9 +4,6 @@ import cors from 'cors';
 
 import express from 'express';
 
-// @TODO удалить axios из зависимостей после того, как будет окончена разработка
-// import axios from 'axios';
-
 import userRoutes from './routes/userRoutes';
 import topicRoutes from './routes/topicRoutes';
 import commentRoutes from './routes/commentRoutes';
@@ -41,16 +38,6 @@ app.get('*', (_, res) => {
 const startApp = (): void => {
   app.listen(PORT, () => {
     console.log(`  ➜ 🎸 Server is listening on port: ${PORT}`);
-
-    // todo: удалить в будущем
-    // axios
-    //   .get(`http://localhost:${PORT}/api/users`)
-    //   .then((response) => {
-    //     console.log('users:', response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error('There was an error fetching the users!', error);
-    //   });
   });
 };
 
