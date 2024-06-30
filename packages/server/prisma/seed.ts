@@ -39,7 +39,7 @@ async function main(): Promise<void> {
     console.log('Second topic created:', secondTopic);
 
     // Создание комментария к первому топику
-    const newComment = await prisma.comments.create({
+    const newComment = await prisma.comment.create({
       data: {
         content: 'This is a comment on the first topic',
         authorId: newUser.id,

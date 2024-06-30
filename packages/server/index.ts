@@ -27,13 +27,8 @@ console.log('API_SERVER_PORT', process.env.API_SERVER_PORT);
 // Библиотека dotenv-expand используетя для того, чтобы в .env файлах можно было использовать другие env-переменные при определении env-переменных: TEST1=${TEST}
 dotenvExpand.expand(processEnv);
 
-const corsOptions = {
-  origin: 'http://localhost:8080', // specify the exact origin
-  credentials: true, // allow credentials
-};
-
 const app = express();
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json()); // Добавление json middleware
 
 const PORT = Number(process.env.API_SERVER_PORT);

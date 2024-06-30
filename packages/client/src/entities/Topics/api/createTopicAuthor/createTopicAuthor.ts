@@ -1,4 +1,4 @@
-import { API, projectClient } from '@/shared/api';
+import { API, apiServerClient } from '@/shared/api';
 import { TCreateTopicAuthorPayload } from './createTopicAuthor.interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
@@ -9,7 +9,7 @@ export const createTopicAuthor = createAsyncThunk<IAuthor, TCreateTopicAuthorPay
   async (credentials, thunkApi) => {
     const { rejectWithValue } = thunkApi;
     try {
-      const { data } = await projectClient.post<
+      const { data } = await apiServerClient.post<
         void,
         AxiosResponse<IAuthor>,
         TCreateTopicAuthorPayload
