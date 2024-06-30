@@ -39,8 +39,15 @@ export const routes: RouteObject[] = [
           </ProtectedRoute>
         ),
       },
-      { path: EAppRoutes.TopicId, element: <TopicPage /> },
     ],
+  },
+  {
+    path: EAppRoutes.TopicId,
+    element: (
+      <ProtectedRoute>
+        <TopicPage />
+      </ProtectedRoute>
+    ),
   },
   { path: EAppRoutes.All, element: <NotFoundPage /> },
 ];

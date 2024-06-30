@@ -4,7 +4,11 @@ import prisma from '../prisma';
 // Получение всех топиков
 export const getTopics = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const topics = await prisma.topic.findMany();
+    const topics = await prisma.topics.findMany({
+      include: {
+        author: true, // Включить все поля автора
+      },
+    });
     res.json(topics);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch topics' });
@@ -21,7 +25,12 @@ export const getTopicById = async (req: Request, res: Response): Promise<void> =
   }
 
   try {
-    const topic = await prisma.topic.findUnique({ where: { id } });
+    const topic = await prisma.topics.findUnique({
+      where: { id },
+      include: {
+        author: true, // Включить все поля автора
+      },
+    });
     if (!topic) {
       res.status(404).json({ error: 'Topic not found' });
     } else {
@@ -42,8 +51,11 @@ export const createTopic = async (req: Request, res: Response): Promise<void> =>
   }
 
   try {
-    const topic = await prisma.topic.create({
+    const topic = await prisma.topics.create({
       data: { title, content, authorId },
+      include: {
+        author: true, // Включить все поля автора
+      },
     });
     res.status(201).json(topic);
   } catch (error) {
@@ -62,7 +74,7 @@ export const updateTopic = async (req: Request, res: Response): Promise<void> =>
   }
 
   try {
-    const topic = await prisma.topic.update({
+    const topic = await prisma.topics.update({
       where: { id },
       data: { title, content },
     });
@@ -82,7 +94,7 @@ export const deleteTopic = async (req: Request, res: Response): Promise<void> =>
   }
 
   try {
-    await prisma.topic.delete({ where: { id } });
+    await prisma.topics.delete({ where: { id } });
     res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete topic' });
@@ -99,12 +111,15 @@ export const addLikeToTopic = async (req: Request, res: Response): Promise<void>
   }
 
   try {
-    const topic = await prisma.topic.update({
+    const topic = await prisma.topics.update({
       where: { id: topicId },
       data: {
         likedUsers: {
           push: userId,
         },
+      },
+      include: {
+        author: true, // Включить все поля автора
       },
     });
     res.json(topic);
@@ -123,17 +138,20 @@ export const removeLikeFromTopic = async (req: Request, res: Response): Promise<
   }
 
   try {
-    const topic = await prisma.topic.update({
+    const topic = await prisma.topics.update({
       where: { id: topicId },
       data: {
         likedUsers: {
           set:
             (
-              await prisma.topic.findUnique({
+              await prisma.topics.findUnique({
                 where: { id: topicId },
               })
             )?.likedUsers.filter((id) => id !== userId) || [],
         },
+      },
+      include: {
+        author: true, // Включить все поля автора
       },
     });
     res.json(topic);

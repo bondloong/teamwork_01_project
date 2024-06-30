@@ -30,6 +30,33 @@ export const getCommentById = async (req: Request, res: Response): Promise<void>
   }
 };
 
+// Получение комментариев для конкретного топика
+export const getCommentsByTopicId = async (req: Request, res: Response): Promise<void> => {
+  const { topicId } = req.params;
+
+  if (!topicId) {
+    res.status(400).json({ error: 'Missing required parameter: topicId' });
+    return;
+  }
+
+  try {
+    const comments = await prisma.comment.findMany({
+      where: { topicId },
+      include: {
+        author: true, // Включить все поля автора
+      },
+    });
+
+    if (comments.length === 0) {
+      res.status(404).json({ error: 'No comments found for this topic' });
+    } else {
+      res.json(comments);
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch comments' });
+  }
+};
+
 export const createComment = async (req: Request, res: Response): Promise<void> => {
   const { content, authorId, topicId } = req.body;
 
@@ -41,6 +68,9 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
   try {
     const comment = await prisma.comment.create({
       data: { content, authorId, topicId },
+      include: {
+        author: true, // Включить все поля автора
+      },
     });
     res.status(201).json(comment);
   } catch (error) {

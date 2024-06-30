@@ -1,2 +1,2 @@
-export { praktikumClient } from './client';
+export { praktikumClient, projectClient } from './client';
 export { API } from './constants';

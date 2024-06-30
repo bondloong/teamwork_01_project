@@ -11,6 +11,7 @@
     "stylelint": "stylelint **/*.scss"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
     "@reduxjs/toolkit": "^2.2.3",
     "antd": "^5.16.2",
     "axios": "^1.6.8",

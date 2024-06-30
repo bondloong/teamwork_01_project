@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 async function main(): Promise<void> {
   try {
     // Создание пользователя
-    const newUser = await prisma.user.create({
+    const newUser = await prisma.users.create({
       data: {
         first_name: 'John',
         second_name: 'Doe',
@@ -16,7 +16,7 @@ async function main(): Promise<void> {
     console.log('User created:', newUser);
 
     // Создание топиков
-    const firstTopic = await prisma.topic.create({
+    const firstTopic = await prisma.topics.create({
       data: {
         title: 'First Topic',
         content: 'This is the content of the first topic',
@@ -27,7 +27,7 @@ async function main(): Promise<void> {
 
     console.log('First topic created:', firstTopic);
 
-    const secondTopic = await prisma.topic.create({
+    const secondTopic = await prisma.topics.create({
       data: {
         title: 'Second Topic',
         content: 'This is the content of the second topic',
@@ -39,7 +39,7 @@ async function main(): Promise<void> {
     console.log('Second topic created:', secondTopic);
 
     // Создание комментария к первому топику
-    const newComment = await prisma.comment.create({
+    const newComment = await prisma.comments.create({
       data: {
         content: 'This is a comment on the first topic',
         authorId: newUser.id,
@@ -50,7 +50,7 @@ async function main(): Promise<void> {
     console.log('Comment created:', newComment);
 
     // Добавление лайка к первому топику
-    const updatedTopic = await prisma.topic.update({
+    const updatedTopic = await prisma.topics.update({
       where: { id: firstTopic.id },
       data: {
         likedUsers: {

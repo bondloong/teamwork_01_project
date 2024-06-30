@@ -10,8 +10,13 @@ import userRoutes from './routes/userRoutes';
 import topicRoutes from './routes/topicRoutes';
 import commentRoutes from './routes/commentRoutes';
 
+const corsOptions = {
+  origin: 'http://localhost:8080', // specify the exact origin
+  credentials: true, // allow credentials
+};
+
 const app = express();
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json()); // Добавление json middleware
 
 const port = Number(process.env.SERVER_PORT) || 3002;
@@ -25,13 +30,14 @@ app.get('*', (_, res) => {
 });
 
 // Вывод переменных окружения для отладки
-console.log('MongoDB connection details:', process.env.DATABASE_URL);
+console.log('MongoDB connection details:', process.env.CLOUD_DEV_DB_URL);
 
 const dbUrl =
   process.env.NODE_ENV === 'development'
     ? process.env.CLOUD_DEV_DB_URL
     : `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${process.env.MONGO_CONTAINER}:${process.env.MONGO_PORT}`;
 
+console.log(dbUrl);
 const client = new MongoClient(dbUrl || '');
 
 const connectDb = async (onSuccess: () => void): Promise<void> => {
