@@ -15,6 +15,10 @@ export const Application = ({ children }: IApplicationProps): ReactElement => {
       const host = __API_SERVER_HOST__;
       const port = __API_SERVER_PORT__;
 
+      console.log('__API_SERVER_HOST__', __API_SERVER_HOST__);
+      console.log('__API_SERVER_PORT__', __API_SERVER_PORT__);
+      console.log('${host}:${port}/api', `${host}:${port}/api`);
+
       fetch?.(`${host}:${port}/api`)
         .then((res) => res.json())
         .then(console.log)

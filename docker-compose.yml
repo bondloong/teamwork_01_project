@@ -106,8 +106,8 @@ services:
     # env-переменные, которые будут доступны внутри контейнера
     environment:
       - CLIENT_PORT=${CLIENT_PORT}
-      - API_SERVER_PORT=${API_SERVER_PORT}
       - API_SERVER_HOST=${API_SERVER_HOST}
+      - API_SERVER_PORT=${API_SERVER_PORT}
 
     # Запускать контейнер после запуска контейнера server
     depends_on:
