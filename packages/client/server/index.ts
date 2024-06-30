@@ -1,6 +1,4 @@
 import dotenv from 'dotenv';
-dotenv.config();
-
 import express, { Request as ExpressRequest } from 'express';
 import path from 'path';
 
@@ -8,10 +6,22 @@ import fs from 'fs/promises';
 import { createServer as createViteServer, ViteDevServer } from 'vite';
 import serialize from 'serialize-javascript';
 
-const port = process.env.CLIENT_PORT || 8080;
+const isDev = process.env.NODE_ENV === 'development';
+
+if (isDev) {
+  dotenv.config({ path: path.join(__dirname, '..', '.env.dev') });
+} else {
+  dotenv.config();
+}
+
+// console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+// console.log('process.env.CLIENT_PORT', process.env.CLIENT_PORT);
+// console.log('process.env.API_SERVER_HOST', process.env.API_SERVER_HOST);
+// console.log('process.env.API_SERVER_PORT', process.env.API_SERVER_PORT);
+
+const port = process.env.CLIENT_PORT;
 // Путь к корневой папке
 const clientPath = path.join(__dirname, '..');
-const isDev = process.env.NODE_ENV === 'development';
 
 const createServer = async (): Promise<void> => {
   const app = express();

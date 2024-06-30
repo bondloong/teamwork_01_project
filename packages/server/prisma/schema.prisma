@@ -4,9 +4,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  // url      = env("DATABASE_URL")
-  url      = "mongodb://admin:password@localhost:27017/mongo_game_db?authSource=admin&retryWrites=true&w=majority"
-  // url      = "mongodb+srv://admin:parol1@spaseship.whiq1c1.mongodb.net/spaseship?retryWrites=true&w=majority&appName=spaseship"
+  url      = env("DATABASE_URL")
 }
 
 // Модель пользователя

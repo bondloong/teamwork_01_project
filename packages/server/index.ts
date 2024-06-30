@@ -5,7 +5,7 @@ import cors from 'cors';
 import express from 'express';
 
 // @TODO удалить axios из зависимостей после того, как будет окончена разработка
-import axios from 'axios';
+// import axios from 'axios';
 
 import userRoutes from './routes/userRoutes';
 import topicRoutes from './routes/topicRoutes';
@@ -20,9 +20,6 @@ if (IS_DEV) {
 } else {
   processEnv = dotenv.config();
 }
-
-console.log('DATABASE_URL', process.env.DATABASE_URL);
-console.log('API_SERVER_PORT', process.env.API_SERVER_PORT);
 
 // Библиотека dotenv-expand используетя для того, чтобы в .env файлах можно было использовать другие env-переменные при определении env-переменных: TEST1=${TEST}
 dotenvExpand.expand(processEnv);
@@ -46,14 +43,14 @@ const startApp = (): void => {
     console.log(`  ➜ 🎸 Server is listening on port: ${PORT}`);
 
     // todo: удалить в будущем
-    axios
-      .get(`http://localhost:${PORT}/api/users`)
-      .then((response) => {
-        console.log('users:', response.data);
-      })
-      .catch((error) => {
-        console.error('There was an error fetching the users!', error);
-      });
+    // axios
+    //   .get(`http://localhost:${PORT}/api/users`)
+    //   .then((response) => {
+    //     console.log('users:', response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error('There was an error fetching the users!', error);
+    //   });
   });
 };
 
