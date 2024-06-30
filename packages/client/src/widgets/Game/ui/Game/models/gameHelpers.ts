@@ -98,7 +98,6 @@ export const handleStartGameClick = (
   ) {
     setGameStarted(true);
     setCursor('none');
-    canvas.removeEventListener('click', () => handleStartGameClick); // Удаление обработчика событий после начала игры
   }
 };
 
@@ -110,7 +109,8 @@ export const drawStartGame = (
   width: number,
   height: number,
   setGameStarted: React.Dispatch<React.SetStateAction<boolean>>,
-  setCursor: React.Dispatch<React.SetStateAction<TCursor>>
+  setCursor: React.Dispatch<React.SetStateAction<TCursor>>,
+  handleStartGame: (event: MouseEvent) => void
 ): void => {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
   ctx.fillRect(0, 0, width, height);
@@ -118,7 +118,5 @@ export const drawStartGame = (
   ctx.fillStyle = 'white';
   ctx.textAlign = 'center';
   ctx.fillText('Начать игру', width / 2, height / 2);
-  canvas.addEventListener('click', (event) =>
-    handleStartGameClick(event, canvas, width, height, setGameStarted, setCursor)
-  ); // ← Обработчик клика для начала игры
+  canvas.addEventListener('click', handleStartGame); // ← Обработчик клика для начала игры
 };

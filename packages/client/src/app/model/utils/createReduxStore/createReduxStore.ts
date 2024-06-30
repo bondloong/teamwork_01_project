@@ -1,5 +1,9 @@
 import { userReducer } from '@/entities/User';
+
 import { topicsReducer } from '@/entities/Topics';
+
+import { leaderboardReducer } from '@/entities/leaderboard';
+
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { TCreateReduxStore } from './createReduxStore.interfaces';
 
@@ -18,7 +22,11 @@ export const reducer = combineReducers({
 
 export const createReduxStore: TCreateReduxStore = () => {
   const store = configureStore({
-    reducer,
+    reducer: {
+      user: userReducer,
+      leaderboard: leaderboardReducer,
+    },
+
     // чтобы приложение, которое мы будем гидрировать, имело тот же самый стейт, что и приложение, которое рендерилось в HTML.
     preloadedState: typeof window === 'undefined' ? undefined : window.APP_INITIAL_STATE,
   });
