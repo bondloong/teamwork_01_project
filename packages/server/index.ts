@@ -21,6 +21,9 @@ if (IS_DEV) {
   processEnv = dotenv.config();
 }
 
+console.log('DATABASE_URL', process.env.DATABASE_URL);
+console.log('API_SERVER_PORT', process.env.API_SERVER_PORT);
+
 // Библиотека dotenv-expand используетя для того, чтобы в .env файлах можно было использовать другие env-переменные при определении env-переменных: TEST1=${TEST}
 dotenvExpand.expand(processEnv);
 
