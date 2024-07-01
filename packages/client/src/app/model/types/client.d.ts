@@ -15,7 +15,6 @@ declare global {
     topics: ITopicsSchema;
 
     leaderboard: ILeaderboardState;
-
   }
 
   declare const __API_SERVER_PORT__: number;

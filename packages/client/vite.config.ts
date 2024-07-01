@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import dotenv from 'dotenv';
 import { resolve, join } from 'path';
+import dotenv from 'dotenv';
+
 dotenv.config();
 
 const SERVICE_WORKER = 'service-worker';
@@ -14,8 +15,10 @@ export default defineConfig({
     port: 5555,
   },
   define: {
-    __API_SERVER_PORT__: JSON.stringify(isDev ? 3001 : process.env.API_SERVER_PORT),
-    __API_SERVER_HOST__: JSON.stringify(isDev ? 'http://localhost' : process.env.API_SERVER_HOST),
+    // @TODO добавить домен вместо prakticum_server_container
+    // __API_SERVER_HOST__: JSON.stringify(isDev ? 'http://localhost' : 'http://<<<DOMAIN>>>');
+    __API_SERVER_HOST__: JSON.stringify(isDev ? 'http://localhost' : 'http://localhost'),
+    __API_SERVER_PORT__: JSON.stringify(isDev ? '7001' : '3001'),
   },
   plugins: [react()],
   resolve: {

@@ -1,4 +1,4 @@
-import { API, projectClient } from '@/shared/api';
+import { API, apiServerClient } from '@/shared/api';
 import { IAuthor } from '../../model';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -7,7 +7,7 @@ export const fetchTopicAuthor = createAsyncThunk<IAuthor, number>(
   async (id, thunkApi) => {
     const { rejectWithValue } = thunkApi;
     try {
-      const topics = await projectClient
+      const topics = await apiServerClient
         .get<IAuthor>(`${API.users}/yandex/${id}`)
         .then((res) => res.data);
 
