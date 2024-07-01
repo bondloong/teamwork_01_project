@@ -17,6 +17,5 @@ declare global {
     leaderboard: ILeaderboardState;
   }
 
-  declare const __API_SERVER_PORT__: number;
-  declare const __API_SERVER_HOST__: string;
+  declare const __API_SERVER__: string;
 }

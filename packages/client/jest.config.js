@@ -6,8 +6,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
   globals: {
-    __API_SERVER_PORT__: process.env.API_SERVER_PORT || 'test-api-server-port',
-    __API_SERVER_HOST__: process.env.API_SERVER_HOST || 'test-api-server-host',
+    __API_SERVER__: 'test-api-server',
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
