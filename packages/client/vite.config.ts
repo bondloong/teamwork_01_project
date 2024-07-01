@@ -15,12 +15,10 @@ export default defineConfig({
     port: 5555,
   },
   define: {
-    // __API_SERVER_HOST__: JSON.stringify(process.env.API_SERVER_HOST),
-    // __API_SERVER_PORT__: JSON.stringify(process.env.API_SERVER_PORT),
-    // @TODO настроить передачу env-переменных из окружения
-    // Временное решение
-    __API_SERVER_HOST__: JSON.stringify(process.env.API_SERVER_HOST || 'http://localhost'),
-    __API_SERVER_PORT__: JSON.stringify(process.env.API_SERVER_PORT || isDev ? '7001' : '3001'),
+    // @TODO добавить домен вместо prakticum_server_container
+    // __API_SERVER_HOST__: JSON.stringify(isDev ? 'http://localhost' : 'http://<<<DOMAIN>>>');
+    __API_SERVER_HOST__: JSON.stringify(isDev ? 'http://localhost' : 'http://localhost'),
+    __API_SERVER_PORT__: JSON.stringify(isDev ? '7001' : '3001'),
   },
   plugins: [react()],
   resolve: {
