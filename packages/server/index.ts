@@ -27,13 +27,6 @@ app.use(express.json()); // Добавление json middleware
 
 const PORT = Number(process.env.API_SERVER_PORT);
 
-// @TODO удалить
-app.use((req, _res, next) => {
-  console.log(req);
-
-  next();
-});
-
 app.use('/api/users', userRoutes);
 app.use('/api/topics', topicRoutes);
 app.use('/api/comments', commentRoutes);
