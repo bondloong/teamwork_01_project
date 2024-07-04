@@ -14,12 +14,6 @@ if (isDev) {
   dotenv.config();
 }
 
-// @TODO удалаить
-console.log('process.env.NODE_ENV', process.env.NODE_ENV);
-console.log('process.env.CLIENT_PORT', process.env.CLIENT_PORT);
-console.log('process.env.API_SERVER_HOST', process.env.API_SERVER_HOST);
-console.log('process.env.API_SERVER_PORT', process.env.API_SERVER_PORT);
-
 const port = process.env.CLIENT_PORT;
 // Путь к корневой папке
 const clientPath = path.join(__dirname, '..');

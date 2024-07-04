@@ -121,6 +121,41 @@ services:
     depends_on:
       - server
 
-    # На всякий случай дополнительно явно указали env-переменные
-    env_file:
-      - ./.env
+##############################################################################
+
+  # Образ nginx https://hub.docker.com/_/nginx
+  nginx:
+    # Здесь именно image, потому что мы его сами не пишем, он будет взят с докерхаба
+    image: nginx
+
+    # Имя контейнера. Можно не задавать
+    container_name: ${NGINX_CONTAINER}
+
+    # Всегда перезапускать контейнер, когда он останавливается
+    restart: always
+
+    # Эти переменные будут проброшены внутрь контейнера mongo и из них будут браться указаные значения для создаваемой БД
+    # Т.к. nginx, SSR-сервер, АПИ-сервер и БД будут запущены в докере на одном сервере, для проксирования запросов nginx будет обращаться по имени контейнера и порту
+    environment:
+      CLIENT_CONTAINER: ${CLIENT_CONTAINER}
+      CLIENT_PORT: ${CLIENT_PORT}
+      API_SERVER_CONTAINER: ${API_SERVER_CONTAINER}
+      API_SERVER_PORT: ${API_SERVER_PORT}
+
+    # Связываем файлы хоста с контейнером
+    # nginx.conf из текущего каталога хоста должен быть смонтирован в качестве файла /etc/nginx/nginx.conf в контейнере Docker
+    # ro - read only
+    volumes:
+     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+    # Проброс порта — на какой порт хоста какой порт контейнера
+    # Свзяваем порты, которые nginx слушает внутри контейнера с внешними портами
+    # Традиционно, порт 80 для подключений по http и 443 для https
+    ports:
+      - '${NGINX_EXTERNAL_HTTP_PORT}:${NGINX_EXTERNAL_HTTP_PORT}'
+      - '${NGINX_EXTERNAL_HTTPS_PORT}:${NGINX_EXTERNAL_HTTP_PORT}'
+
+    depends_on:
+      - mongo
+      - server
+      - client

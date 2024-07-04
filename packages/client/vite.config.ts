@@ -15,10 +15,8 @@ export default defineConfig({
     port: 5555,
   },
   define: {
-    // @TODO добавить домен вместо prakticum_server_container
-    // __API_SERVER_HOST__: JSON.stringify(isDev ? 'http://localhost' : 'http://<<<DOMAIN>>>');
-    __API_SERVER_HOST__: JSON.stringify(isDev ? 'http://localhost' : 'http://localhost'),
-    __API_SERVER_PORT__: JSON.stringify(isDev ? '7001' : '3001'),
+    // @TODO указать доменное имя для prod-режима
+    __API_SERVER__: JSON.stringify(isDev ? 'http://localhost:7001' : 'http://localhost'),
   },
   plugins: [react()],
   resolve: {
