@@ -13,16 +13,16 @@ services:
     image: mongo
 
     # Можно не задавать имя контейнера, но мы зададим через env-переменную, чтобы потом использовать эту переменную в качсетве хоста для подключения к БД
-    container_name: ${MONGO_CONTAINER}
+    container_name: mongo_container
 
     # Всегда перезапускать контейнер, когда он останавливается
     restart: always
 
     # Эти переменные будут проброшены внутрь контейнера mongo и из них будут браться указаные значения для создаваемой БД
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: someuser
+      MONGO_INITDB_ROOT_PASSWORD: somepassword
+      MONGO_INITDB_DATABASE: mongo_game_db
 
     # Связываем файлы хоста (папка ./mongo) с файлами в контейнере /data/db
     volumes:
@@ -32,7 +32,7 @@ services:
     # Свзяваем порт подключения к БД Mongo внутри контейнера с портом на внешней машине
     # По-умолчанию,порт подключения в Mongo - 27017. Оставим без изменений и свяжем с таким же портом на хосте
     ports:
-      - '${MONGO_PORT}:${MONGO_PORT}'
+      - '27017:27017'
 
     # На всякий случай дополнительно явно указали env-переменные
     env_file:
@@ -43,7 +43,7 @@ services:
   # Образ для серверного приложения (которое общается с БД и предоставляет апи форума, темы и пр.)
   server:
     # Имя контейнера после того, как контейнер будет запущен
-    container_name: ${API_SERVER_CONTAINER}
+    container_name: prakticum_server_container
 
     # Задаем имя создаваемого образа
     image: prackicum-server-image
@@ -56,25 +56,25 @@ services:
       dockerfile: Dockerfile.server
       # Аргументы, которые будут переданы в процесс сборки образа
       args:
-        API_SERVER_PORT: ${API_SERVER_PORT}
+        API_SERVER_PORT: 3001
       
     # Всегда перезапускать контейнер, когда он останавливается
     restart: always
       
     # Связываем порт приложения на хост-машине с портом приложения внутри контейнера
     ports:
-      - "${API_SERVER_PORT}:${API_SERVER_PORT}"
+      - "3001:3001"
 
     # Т.к. Mongo база данных запускается не мгновенно после запуска контейнера, нам надо дождаться пока база данных будет инициализирована и только после этого запускать
     # Альтернативой является использование wait-for в Dockerfile.server
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo localhost:${MONGO_PORT}/${MONGO_INITDB_DATABASE} --quiet
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/mongo_game_db --quiet
 
     # env-переменные, которые будут доступны внутри контейнера
     # При необходимости, внутрь контейнера можно передать env-переменные, содержащий данные для подключения к БД. В текущей реализации, вся необходимая информация содержится в DATABASE_URL
     environment:
-      API_SERVER_PORT: ${API_SERVER_PORT}
-      DATABASE_URL: ${DATABASE_URL}
+      API_SERVER_PORT: 3001
+      DATABASE_URL: mongodb+srv://admin:parol1@spaseship.whiq1c1.mongodb.net/spaseship?retryWrites=true&w=majority&appName=spaseship
 
     # Контейнер prakticum-server-container должен быть запущен после того, как запуститься кконтейнер mongo и пройдет инициализация БД (то есть надо какое-то время подождать. Для этого внутри Dockerfile.server используется скрипт wait-for)
     depends_on:
@@ -89,7 +89,7 @@ services:
   # Образ для клиентского приложения (которое раздает статику)
   client:
     # Имя контейнера после того, как контейнер будет запущен
-    container_name: ${CLIENT_CONTAINER}
+    container_name: prakticum_client_container
 
     # Задаем имя создаваемого образа
     image: prakticum-client-image
@@ -102,20 +102,20 @@ services:
       dockerfile: Dockerfile.client
       # Аргументы, которые будут переданы в процесс сборки образа
       args:
-        CLIENT_PORT: ${CLIENT_PORT}
+        CLIENT_PORT: 3000
       
     # Всегда перезапускать контейнер, когда он останавливается
     restart: always
 
     # Связываем порт приложения на хост-машине с портом приложения внутри контейнера
     ports:
-      - "${CLIENT_PORT}:${CLIENT_PORT}"
+      - "3000:3000"
 
     # env-переменные, которые будут доступны внутри контейнера
     environment:
-      CLIENT_PORT: ${CLIENT_PORT}
-      API_SERVER_HOST: ${API_SERVER_HOST}
-      API_SERVER_PORT: ${API_SERVER_PORT}
+      CLIENT_PORT: 3000
+      API_SERVER_HOST: http://localhost
+      API_SERVER_PORT: 3001
 
     # Запускать контейнер после запуска контейнера server
     depends_on:
@@ -129,7 +129,7 @@ services:
     image: nginx
 
     # Имя контейнера. Можно не задавать
-    container_name: ${NGINX_CONTAINER}
+    container_name: nginx_container
 
     # Всегда перезапускать контейнер, когда он останавливается
     restart: always
@@ -137,10 +137,10 @@ services:
     # Эти переменные будут проброшены внутрь контейнера mongo и из них будут браться указаные значения для создаваемой БД
     # Т.к. nginx, SSR-сервер, АПИ-сервер и БД будут запущены в докере на одном сервере, для проксирования запросов nginx будет обращаться по имени контейнера и порту
     environment:
-      CLIENT_CONTAINER: ${CLIENT_CONTAINER}
-      CLIENT_PORT: ${CLIENT_PORT}
-      API_SERVER_CONTAINER: ${API_SERVER_CONTAINER}
-      API_SERVER_PORT: ${API_SERVER_PORT}
+      CLIENT_CONTAINER: prakticum_client_container
+      CLIENT_PORT: 3000
+      API_SERVER_CONTAINER: prakticum_server_container
+      API_SERVER_PORT: 3001
 
     # Связываем файлы хоста с контейнером
     # nginx.conf из текущего каталога хоста должен быть смонтирован в качестве файла /etc/nginx/nginx.conf в контейнере Docker
@@ -152,8 +152,8 @@ services:
     # Свзяваем порты, которые nginx слушает внутри контейнера с внешними портами
     # Традиционно, порт 80 для подключений по http и 443 для https
     ports:
-      - '${NGINX_EXTERNAL_HTTP_PORT}:${NGINX_EXTERNAL_HTTP_PORT}'
-      - '${NGINX_EXTERNAL_HTTPS_PORT}:${NGINX_EXTERNAL_HTTP_PORT}'
+      - '80:80'
+      - '443:443'
 
     depends_on:
       - mongo
