@@ -52,11 +52,14 @@ export const spawnEnemy = (
   height: number,
   enemySpeed: number
 ): void => {
-  /* Ускорять по мере набора очков */
+  const minSize = 80;
+  const maxSize = 150;
+  const enemySize = Math.random() * (maxSize - minSize) + minSize;
+
   enemies.current.push({
     x: width,
-    y: Math.random() * (height - 30),
-    size: 30,
+    y: Math.random() * (height - enemySize),
+    size: enemySize,
     moveX: -enemySpeed,
     moveY: 0,
   });
