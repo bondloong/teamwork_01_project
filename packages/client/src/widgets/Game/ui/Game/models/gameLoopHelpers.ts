@@ -1,4 +1,16 @@
 import { IBullet, IEnemy, IShip } from '../GameInterfaces';
+import { StarshipImage, BoulderImage } from '../assets/index';
+
+// Загрузка изображений только в браузере
+let shipImage: HTMLImageElement;
+let boulderImage: HTMLImageElement;
+if (typeof window !== 'undefined') {
+  shipImage = new Image();
+  shipImage.src = StarshipImage;
+
+  boulderImage = new Image();
+  boulderImage.src = BoulderImage;
+}
 
 // Отрисовка фона с учётом сдвига
 export const moveBG = (
@@ -25,8 +37,7 @@ export const drawShip = (
   ctx: CanvasRenderingContext2D,
   ship: React.MutableRefObject<IShip>
 ): void => {
-  ctx.fillStyle = 'blue';
-  ctx.fillRect(ship.current.x, ship.current.y, ship.current.size, ship.current.size);
+  ctx.drawImage(shipImage, ship.current.x, ship.current.y, ship.current.size, ship.current.size);
 };
 
 export const drawBullets = (
@@ -83,8 +94,7 @@ export const drawEnemies = (
 ): void => {
   enemies.current.forEach((enemy) => {
     enemy.x += enemy.moveX;
-    ctx.fillStyle = 'green';
-    ctx.fillRect(enemy.x, enemy.y, enemy.size, enemy.size);
+    ctx.drawImage(boulderImage, enemy.x, enemy.y, enemy.size, enemy.size);
 
     if (
       Math.hypot(enemy.x - ship.current.x, enemy.y - ship.current.y) <
