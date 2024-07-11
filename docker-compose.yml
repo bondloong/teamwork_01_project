@@ -15,7 +15,7 @@ services:
     container_name: prakticum_server_container
 
     # Задаем имя создаваемого образа
-    image: ghcr.io/bondloong/teamwork_01_project/server:6dc17c1f9c74a0b7e2df368c5d18823c48d9a344
+    # image: ghcr.io/bondloong/teamwork_01_project/server:6dc17c1f9c74a0b7e2df368c5d18823c48d9a344
       
     # Как будем создавать контейнер? Какой Dockerfile использовать?
     build:
@@ -53,7 +53,7 @@ services:
     container_name: prakticum_client_container
 
     # Задаем имя создаваемого образа
-    image: ghcr.io/bondloong/teamwork_01_project/client:6dc17c1f9c74a0b7e2df368c5d18823c48d9a344
+    # image: ghcr.io/bondloong/teamwork_01_project/client:6dc17c1f9c74a0b7e2df368c5d18823c48d9a344
 
     # Как будем создавать контейнер? Какой Dockerfile использовать?
     build:
