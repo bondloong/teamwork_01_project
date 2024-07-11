@@ -8,7 +8,7 @@
   justify-content: space-between;
   align-items: center;
   padding-right: 33px;
-  background-color: $primary-bg-color;
+  background-color: var(--color-bg-base);
   border-bottom: 1px solid $secondary-color;
   z-index: 10;
 }
