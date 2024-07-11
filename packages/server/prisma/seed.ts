@@ -10,6 +10,7 @@ async function main(): Promise<void> {
         first_name: 'John',
         second_name: 'Doe',
         yandexUserId: '123',
+        theme: 'light',
       },
     });
 

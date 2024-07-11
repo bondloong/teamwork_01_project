@@ -6,6 +6,7 @@ export interface IUser {
   login: string;
   avatar?: string;
   email: string;
+  theme: string;
 }
 
 export interface IUserSchema {

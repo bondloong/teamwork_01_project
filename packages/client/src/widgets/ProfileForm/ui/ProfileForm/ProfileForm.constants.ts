@@ -9,4 +9,5 @@ export const TEXTS = {
   changeData: 'Change Data',
   profileUpdateSuccess: 'Profile updated successfully!',
   profileUpdateFailed: 'Failed to update profile. Please try again.',
+  ThemeSwitch: 'Change theme ',
 } as const;

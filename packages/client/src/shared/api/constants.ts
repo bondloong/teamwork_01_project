@@ -14,4 +14,6 @@ export const API = {
   topics: '/topics',
   users: '/users',
   comments: '/comments',
+  getUserTheme: (userId: number) => `/user/theme/${userId}`,
+  setUserTheme: '/user/theme',
 } as const;

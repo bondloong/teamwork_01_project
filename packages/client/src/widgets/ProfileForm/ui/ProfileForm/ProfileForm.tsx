@@ -10,6 +10,7 @@ import { useForm } from '@/shared/hooks';
 import { ValidationError } from 'yup';
 import { PROFILE_INPUTS, ProfileSchema } from '../../model';
 import { getIsProfileLoading } from '@/entities/User';
+import { ThemeSwitch } from '@/widgets/ThemeSwtich';
 
 export const ProfileForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -96,6 +97,10 @@ export const ProfileForm: React.FC = () => {
           {errors[name] && <div className={classes.error}>{errors[name]}</div>}
         </div>
       ))}
+      <div>
+        <span className={classes.formItem}>{TEXTS.ThemeSwitch} </span>
+        <ThemeSwitch id="themeSwitch" />
+      </div>
       <div className={classes.formButtonItem}>
         <Button
           type="primary"

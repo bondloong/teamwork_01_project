@@ -20,4 +20,6 @@ export {
   changeUserPassword,
   uploadProfileAvatar,
   changeUserProfile,
+  fetchTheme,
+  setTheme,
 } from './api';

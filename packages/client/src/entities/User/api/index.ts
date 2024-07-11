@@ -5,3 +5,5 @@ export { fetchUserInfo } from './fetchUserInfo';
 export { changeUserProfile } from './changeUserProfile';
 export { changeUserPassword, type IChangePasswordPayload } from './changeUserPassword';
 export { uploadProfileAvatar } from './uploadProfileAvatar';
+export { fetchTheme } from './fetchTheme';
+export { setTheme } from './setTheme';
