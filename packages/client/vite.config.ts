@@ -15,8 +15,9 @@ export default defineConfig({
     port: 5555,
   },
   define: {
-    // @TODO указать доменное имя для prod-режима
-    __API_SERVER__: JSON.stringify(isDev ? 'http://localhost:7001' : 'http://localhost'),
+    __API_SERVER__: JSON.stringify(
+      isDev ? 'http://localhost:7001' : 'http://teamwork01-starship-37.ya-praktikum.tech'
+    ),
   },
   plugins: [react()],
   resolve: {

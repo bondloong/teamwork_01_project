@@ -24,7 +24,7 @@ export const Game: FC<IGameProps> = ({ width, height }) => {
 
   const [canvasSize, setCanvasSize] = useState({ width, height });
 
-  const ship = useRef({ x: width / 2, y: height / 2, size: 20 });
+  const ship = useRef({ x: width / 2, y: height / 2, size: 50 });
   const bullets = useRef<Array<IBullet>>([]);
   const enemies = useRef<Array<IEnemy>>([]);
   const [gameOver, setGameOver] = useState(false);
