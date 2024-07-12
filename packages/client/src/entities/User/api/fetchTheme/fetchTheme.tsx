@@ -3,13 +3,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 
 export const fetchTheme = createAsyncThunk<string, string>(
-  'user/fetchTheme',
+  'user/theme',
   async (userId, thunkApi) => {
     const { rejectWithValue } = thunkApi;
 
     try {
       const { data } = await apiServerClient.get<void, AxiosResponse<{ theme: string }>>(
-        `${API.user}/theme/${userId}`
+        API.getUserTheme(userId)
       );
       return data.theme;
     } catch (error) {

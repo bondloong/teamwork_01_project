@@ -13,12 +13,12 @@ import {
 const router = Router();
 
 router.get('/', getUsers);
+router.get('/theme/:id', getUserTheme);
+router.put('/theme', setUserTheme);
 router.get('/:id', getUserById);
 router.get('/yandex/:yandexUserId', getUserByYandexUserId);
 router.post('/', createUser);
 router.put('/:id', updateUser);
 router.delete('/:id', deleteUser);
-router.get('/theme/:id', getUserTheme);
-router.put('/theme', setUserTheme);
 
 export default router;

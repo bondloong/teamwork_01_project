@@ -133,10 +133,12 @@ export const getUserTheme = async (req: Request, res: Response): Promise<void> =
 export const setUserTheme = async (req: Request, res: Response): Promise<void> => {
   console.log('Received request body:', req.body);
   const { id, theme } = req.body;
+
   if (!id || !theme) {
-    res.status(400).json({ error: 'Missing required fields: id and theme' });
+    res.status(400).json({ error: 'Missing required fields: id and theme)' });
     return;
   }
+
   try {
     const user = await prisma.users.update({
       where: { id },

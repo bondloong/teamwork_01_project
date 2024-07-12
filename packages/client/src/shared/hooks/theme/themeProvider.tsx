@@ -3,9 +3,10 @@ import { ConfigProvider } from 'antd';
 import { useSelector } from 'react-redux';
 import { themeTokens } from './themeProvider.constants';
 import { ThemeName, ThemeContextType } from './theme.interfaces';
-import { getUserData } from '@/entities/User';
 import { fetchTheme, setTheme } from '@/entities/User';
 import { useAppDispatch } from '@/shared/hooks';
+import { getUserData } from '@/entities/User';
+import { fetchTopicAuthor } from '@/entities/Topics/api';
 
 export const ThemeContext = createContext<ThemeContextType>({
   currentTheme: 'light',
@@ -19,13 +20,26 @@ const applyThemeVariables = (theme: ThemeName): void => {
 
 export const ThemeProvider = ({ children }: { children: ReactNode }): JSX.Element => {
   const user = useSelector(getUserData);
-
   const dispatch = useAppDispatch();
   const [currentTheme, setCurrentTheme] = useState<ThemeName>('light');
+  const [authorId, setAuthorId] = useState<string | null>(null);
 
   useEffect(() => {
     if (user && user.id) {
-      dispatch(fetchTheme(user.id))
+      dispatch(fetchTopicAuthor(user.id))
+        .unwrap()
+        .then((result) => {
+          setAuthorId(result.id);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch topic author:', error);
+        });
+    }
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    if (authorId) {
+      dispatch(fetchTheme(authorId))
         .unwrap()
         .then((theme) => {
           setCurrentTheme(theme as ThemeName);
@@ -35,17 +49,18 @@ export const ThemeProvider = ({ children }: { children: ReactNode }): JSX.Elemen
           console.error('Failed to fetch theme:', error);
         });
     }
-  }, [dispatch, user]);
+  }, [dispatch, authorId]);
 
-  const toggleTheme = (): void => {
+  const toggleTheme = async (): Promise<void> => {
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    setCurrentTheme(newTheme);
-    applyThemeVariables(newTheme);
-    if (user && user.id) {
-      console.log('🚀 ~ toggleTheme ~ user:', user);
-      dispatch(setTheme({ id: user.id, theme: newTheme })).catch((error) => {
-        console.error('Failed to set theme:', error);
-      });
+    try {
+      if (authorId) {
+        await dispatch(setTheme({ id: authorId, theme: newTheme })).unwrap();
+        setCurrentTheme(newTheme);
+        applyThemeVariables(newTheme);
+      }
+    } catch (error) {
+      console.error('Failed to set theme:', error);
     }
   };
 
