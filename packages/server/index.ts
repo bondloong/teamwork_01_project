@@ -25,7 +25,7 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Добавление json middleware
 
-const PORT = Number(process.env.API_SERVER_PORT);
+const PORT = Number(process.env.SERVER_API_PORT);
 
 app.use('/api/users', userRoutes);
 app.use('/api/topics', topicRoutes);
