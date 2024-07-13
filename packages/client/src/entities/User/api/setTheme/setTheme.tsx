@@ -7,7 +7,6 @@ export const setTheme = createAsyncThunk<void, SetThemePayload>(
   'user/setTheme',
   async (payload, thunkAPI) => {
     try {
-      console.log('Payload:', thunkAPI);
       await apiServerClient.put<void, AxiosResponse<void>>(API.setUserTheme, payload);
     } catch (error) {
       return thunkAPI.rejectWithValue('Failed to set user theme');

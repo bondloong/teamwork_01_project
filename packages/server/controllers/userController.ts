@@ -131,7 +131,6 @@ export const getUserTheme = async (req: Request, res: Response): Promise<void> =
   }
 };
 export const setUserTheme = async (req: Request, res: Response): Promise<void> => {
-  console.log('Received request body:', req.body);
   const { id, theme } = req.body;
 
   if (!id || !theme) {
