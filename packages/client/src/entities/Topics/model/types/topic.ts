@@ -1,3 +1,5 @@
+import { EReactions } from '@/shared/types';
+
 export interface ITopic {
   id: string;
   title: string;
@@ -5,6 +7,7 @@ export interface ITopic {
   authorId: string;
   author: IAuthor;
   likedUsers: string[];
+  comments: IComment[];
   createdAt: Date;
 }
 
@@ -23,6 +26,7 @@ export interface IComment {
   topicId: string;
   createdAt: string;
   updatedAt: string;
+  reactions: Array<EReactions>;
 }
 
 export interface ITopicsSchema {
@@ -31,4 +35,5 @@ export interface ITopicsSchema {
   isLoading: boolean;
   isNewTopicLoading: boolean;
   isTopicAuthorLoading: boolean;
+  commentsReactions: { [key: string]: EReactions[] };
 }
