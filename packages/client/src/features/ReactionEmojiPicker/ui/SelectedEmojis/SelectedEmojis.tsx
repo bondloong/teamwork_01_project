@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { REACTION_ICONS } from '../../model';
 import { ECommentReactions } from '@/shared/types';
@@ -12,11 +12,9 @@ export const SelectedEmojis: FC<SelectedEmojisProps> = ({ commentId }) => {
     shallowEqual
   );
 
-  const memoizedReactions = useMemo(() => reactions, [reactions]);
-
   return (
     <div className={classes.selectedEmojis}>
-      {memoizedReactions.map((reaction: ECommentReactions, index: number) => (
+      {reactions.map((reaction: ECommentReactions, index: number) => (
         <span key={index}>{REACTION_ICONS[reaction]}</span>
       ))}
     </div>
