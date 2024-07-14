@@ -24,7 +24,7 @@ const topicsSlice = createSlice({
       state.data = state.data.filter((item) => item.id !== payload);
     },
     addComment: (state, { payload }: PayloadAction<{ topicId: string; comment: IComment }>) => {
-      const topic = state.data.find((topic) => topic.id === payload.topicId);
+      const topic = state.data.find(({ id }) => id === payload.topicId);
       if (topic) {
         topic.comments.push(payload.comment);
       }

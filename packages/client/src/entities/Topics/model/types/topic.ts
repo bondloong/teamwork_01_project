@@ -35,5 +35,5 @@ export interface ITopicsSchema {
   isLoading: boolean;
   isNewTopicLoading: boolean;
   isTopicAuthorLoading: boolean;
-  commentsReactions: { [key: string]: EReactions[] };
+  commentsReactions: Record<string, EReactions[]>;
 }
