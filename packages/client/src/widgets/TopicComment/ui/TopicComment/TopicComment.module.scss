@@ -10,11 +10,11 @@
 
 .comment {
   padding: 12px;
-  background-color: #f8f8f8;
+  background-color: $primary-bg-color;
   border-radius: 6px;
   &:hover {
     cursor: pointer;
-    background-color: #f3f3f3;
+    background-color: lighten($secondary-color, 20%);
   }
 }
 
