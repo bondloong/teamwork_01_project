@@ -7,3 +7,19 @@
   align-self: flex-end;
   color: #1677ff;
 }
+
+.comment {
+  padding: 12px;
+  background-color: $primary-bg-color;
+  border-radius: 6px;
+  &:hover {
+    cursor: pointer;
+    background-color: lighten($secondary-color, 20%);
+  }
+}
+
+.commentHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

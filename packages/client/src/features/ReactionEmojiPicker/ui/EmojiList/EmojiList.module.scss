@@ -1,0 +1,11 @@
+.emojiButton {
+  font-size: 22px;
+  border: none;
+  padding: 0;
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+    font-size: 24px;
+  }
+}

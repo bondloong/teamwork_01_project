@@ -1,6 +1,6 @@
 import { BaseLayout } from '@/layouts/BaseLayout';
 import { Breadcrumb, Button, Empty, Flex, Form, Input } from 'antd';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 import classes from './TopicPage.module.scss';
 import { TopicComment } from '@/widgets/TopicComment';
 import { IComment, ITopic, getTopics } from '@/entities/Topics/model';
@@ -15,7 +15,7 @@ import { getUserData } from '@/entities/User';
 import { fetchTopicAuthor } from '@/entities/Topics/api';
 import { createTopicAuthor } from '@/entities/Topics/api/createTopicAuthor';
 import { removeLikeFromTopic } from '../../api/removeLikeFromTopic';
-import { LikeTwoTone } from '@ant-design/icons';
+import { topicsActions } from '@/entities/Topics/model/slice/topicsSlice';
 
 interface FormValues {
   comment: string;
@@ -29,6 +29,7 @@ export const TopicPage = (): ReactElement => {
   const { topicAuthor } = useSelector(getTopics);
   const dispatch = useAppDispatch();
   const user = useSelector(getUserData);
+  const commentsEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (user) {
@@ -55,11 +56,16 @@ export const TopicPage = (): ReactElement => {
         });
       });
     }
-  }, []);
+  }, [topicId]);
+
+  useEffect(() => {
+    commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [topicComments]);
 
   if (!topic || !topicAuthor) {
     return <Loader />;
   }
+
   const addComment = (value: FormValues): void => {
     const data: CreateCommentProps = {
       content: value.comment,
@@ -68,7 +74,10 @@ export const TopicPage = (): ReactElement => {
     };
 
     createComment(data).then((result) => {
-      setTopicComments((prev) => [...prev, result]);
+      dispatch(topicsActions.addComment({ topicId: topic.id, comment: result }));
+      setTopicComments((prevComments) => [...prevComments, result]);
+      form.resetFields();
+      commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     });
   };
 
@@ -117,9 +126,12 @@ export const TopicPage = (): ReactElement => {
           </h3>
 
           <div className={classes.topicContent}>{topic.content}</div>
-          <span className={classes.commentLike}>
-            <LikeTwoTone style={{ fontSize: 18 }} onClick={changeLike} /> {topic.likedUsers.length}
-          </span>
+          <div className={classes.commentLike}>
+            <Button className={classes.commentLikeButton} onClick={changeLike}>
+              <span className={classes.commentLikeEmoji}>👍</span>
+              {topic.likedUsers.length}
+            </Button>
+          </div>
 
           <div className={classes.comments}>
             <h2 className={classes.header}>Comments</h2>
@@ -130,6 +142,7 @@ export const TopicPage = (): ReactElement => {
                 {topicComments.map((comment, i) => (
                   <TopicComment key={i} {...comment} />
                 ))}
+                <div ref={commentsEndRef} />
               </Flex>
             )}
           </div>
