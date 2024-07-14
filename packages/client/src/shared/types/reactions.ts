@@ -1,4 +1,4 @@
-export enum EReactions {
+export enum ECommentReactions {
   HEART = 'HEART',
   LAUGH = 'LAUGH',
   CRY = 'CRY',

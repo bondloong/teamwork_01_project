@@ -1,4 +1,4 @@
-import { EReactions } from '@/shared/types';
+import { ECommentReactions } from '@/shared/types';
 
 export interface ITopic {
   id: string;
@@ -26,7 +26,7 @@ export interface IComment {
   topicId: string;
   createdAt: string;
   updatedAt: string;
-  reactions: Array<EReactions>;
+  reactions: Array<ECommentReactions>;
 }
 
 export interface ITopicsSchema {
@@ -35,5 +35,5 @@ export interface ITopicsSchema {
   isLoading: boolean;
   isNewTopicLoading: boolean;
   isTopicAuthorLoading: boolean;
-  commentsReactions: Record<string, EReactions[]>;
+  commentsReactions: Record<string, ECommentReactions[]>;
 }

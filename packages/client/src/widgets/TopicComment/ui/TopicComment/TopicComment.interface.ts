@@ -1,4 +1,4 @@
-import { EReactions } from '@/shared/types';
+import { ECommentReactions } from '@/shared/types';
 
 export type TAuthor = {
   username: string;
@@ -10,5 +10,5 @@ export type TTopicComment = {
   content: string;
   author: TAuthor;
   created_at: string;
-  reactions: Array<EReactions>;
+  reactions: Array<ECommentReactions>;
 };

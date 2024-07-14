@@ -1,6 +1,6 @@
-import { EReactions } from '@/shared/types';
+import { ECommentReactions } from '@/shared/types';
 
 export interface IEmojiList {
-  reactions: Array<EReactions>;
-  onClick: (reaction: EReactions) => void;
+  reactions: Array<ECommentReactions>;
+  onClick: (reaction: ECommentReactions) => void;
 }

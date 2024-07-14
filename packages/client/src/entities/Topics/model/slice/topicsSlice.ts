@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { IAuthor, ITopic, ITopicsSchema, IComment } from '../types';
-import { EReactions } from '@/shared/types';
+import { ECommentReactions } from '@/shared/types';
 import { fetchTopics, addTopic, fetchTopicAuthor } from '../../api';
 import { createTopicAuthor } from '../../api/createTopicAuthor';
 
@@ -31,7 +31,7 @@ const topicsSlice = createSlice({
     },
     toggleReaction: (
       state,
-      { payload }: PayloadAction<{ commentId: string; reaction: EReactions }>
+      { payload }: PayloadAction<{ commentId: string; reaction: ECommentReactions }>
     ) => {
       const reactions = state.commentsReactions[payload.commentId] || [];
       const reactionIndex = reactions.indexOf(payload.reaction);
