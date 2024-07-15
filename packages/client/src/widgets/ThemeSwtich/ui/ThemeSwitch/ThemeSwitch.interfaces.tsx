@@ -1,3 +1,3 @@
 export interface ThemeSwitchProps {
-  id: string | undefined;
+  id?: string;
 }

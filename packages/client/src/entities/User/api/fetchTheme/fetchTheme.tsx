@@ -4,9 +4,7 @@ import { AxiosResponse } from 'axios';
 
 export const fetchTheme = createAsyncThunk<string, string>(
   'user/theme',
-  async (userId, thunkApi) => {
-    const { rejectWithValue } = thunkApi;
-
+  async (userId, { rejectWithValue }) => {
     try {
       const { data } = await apiServerClient.get<void, AxiosResponse<{ theme: string }>>(
         API.getUserTheme(userId)
