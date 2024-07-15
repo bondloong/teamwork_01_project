@@ -16,7 +16,7 @@ export default defineConfig({
   },
   define: {
     __API_SERVER__: JSON.stringify(
-      isDev ? 'http://localhost:7001' : 'http://teamwork01-starship-37.ya-praktikum.tech'
+      isDev ? 'http://localhost:7001' : 'https://teamwork01-starship-37.ya-praktikum.tech'
     ),
   },
   plugins: [react()],
