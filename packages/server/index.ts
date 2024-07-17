@@ -30,6 +30,7 @@ const PORT = Number(process.env.API_SERVER_PORT);
 app.use('/api/users', userRoutes);
 app.use('/api/topics', topicRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api/user', userRoutes);
 
 app.get('*', (_, res) => {
   res.json('You are awesome)');

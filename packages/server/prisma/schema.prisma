@@ -13,6 +13,7 @@ model Users {
   yandexUserId String @unique
   first_name   String
   second_name  String
+  theme        String?
   topics       Topics[]  @relation("AuthorOfTopics")
   comments     Comment[]
 }

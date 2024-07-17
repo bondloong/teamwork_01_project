@@ -62,7 +62,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
 
   try {
     const user = await prisma.users.create({
-      data: { first_name, second_name, yandexUserId },
+      data: { first_name, second_name, yandexUserId, theme: 'light' },
     });
     res.status(201).json(user);
   } catch (error) {
@@ -108,5 +108,45 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
     res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete user' });
+  }
+};
+export const getUserTheme = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+
+  try {
+    const user = await prisma.users.findUnique({
+      where: { id },
+      select: { theme: true },
+    });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    res.status(200).json({ theme: user.theme });
+  } catch (error) {
+    console.error('Error fetching user theme:', error);
+    res.status(500).json({ error: 'Failed to fetch user theme' });
+  }
+};
+export const setUserTheme = async (req: Request, res: Response): Promise<void> => {
+  const { id, theme } = req.body;
+
+  if (!id || !theme) {
+    res.status(400).json({ error: 'Missing required fields: id and theme)' });
+    return;
+  }
+
+  try {
+    const user = await prisma.users.update({
+      where: { id },
+      data: { theme },
+    });
+
+    res.status(200).json({ message: 'Theme updated successfully', theme: user.theme });
+  } catch (error) {
+    console.error('Error updating user theme:', error);
+    res.status(500).json({ error: 'Failed to update user theme' });
   }
 };

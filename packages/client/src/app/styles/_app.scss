@@ -5,7 +5,8 @@
   font-family: $font-primary;
   font-size: $font-size-primary;
   font-weight: $font-weight-primary;
-  color: $text-primary-color;
+  color: var(--color-text-base);
+  background-color: var(--color-bg-base);
 }
 
 h1 {
