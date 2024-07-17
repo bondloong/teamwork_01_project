@@ -13,7 +13,7 @@ import { getUserData } from '@/entities/User';
 import { createTopicAuthor } from '@/entities/Topics/api/createTopicAuthor';
 
 export const ForumPage = (): ReactElement => {
-  const { data, isLoading } = useSelector(getTopics);
+  const { data, isLoading, isNewTopicLoading } = useSelector(getTopics);
   const user = useSelector(getUserData);
   const dispatch = useAppDispatch();
 
@@ -36,6 +36,13 @@ export const ForumPage = (): ReactElement => {
       });
     }
   }, [user]);
+
+  // Обновляем список топиков при изменении isNewTopicLoading
+  useEffect(() => {
+    if (!isNewTopicLoading) {
+      dispatch(fetchTopics());
+    }
+  }, [isNewTopicLoading]);
 
   return (
     <BaseLayout>

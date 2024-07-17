@@ -13,8 +13,22 @@ import { RouteObject } from 'react-router-dom';
 export const routes: RouteObject[] = [
   { path: EAppRoutes.Main, element: <MainPage /> },
   { path: EAppRoutes.Auth, element: <AuthPage /> },
-  { path: EAppRoutes.Game, element: <GamePage /> },
-  { path: EAppRoutes.Profile, element: <ProfilePage /> },
+  {
+    path: EAppRoutes.Game,
+    element: (
+      <ProtectedRoute>
+        <GamePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: EAppRoutes.Profile,
+    element: (
+      <ProtectedRoute>
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
+  },
   {
     path: EAppRoutes.LeaderBoard,
     element: (
